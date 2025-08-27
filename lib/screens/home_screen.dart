@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                     icon: const Icon(
-                      Icons.menu,
+                      Icons.settings,
                       color: Colors.white,
                       size: 28,
                     ),
