@@ -50,7 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _nameController.text = prefs.getString('user_name') ?? 'أحمد محمد';
-      _addressController.text = prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
+      _addressController.text =
+          prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
       _cityController.text = prefs.getString('user_city') ?? 'صنعاء';
     });
   }
@@ -73,7 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _isEditing = !_isEditing;
               });
             },
-            icon: Icon(_isEditing ? Icons.close : Icons.edit),
+            tooltip:_isEditing ? ' حفظ' : 'تعديل',
+            
+            icon: Icon(_isEditing ? Icons.done : Icons.edit),
           ),
         ],
       ),
@@ -82,11 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1E3A8A),
-              Color(0xFF3B82F6),
-              Color(0xFF60A5FA),
-            ],
+            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
           ),
         ),
         child: SafeArea(
@@ -118,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // اسم المستخدم
                   Text(
                     _nameController.text,
@@ -130,17 +129,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  
+
                   Text(
                     'مستخدم نشط',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.white70),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
-                  
+
                   // معلومات المستخدم
                   Container(
                     decoration: BoxDecoration(
@@ -165,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           enabled: _isEditing,
                         ),
                         const SizedBox(height: 20),
-                        
+
                         // حقل العنوان
                         _buildInfoField(
                           label: 'العنوان',
@@ -174,26 +170,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           enabled: _isEditing,
                         ),
                         const SizedBox(height: 20),
-                        
+
                         // حقل المدينة
                         _buildCityField(),
                         const SizedBox(height: 20),
-                        
+
                         // إحصائيات
                         if (!_isEditing) ...[
                           const Divider(),
                           const SizedBox(height: 20),
                           _buildStatsRow(),
                         ],
-                        
-
                       ],
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // أزرار إضافية
-               
                 ],
               ),
             ),
@@ -208,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required IconData icon,
     required TextEditingController controller,
     required bool enabled,
-    }) {
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,7 +261,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         DropdownButtonFormField<String>(
           value: _cityController.text.isEmpty ? null : _cityController.text,
           decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.location_city, color: Color(0xFF1E3A8A)),
+            prefixIcon: const Icon(
+              Icons.location_city,
+              color: Color(0xFF1E3A8A),
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
@@ -290,17 +286,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               vertical: 16,
             ),
           ),
-          items: _cities.map((String city) {
-            return DropdownMenuItem<String>(
-              value: city,
-              child: Text(city),
-            );
-          }).toList(),
-          onChanged: _isEditing ? (String? newValue) {
-            setState(() {
-              _cityController.text = newValue ?? '';
-            });
-          } : null,
+          items:
+              _cities.map((String city) {
+                return DropdownMenuItem<String>(value: city, child: Text(city));
+              }).toList(),
+          onChanged:
+              _isEditing
+                  ? (String? newValue) {
+                    setState(() {
+                      _cityController.text = newValue ?? '';
+                    });
+                  }
+                  : null,
         ),
       ],
     );
@@ -327,11 +324,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: const Color(0xFF1E3A8A).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF1E3A8A),
-            size: 24,
-          ),
+          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -342,13 +335,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Color(0xFF1E3A8A),
           ),
         ),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],
     );
   }
@@ -380,11 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: const Color(0xFF1E3A8A).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF1E3A8A),
-            size: 24,
-          ),
+          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
         ),
         title: Text(
           title,
@@ -396,10 +379,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-          ),
+          style: const TextStyle(fontSize: 14, color: Colors.grey),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
@@ -463,7 +443,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // مسح بيانات المستخدم
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.clear();
-                
+
                 Navigator.of(context).pop();
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -489,4 +469,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 }
-

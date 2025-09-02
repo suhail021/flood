@@ -82,7 +82,7 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 // صورة الملف الشخصي
                 _buildActionButton(
-                  icon: Icons.notifications,
+                  icon: Icons.person,
                   title: 'الملف الشخصي',
                   subtitle: ' إدارة الملف الشخصي',
                   onTap: () {
