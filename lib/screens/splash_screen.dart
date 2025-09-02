@@ -1,5 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:google/screens/home_screen.dart';
+import 'package:google/screens/phone_login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -10,14 +12,17 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
-  late Animation<Offset> slidingAnimation;
+  late Animation<Offset> logoSlideAnimation;
+  late Animation<Offset> titleSlideAnimation;
+  late Animation<Offset> subtitleSlideAnimation;
+  late Animation<double> waveAnimation;
   late Animation<double> fadeAnimation;
 
   @override
   void initState() {
     super.initState();
-    initSlidingAnimation();
-    navigateToHome();
+    initAnimations();
+    navigateToPhoneLogin();
   }
 
   @override
@@ -26,13 +31,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
-  void initSlidingAnimation() {
+  void initAnimations() {
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 2000),
     );
     
-    slidingAnimation = Tween<Offset>(
+    // أنيمشن الشعار
+    logoSlideAnimation = Tween<Offset>(
       begin: const Offset(0, 2),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -40,6 +46,34 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       curve: Curves.easeOutCubic,
     ));
     
+    // أنيمشن العنوان الرئيسي
+    titleSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+    ));
+    
+    // أنيمشن العنوان الفرعي
+    subtitleSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 4),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: const Interval(0.4, 1.0, curve: Curves.easeOutCubic),
+    ));
+    
+    // أنيمشن الأمواج
+    waveAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: const Interval(0.6, 1.0, curve: Curves.easeInOut),
+    ));
+    
+    // أنيمشن التلاشي
     fadeAnimation = Tween<double>(
       begin: 0,
       end: 1,
@@ -51,10 +85,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     animationController.forward();
   }
 
-  void navigateToHome() {
-    Future.delayed(const Duration(seconds: 3), () {
+  void navigateToPhoneLogin() {
+    Future.delayed(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const PhoneLoginScreen()),
       );
     });
   }
@@ -62,108 +96,135 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF1565C0), // لون أزرق غامق في الأعلى
+              Color(0xFF64B5F6), // لون أزرق فاتح في الأسفل
+            ],
+          ),
+        ),
+        child: Stack(
           children: [
-            SlideTransition(
-              position: slidingAnimation,
-              child: FadeTransition(
-                opacity: fadeAnimation,
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(60),
-                  ),
-                  child: const Icon(
-                    Icons.app_shortcut,
-                    size: 60,
-                    color: Colors.white,
-                  ),
-                ),
+            // تأثير الموجات
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: AnimatedBuilder(
+                animation: waveAnimation,
+                builder: (context, child) {
+                  return CustomPaint(
+                    size: Size(MediaQuery.of(context).size.width, 200),
+                    painter: WavePainter(waveAnimation.value),
+                  );
+                },
               ),
             ),
-            const SizedBox(height: 30),
-            SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 4),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animationController,
-                curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
-              )),
-              child: FadeTransition(
-                opacity: Tween<double>(
-                  begin: 0,
-                  end: 1,
-                ).animate(CurvedAnimation(
-                  parent: animationController,
-                  curve: const Interval(0.2, 1.0, curve: Curves.easeIn),
-                )),
-                child: const Text(
-                  "تطبيقي الرائع",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+            
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // الشعار
+                  SlideTransition(
+                    position: logoSlideAnimation,
+                    child: FadeTransition(
+                      opacity: fadeAnimation,
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(75),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 15,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.water_drop,
+                            size: 80,
+                            color: Colors.blue[700],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 6),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animationController,
-                curve: const Interval(0.4, 1.0, curve: Curves.easeOutCubic),
-              )),
-              child: FadeTransition(
-                opacity: Tween<double>(
-                  begin: 0,
-                  end: 1,
-                ).animate(CurvedAnimation(
-                  parent: animationController,
-                  curve: const Interval(0.4, 1.0, curve: Curves.easeIn),
-                )),
-                child: const Text(
-                  "تطبيق يجعل حياتك أفضل وأسهل",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
+                  
+                  const SizedBox(height: 40),
+                  
+                  // العنوان الرئيسي
+                  SlideTransition(
+                    position: titleSlideAnimation,
+                    child: FadeTransition(
+                      opacity: fadeAnimation,
+                      child: const Text(
+                        "نظام التنبؤ الذكي للسيول",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 5,
+                              color: Colors.black26,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 8),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animationController,
-                curve: const Interval(0.6, 1.0, curve: Curves.easeOutCubic),
-              )),
-              child: FadeTransition(
-                opacity: Tween<double>(
-                  begin: 0,
-                  end: 1,
-                ).animate(CurvedAnimation(
-                  parent: animationController,
-                  curve: const Interval(0.6, 1.0, curve: Curves.easeIn),
-                )),
-                child: SizedBox(
-                  width: 200,
-                  child: LinearProgressIndicator(
-                    backgroundColor: Colors.grey[200],
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-                    value: null, // لجعل شريط التقدم متحرك
+                  
+                  const SizedBox(height: 15),
+                  
+                  // العنوان الفرعي
+                  SlideTransition(
+                    position: subtitleSlideAnimation,
+                    child: FadeTransition(
+                      opacity: fadeAnimation,
+                      child: const Text(
+                        "للتنبيه المبكر وحماية الأرواح والممتلكات",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                ),
+                  
+                  const SizedBox(height: 50),
+                  
+                  // شريط التقدم
+                  SlideTransition(
+                    position: subtitleSlideAnimation,
+                    child: FadeTransition(
+                      opacity: fadeAnimation,
+                      child: SizedBox(
+                        width: 220,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: const LinearProgressIndicator(
+                            minHeight: 8,
+                            backgroundColor: Colors.white38,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -171,4 +232,62 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
     );
   }
+}
+
+// رسام مخصص لتأثير الموجات
+class WavePainter extends CustomPainter {
+  final double animationValue;
+  
+  WavePainter(this.animationValue);
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withOpacity(0.3)
+      ..style = PaintingStyle.fill;
+    
+    final path = Path();
+    
+    // الموجة الأولى
+    path.moveTo(0, size.height * 0.8);
+    
+    for (double i = 0; i <= size.width; i++) {
+      path.lineTo(
+        i, 
+        size.height * 0.8 + 
+          sin((i / size.width * 4 * 3.14) + (animationValue * 10)) * 20
+      );
+    }
+    
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    
+    canvas.drawPath(path, paint);
+    
+    // الموجة الثانية (أكثر شفافية)
+    final path2 = Path();
+    final paint2 = Paint()
+      ..color = Colors.white.withOpacity(0.2)
+      ..style = PaintingStyle.fill;
+    
+    path2.moveTo(0, size.height * 0.85);
+    
+    for (double i = 0; i <= size.width; i++) {
+      path2.lineTo(
+        i, 
+        size.height * 0.85 + 
+          sin((i / size.width * 3 * 3.14) + (animationValue * 8)) * 15
+      );
+    }
+    
+    path2.lineTo(size.width, size.height);
+    path2.lineTo(0, size.height);
+    path2.close();
+    
+    canvas.drawPath(path2, paint2);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
