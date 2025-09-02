@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google/screens/setting_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/flood_zone_model.dart';
 import 'report_flood_screen.dart';
@@ -14,10 +15,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
   final Set<Polygon> _floodZones = {};
   final Set<Marker> _markers = {};
-  
+
   @override
   void initState() {
     super.initState();
@@ -94,20 +96,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void _createMarkers() {
     // علامة الموقع الحالي
     _markers.add(
-       Marker(
+      Marker(
         markerId: MarkerId('current_location'),
         position: LatLng(15.3694, 44.1910),
-        infoWindow: InfoWindow(
-          title: 'موقعك الحالي',
-          snippet: 'أنت هنا',
-        ),
+        infoWindow: InfoWindow(title: 'موقعك الحالي', snippet: 'أنت هنا'),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       ),
     );
 
     // علامة منطقة الخطر
     _markers.add(
-       Marker(
+      Marker(
         markerId: MarkerId('danger_zone'),
         position: LatLng(15.3994, 44.2260),
         infoWindow: InfoWindow(
@@ -122,11 +121,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           // AppBar مخصص
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: const BoxDecoration(
               color: Color(0xFF1E3A8A),
               boxShadow: [
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProfileScreen(),
+                          builder: (context) => const SettingScreen(),
                         ),
                       );
                     },
@@ -156,7 +156,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 28,
                     ),
                   ),
-                  
                   // شعار التطبيق في الوسط
                   Expanded(
                     child: Row(
@@ -187,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  
+
                   // أيقونة الإشعارات
                   IconButton(
                     onPressed: () {
@@ -208,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          
+
           // الخريطة
           Expanded(
             flex: 2,
@@ -225,11 +224,11 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-          
+
           // بطاقات المناطق
           Container(
             height: 400,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(top: 16,right: 16,left: 16),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -259,6 +258,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xFF1E3A8A), // خلفية زرقاء
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ), // مسافة داخلية
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            15,
+                          ), // حواف دائرية (اختياري)
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -270,23 +281,39 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: const Text(
                         'تقديم بلاغ',
                         style: TextStyle(
-                          color: Color(0xFF1E3A8A),
+                          color: Colors.white, // النص أبيض
                           fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                
+
                 // قائمة البطاقات
                 Expanded(
                   child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.only(top: 10),
                     children: [
-                      _buildRiskCard('منطقة صنعاء القديمة', 'منخفض', Colors.green, 0.1),
-                      _buildRiskCard('منطقة صنعاء الجديدة', 'متوسط', Colors.yellow, 0.3),
-                      _buildRiskCard('منطقة صنعاء الغربية', 'حرج', Colors.red, 0.9),
+                      _buildRiskCard(
+                        'منطقة صنعاء القديمة',
+                        'منخفض',
+                        Colors.green,
+                        0.1,
+                      ),
+                      _buildRiskCard(
+                        'منطقة صنعاء الجديدة',
+                        'متوسط',
+                        Colors.yellow,
+                        0.3,
+                      ),
+                      _buildRiskCard(
+                        'منطقة صنعاء الغربية',
+                        'حرج',
+                        Colors.red,
+                        0.9,
+                      ),
                     ],
                   ),
                 ),
@@ -298,7 +325,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRiskCard(String name, String risk, Color color, double probability) {
+  Widget _buildRiskCard(
+    String name,
+    String risk,
+    Color color,
+    double probability,
+  ) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 12),
@@ -317,11 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: color.withOpacity(0.2),
               borderRadius: BorderRadius.circular(25),
             ),
-            child: Icon(
-              _getRiskIcon(risk),
-              color: color,
-              size: 24,
-            ),
+            child: Icon(_getRiskIcon(risk), color: color, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -347,10 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'احتمالية: ${(probability * 100).toInt()}%',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),

@@ -52,6 +52,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+                  resizeToAvoidBottomInset: false,
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -77,7 +79,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                     child: IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(
-                        Icons.arrow_back_ios,
+                        Icons.arrow_forward_ios,
                         color: Colors.white,
                         size: 28,
                       ),

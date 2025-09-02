@@ -46,7 +46,9 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:   Color(0xFF60A5FA),
       body: Container(
+        
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -60,7 +62,7 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.only(top: 24.0,left: 24.0,right: 24,bottom: 24),
             child: Form(
               key: _formKey,
               child: Column(
@@ -71,7 +73,7 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                     child: IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(
-                        Icons.arrow_back_ios,
+                        Icons.arrow_forward_ios,
                         color: Colors.white,
                         size: 28,
                       ),
@@ -267,6 +269,7 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                             ),
                     ),
                   ),
+               
                 ],
               ),
             ),

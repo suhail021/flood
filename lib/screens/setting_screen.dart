@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google/screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'phone_login_screen.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _SettingScreenState extends State<SettingScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
@@ -50,7 +51,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _nameController.text = prefs.getString('user_name') ?? 'أحمد محمد';
-      _addressController.text = prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
+      _addressController.text =
+          prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
       _cityController.text = prefs.getString('user_city') ?? 'صنعاء';
     });
   }
@@ -58,144 +60,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:   Color(0xFF60A5FA),
       appBar: AppBar(
-        title: const Text(
-          'الملف الشخصي',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text('الأعدادات ', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF1E3A8A),
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _isEditing = !_isEditing;
-              });
-            },
-            icon: Icon(_isEditing ? Icons.close : Icons.edit),
-          ),
-        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1E3A8A),
-              Color(0xFF3B82F6),
-              Color(0xFF60A5FA),
-            ],
+            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
           ),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // صورة الملف الشخصي
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(60),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
+            child: Column(
+              children: [
+                // صورة الملف الشخصي
+                _buildActionButton(
+                  icon: Icons.notifications,
+                  title: 'الملف الشخصي',
+                  subtitle: ' إدارة الملف الشخصي',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                // أزرار إضافية
+                if (!_isEditing) ...[
+                  _buildActionButton(
+                    icon: Icons.notifications,
+                    title: 'الإشعارات',
+                    subtitle: 'إدارة الإشعارات',
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('سيتم إضافة إدارة الإشعارات قريباً'),
+                          backgroundColor: Colors.blue,
                         ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Color(0xFF1E3A8A),
-                    ),
+                      );
+                    },
                   ),
-                  const SizedBox(height: 24),
-                  
-                  // اسم المستخدم
-                  Text(
-                    _nameController.text,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  
-                  Text(
-                    'مستخدم نشط',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 40),
-                  
-                  // معلومات المستخدم
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      children: [
-                        // حقل الاسم
-                        _buildInfoField(
-                          label: 'الاسم الكامل',
-                          icon: Icons.person,
-                          controller: _nameController,
-                          enabled: _isEditing,
-                        ),
-                        const SizedBox(height: 20),
-                        
-                        // حقل العنوان
-                        _buildInfoField(
-                          label: 'العنوان',
-                          icon: Icons.location_on,
-                          controller: _addressController,
-                          enabled: _isEditing,
-                        ),
-                        const SizedBox(height: 20),
-                        
-                        // حقل المدينة
-                        _buildCityField(),
-                        const SizedBox(height: 20),
-                        
-                        // إحصائيات
-                        if (!_isEditing) ...[
-                          const Divider(),
-                          const SizedBox(height: 20),
-                          _buildStatsRow(),
-                        ],
-                        
 
-                      ],
-                    ),
+                  const SizedBox(height: 16),
+
+                  _buildActionButton(
+                    icon: Icons.security,
+                    title: 'الأمان',
+                    subtitle: 'إعدادات الأمان',
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('سيتم إضافة إعدادات الأمان قريباً'),
+                          backgroundColor: Colors.blue,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  _buildActionButton(
+                    icon: Icons.help,
+                    title: 'المساعدة',
+                    subtitle: 'الدعم والمساعدة',
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('سيتم إضافة صفحة المساعدة قريباً'),
+                          backgroundColor: Colors.blue,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 24),
-                  
-                  // أزرار إضافية
-               
+
+                  // زر تسجيل الخروج
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: _logout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'تسجيل الخروج',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
+              ],
             ),
           ),
         ),
@@ -208,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required IconData icon,
     required TextEditingController controller,
     required bool enabled,
-    }) {
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,7 +240,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         DropdownButtonFormField<String>(
           value: _cityController.text.isEmpty ? null : _cityController.text,
           decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.location_city, color: Color(0xFF1E3A8A)),
+            prefixIcon: const Icon(
+              Icons.location_city,
+              color: Color(0xFF1E3A8A),
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
@@ -290,17 +265,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               vertical: 16,
             ),
           ),
-          items: _cities.map((String city) {
-            return DropdownMenuItem<String>(
-              value: city,
-              child: Text(city),
-            );
-          }).toList(),
-          onChanged: _isEditing ? (String? newValue) {
-            setState(() {
-              _cityController.text = newValue ?? '';
-            });
-          } : null,
+          items:
+              _cities.map((String city) {
+                return DropdownMenuItem<String>(value: city, child: Text(city));
+              }).toList(),
+          onChanged:
+              _isEditing
+                  ? (String? newValue) {
+                    setState(() {
+                      _cityController.text = newValue ?? '';
+                    });
+                  }
+                  : null,
         ),
       ],
     );
@@ -327,11 +303,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: const Color(0xFF1E3A8A).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF1E3A8A),
-            size: 24,
-          ),
+          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -342,13 +314,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Color(0xFF1E3A8A),
           ),
         ),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],
     );
   }
@@ -380,11 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: const Color(0xFF1E3A8A).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF1E3A8A),
-            size: 24,
-          ),
+          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
         ),
         title: Text(
           title,
@@ -396,10 +358,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-          ),
+          style: const TextStyle(fontSize: 14, color: Colors.grey),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
@@ -463,7 +422,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // مسح بيانات المستخدم
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.clear();
-                
+
                 Navigator.of(context).pop();
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -489,4 +448,3 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 }
-
