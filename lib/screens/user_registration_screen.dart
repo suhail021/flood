@@ -46,7 +46,7 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:   Color(0xFF60A5FA),
+      backgroundColor: Color(0xFF60A5FA),
       body: Container(
         
         decoration: const BoxDecoration(
@@ -142,14 +142,17 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                     ),
                     child: TextFormField(
                       controller: _nameController,
+                      textAlign: TextAlign.right, // محاذاة النص لليمين
                       decoration: const InputDecoration(
                         hintText: 'الاسم الكامل',
-                        prefixIcon: Icon(Icons.person, color: Color(0xFF1E3A8A)),
+                        hintTextDirection: TextDirection.rtl, // اتجاه النص الظاهر
+                        suffixIcon: Icon(Icons.person, color: Color(0xFF1E3A8A)), // تغيير من suffix إلى prefix
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 16,
                         ),
+                        alignLabelWithHint: true,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -176,14 +179,17 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                     ),
                     child: TextFormField(
                       controller: _addressController,
+                      textAlign: TextAlign.right, // محاذاة النص لليمين
                       decoration: const InputDecoration(
                         hintText: 'العنوان التفصيلي',
-                        prefixIcon: Icon(Icons.location_on, color: Color(0xFF1E3A8A)),
+                        hintTextDirection: TextDirection.rtl, // اتجاه النص الظاهر
+                        suffixIcon: Icon(Icons.location_on, color: Color(0xFF1E3A8A)), // تغيير من suffix إلى prefix
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 16,
                         ),
+                        alignLabelWithHint: true,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -208,20 +214,25 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                         ),
                       ],
                     ),
+
                     child: DropdownButtonFormField<String>(
                       value: _cityController.text.isEmpty ? null : _cityController.text,
+                      alignment: AlignmentDirectional.centerStart, // محاذاة القائمة المنسدلة لليمين
                       decoration: const InputDecoration(
                         hintText: 'اختر المدينة',
-                        prefixIcon: Icon(Icons.location_city, color: Color(0xFF1E3A8A)),
+                        hintTextDirection: TextDirection.rtl, // اتجاه النص الظاهر
+                        suffixIcon: Icon(Icons.location_city, color: Color(0xFF1E3A8A)), // تغيير من suffix إلى prefix
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 16,
                         ),
-                      ),
+                        alignLabelWithHint: true,
+                       ),
                       items: _cities.map((String city) {
                         return DropdownMenuItem<String>(
                           value: city,
+                          alignment: Alignment.centerRight, // محاذاة عناصر القائمة لليمين
                           child: Text(city),
                         );
                       }).toList(),
@@ -238,6 +249,7 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                       },
                     ),
                   ),
+             
                   const SizedBox(height: 40),
                   
                   // زر إكمال التسجيل

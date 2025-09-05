@@ -54,12 +54,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
-        title: const Text(
-          'الإشعارات',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF1E3A8A),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -77,9 +73,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF1E3A8A),
-              Color(0xFF3B82F6),
-              Color(0xFF60A5FA),
+              Color(0xFF1565C0), // لون أزرق غامق في الأعلى
+              Color(0xFF64B5F6),
             ],
           ),
         ),
@@ -104,13 +99,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildStatItem('إجمالي الإشعارات', '${_notifications.length}', Icons.notifications),
-                    _buildStatItem('غير مقروءة', '${_notifications.where((n) => !n.isRead).length}', Icons.mark_email_unread),
-                    _buildStatItem('اليوم', '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}', Icons.today),
+                    _buildStatItem(
+                      'إجمالي الإشعارات',
+                      '${_notifications.length}',
+                      Icons.notifications,
+                    ),
+                    _buildStatItem(
+                      'غير مقروءة',
+                      '${_notifications.where((n) => !n.isRead).length}',
+                      Icons.mark_email_unread,
+                    ),
+                    _buildStatItem(
+                      'اليوم',
+                      '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
+                      Icons.today,
+                    ),
                   ],
                 ),
               ),
-              
+
               // قائمة الإشعارات
               Expanded(
                 child: Container(
@@ -149,11 +156,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             color: const Color(0xFF1E3A8A).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF1E3A8A),
-            size: 24,
-          ),
+          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -166,10 +169,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
           textAlign: TextAlign.center,
         ),
       ],
@@ -180,10 +180,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: notification.isRead ? Colors.grey.withOpacity(0.05) : Colors.white,
+        color:
+            notification.isRead ? Colors.grey.withOpacity(0.05) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: notification.isRead ? Colors.grey.withOpacity(0.2) : _getNotificationColor(notification.type).withOpacity(0.3),
+          color:
+              notification.isRead
+                  ? Colors.grey.withOpacity(0.2)
+                  : _getNotificationColor(notification.type).withOpacity(0.3),
           width: 1,
         ),
         boxShadow: [
@@ -216,7 +220,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 notification.title,
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
+                  fontWeight:
+                      notification.isRead ? FontWeight.normal : FontWeight.bold,
                   color: notification.isRead ? Colors.grey : Colors.black87,
                 ),
               ),
@@ -246,10 +251,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             const SizedBox(height: 8),
             Text(
               _formatTimestamp(notification.timestamp),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
         ),
@@ -260,18 +262,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               _deleteNotification(notification.id);
             }
           },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'delete',
-              child: Row(
-                children: [
-                  Icon(Icons.delete, color: Colors.red),
-                  SizedBox(width: 8),
-                  Text('حذف'),
-                ],
-              ),
-            ),
-          ],
+          itemBuilder:
+              (context) => [
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text('حذف'),
+                    ],
+                  ),
+                ),
+              ],
         ),
       ),
     );
@@ -335,7 +338,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         notification.isRead = true;
       }
     });
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('تم تحديد جميع الإشعارات كمقروءة'),
@@ -348,7 +351,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() {
       _notifications.removeWhere((n) => n.id == id);
     });
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('تم حذف الإشعار'),

@@ -74,8 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _isEditing = !_isEditing;
               });
             },
-            tooltip:_isEditing ? ' حفظ' : 'تعديل',
-            
+            tooltip: _isEditing ? ' حفظ' : 'تعديل',
+
             icon: Icon(_isEditing ? Icons.done : Icons.edit),
           ),
         ],

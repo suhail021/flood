@@ -138,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         width: 150,
                         height: 150,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.transparent,
                           borderRadius: BorderRadius.circular(75),
                           boxShadow: [
                             BoxShadow(
@@ -149,11 +149,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                           ],
                         ),
                         child: Center(
-                          child: Icon(
-                            Icons.water_drop,
-                            size: 80,
-                            color: Colors.blue[700],
-                          ),
+                          child: Image.asset('assets/images/logo.jpg'),
                         ),
                       ),
                     ),
