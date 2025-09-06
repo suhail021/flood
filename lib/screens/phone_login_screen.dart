@@ -19,22 +19,18 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor:      Color(0xFF60A5FA) ,
+      backgroundColor: Color(0xFF60A5FA),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1E3A8A),
-              Color(0xFF3B82F6),
-              Color(0xFF60A5FA),
-            ],
+            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
           ),
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(top:  2.0,right: 24,left: 24),
+            padding: const EdgeInsets.only(top: 2.0, right: 24, left: 24),
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
@@ -58,15 +54,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.water_drop,
-                          size: 60,
-                          color: Color(0xFF1E3A8A),
-                        ),
+                        child: Image.asset('assets/images/logo.jpg'),
                       ),
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // عنوان التطبيق
                     const Text(
                       'نظام التنبؤ الذكي للسيول',
@@ -78,17 +70,14 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
-                    
+
                     const Text(
                       'أدخل رقم هاتفك للبدء',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.white70),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 48),
-                    
+
                     // حقل إدخال رقم الهاتف
                     Container(
                       decoration: BoxDecoration(
@@ -110,7 +99,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         ],
                         decoration: const InputDecoration(
                           hintText: 'رقم الهاتف',
-                          prefixIcon: Icon(Icons.phone, color: Color(0xFF1E3A8A)),
+                          prefixIcon: Icon(
+                            Icons.phone,
+                            color: Color(0xFF1E3A8A),
+                          ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 20,
@@ -129,7 +121,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // زر إرسال رمز التحقق
                     SizedBox(
                       width: double.infinity,
@@ -144,19 +136,20 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           ),
                           elevation: 0,
                         ),
-                        child: _isLoading
-                            ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Color(0xFF1E3A8A),
+                        child:
+                            _isLoading
+                                ? const CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Color(0xFF1E3A8A),
+                                  ),
+                                )
+                                : const Text(
+                                  'إرسال رمز التحقق',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              )
-                            : const Text(
-                                'إرسال رمز التحقق',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -165,10 +158,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       onPressed: _callEmergency,
                       child: const Text(
                         'اتصال طوارئ',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ],
@@ -198,9 +188,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PhoneVerificationScreen(
-            phoneNumber: _phoneController.text,
-          ),
+          builder:
+              (context) =>
+                  PhoneVerificationScreen(phoneNumber: _phoneController.text),
         ),
       );
     }
