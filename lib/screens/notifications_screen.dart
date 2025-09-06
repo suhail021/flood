@@ -53,90 +53,93 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF1E3A8A),
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: _markAllAsRead,
-            icon: const Icon(Icons.done_all),
-            tooltip: 'تحديد الكل كمقروء',
-          ),
-        ],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-          ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
+          backgroundColor: const Color(0xFF1E3A8A),
+          foregroundColor: Colors.white,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: _markAllAsRead,
+              icon: const Icon(Icons.done_all),
+              tooltip: 'تحديد الكل كمقروء',
+            ),
+          ],
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // إحصائيات سريعة
-              Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStatItem(
-                      'إجمالي الإشعارات',
-                      '${_notifications.length}',
-                      Icons.notifications,
-                    ),
-                    _buildStatItem(
-                      'غير مقروءة',
-                      '${_notifications.where((n) => !n.isRead).length}',
-                      Icons.mark_email_unread,
-                    ),
-                    _buildStatItem(
-                      'اليوم',
-                      '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
-                      Icons.today,
-                    ),
-                  ],
-                ),
-              ),
-
-              // قائمة الإشعارات
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: const BoxDecoration(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                // إحصائيات سريعة
+                Container(
+                  margin: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _notifications.length,
-                    itemBuilder: (context, index) {
-                      final notification = _notifications[index];
-                      return _buildNotificationCard(notification);
-                    },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildStatItem(
+                        'إجمالي الإشعارات',
+                        '${_notifications.length}',
+                        Icons.notifications,
+                      ),
+                      _buildStatItem(
+                        'غير مقروءة',
+                        '${_notifications.where((n) => !n.isRead).length}',
+                        Icons.mark_email_unread,
+                      ),
+                      _buildStatItem(
+                        'اليوم',
+                        '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
+                        Icons.today,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+      
+                // قائمة الإشعارات
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _notifications.length,
+                      itemBuilder: (context, index) {
+                        final notification = _notifications[index];
+                        return _buildNotificationCard(notification);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

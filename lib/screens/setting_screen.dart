@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'phone_login_screen.dart';
@@ -59,115 +60,119 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:   Color(0xFF60A5FA),
-      appBar: AppBar(
-        title: const Text('الأعدادات ', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF1E3A8A),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-          ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor:   Color(0xFF60A5FA),
+        appBar: AppBar(
+          title: const Text('الأعدادات ', style: TextStyle(color: Colors.white)),
+          backgroundColor: const Color(0xFF1E3A8A),
+          foregroundColor: Colors.white,
+          elevation: 0,
         ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                // صورة الملف الشخصي
-                _buildActionButton(
-                  icon: Icons.person,
-                  title: 'الملف الشخصي',
-                  subtitle: ' إدارة الملف الشخصي',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                // أزرار إضافية
-                if (!_isEditing) ...[
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
+            ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: [
+                  // صورة الملف الشخصي
                   _buildActionButton(
-                    icon: Icons.notifications,
-                    title: 'الإشعارات',
-                    subtitle: 'إدارة الإشعارات',
+                    icon: Icons.person,
+                    title: 'الملف الشخصي',
+                    subtitle: ' إدارة الملف الشخصي',
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('سيتم إضافة إدارة الإشعارات قريباً'),
-                          backgroundColor: Colors.blue,
-                        ),
-                      );
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  _buildActionButton(
-                    icon: Icons.security,
-                    title: 'الأمان',
-                    subtitle: 'إعدادات الأمان',
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('سيتم إضافة إعدادات الأمان قريباً'),
-                          backgroundColor: Colors.blue,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileScreen(),
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 16),
-
-                  _buildActionButton(
-                    icon: Icons.help,
-                    title: 'المساعدة',
-                    subtitle: 'الدعم والمساعدة',
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('سيتم إضافة صفحة المساعدة قريباً'),
-                          backgroundColor: Colors.blue,
+                  // أزرار إضافية
+                  if (!_isEditing) ...[
+                    _buildActionButton(
+                      icon: Icons.notifications,
+                      title: 'الإشعارات',
+                      subtitle: 'إدارة الإشعارات',
+                      onTap: () {
+      
+                           Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsScreen(),
                         ),
                       );
-                    },
-                  ),
-                  const SizedBox(height: 24),
-
-                  // زر تسجيل الخروج
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: _logout,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                      },
+                    ),
+      
+                    const SizedBox(height: 16),
+      
+                    _buildActionButton(
+                      icon: Icons.security,
+                      title: 'الأمان',
+                      subtitle: 'إعدادات الأمان',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('سيتم إضافة إعدادات الأمان قريباً'),
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+      
+                    _buildActionButton(
+                      icon: Icons.help,
+                      title: 'المساعدة',
+                      subtitle: 'الدعم والمساعدة',
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('سيتم إضافة صفحة المساعدة قريباً'),
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 24),
+      
+                    // زر تسجيل الخروج
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: _logout,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 0,
                         ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'تسجيل الخروج',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        child: const Text(
+                          'تسجيل الخروج',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

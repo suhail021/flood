@@ -250,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+  
             child: SafeArea(
               child: Row(
                 children: [

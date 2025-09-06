@@ -60,7 +60,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
                     // عنوان التطبيق
                     const Text(
-                      'نظام التنبؤ الذكي للسيول',
+                      ' التنبؤ الذكي للسيول' ,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       style: TextStyle(fontSize: 16, color: Colors.white70),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 30),
 
                     // حقل إدخال رقم الهاتف
                     Container(
