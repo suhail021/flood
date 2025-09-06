@@ -18,7 +18,6 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFF60A5FA),
       body: Container(
         decoration: const BoxDecoration(
@@ -41,20 +40,20 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 80),
                       child: Container(
-                        width: 120,
-                        height: 120,
+                        width: 210,
+                        height: 210,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.transparent,
                           borderRadius: BorderRadius.circular(60),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black.withOpacity(0.1),
+                          //     blurRadius: 20,
+                          //     offset: const Offset(0, 10),
+                          //   ),
+                          // ],
                         ),
-                        child: Image.asset('assets/images/logo.jpg'),
+                        child: Image.asset('assets/images/logo.png'),
                       ),
                     ),
                     const SizedBox(height: 32),

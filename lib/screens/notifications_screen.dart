@@ -72,10 +72,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1565C0), // لون أزرق غامق في الأعلى
-              Color(0xFF64B5F6),
-            ],
+            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
           ),
         ),
         child: SafeArea(

@@ -102,8 +102,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF1565C0), // لون أزرق غامق في الأعلى
-              Color(0xFF64B5F6), // لون أزرق فاتح في الأسفل
+              Color(0xFF1E3A8A),
+              Color(0xFF3B82F6),
+              Color(0xFF60A5FA),// لون أزرق فاتح في الأسفل
             ],
           ),
         ),
@@ -135,28 +136,28 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     child: FadeTransition(
                       opacity: fadeAnimation,
                       child: Container(
-                        width: 150,
-                        height: 150,
+                        width: 200,
+                        height: 200,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(75),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 15,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black.withOpacity(0.2),
+                          //     blurRadius: 15,
+                          //     offset: const Offset(0, 5),
+                          //   ),
+                          // ],
                         ),
                         child: Center(
-                          child: Image.asset('assets/images/logo.jpg'),
+                          child: Image.asset('assets/images/logo.png'),
                         ),
                       ),
                     ),
                   ),
-                  
+              
                   const SizedBox(height: 40),
-                  
+                   
                   // العنوان الرئيسي
                   SlideTransition(
                     position: titleSlideAnimation,
