@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     controller.animateCamera(
       CameraUpdate.newLatLngZoom(
         LatLng(position.latitude, position.longitude),
-        13.1,
+        14.1,
       ),
     );
   }
@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // البطاقات
           Container(
             height: 400,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(bottom: 0, left: 16, right: 16, top: 16),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -374,6 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: ListView(
+                    padding: EdgeInsets.only(top: 0 ),
                     children: [
                       _buildRiskCard(
                         'منطقة السالية الشمالية',
@@ -383,18 +384,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         const LatLng(15.4340281, 44.2216007),
                       ),
                       _buildRiskCard(
-                        'منطقة السالية القديمة',
-                        'منخفض',
-                        Colors.green,
-                        0.3,
-                        const LatLng(15.3450521, 44.2152535),
-                      ),
-                      _buildRiskCard(
                         'منطقة السالية الجديدة',
                         'متوسط',
                         Colors.yellow,
                         0.6,
                         const LatLng(15.3724301, 44.2118893),
+                      ),
+                      _buildRiskCard(
+                        'منطقة السالية القديمة',
+                        'منخفض',
+                        Colors.green,
+                        0.3,
+                        const LatLng(15.3450521, 44.2152535),
                       ),
                     ],
                   ),

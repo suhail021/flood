@@ -87,7 +87,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                         controller: _descriptionController,
                         maxLines: 4,
                         decoration: const InputDecoration(
-                          hintText: 'وصف تفصيلي للمشكلة...',
+                          hintText: 'وصف تفصيلي للبلاغ...',
                           prefixIcon: Icon(
                             Icons.description,
                             color: Color(0xFF1E3A8A),
@@ -97,11 +97,9 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'الرجاء إدخال وصف للمشكلة';
+                            return 'الرجاء إدخال وصف البلاغ';
                           }
-                          if (value.length < 10) {
-                            return 'الوصف يجب أن يكون أكثر من 10 أحرف';
-                          }
+                      
                           return null;
                         },
                       ),
@@ -426,12 +424,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
 
   void _selectLocationOnMap() {
     // TODO: فتح خريطة لاختيار الموقع
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('سيتم إضافة هذه الميزة قريباً'),
-        backgroundColor: Colors.blue,
-      ),
-    );
+
   }
 
   void _submitReport() async {
