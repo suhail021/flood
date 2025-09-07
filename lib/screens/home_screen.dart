@@ -240,7 +240,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-
             child: SafeArea(
               child: Row(
                 children: [
@@ -294,19 +293,51 @@ class _HomeScreenState extends State<HomeScreen> {
           // الخريطة
           Expanded(
             flex: 2,
-            child: GoogleMap(
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              mapType: MapType.normal,
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(15.3694, 44.1910),
-                zoom: 13.0,
-              ),
-              polylines: _floodZones,
-              markers: _markers,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
+            child: Stack(
+              children: [
+                GoogleMap(
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                  mapType: MapType.normal,
+                  initialCameraPosition: const CameraPosition(
+                    target: LatLng(15.3694, 44.1910),
+                    zoom: 13.0,
+                  ),
+                  polylines: _floodZones,
+                  markers: _markers,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                ),
+                
+                // Search Bar - أضفنا هنا شريط البحث الشفاف
+                Positioned(
+                  top: 10,
+                  left: 16,
+                  right: 16,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                    child: TextField(
+                      textAlign: TextAlign.right,
+                      decoration: InputDecoration(
+                        hintText: '   البحث  ',
+                        hintStyle: TextStyle(color: Colors.grey.shade600),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Color(0xFF1E3A8A).withOpacity(0.7),
+                          size: 24,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(top: 12,right: 12,bottom: 12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -374,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: ListView(
-                    padding: EdgeInsets.only(top: 0 ),
+                    padding: EdgeInsets.only(top: 0),
                     children: [
                       _buildRiskCard(
                         'منطقة السالية الشمالية',

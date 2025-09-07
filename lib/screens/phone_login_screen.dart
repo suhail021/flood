@@ -81,7 +81,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(13),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
@@ -131,7 +131,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           backgroundColor: Colors.white,
                           foregroundColor: const Color(0xFF1E3A8A),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(13),
                           ),
                           elevation: 0,
                         ),

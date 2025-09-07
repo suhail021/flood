@@ -80,7 +80,7 @@ class FloodAlertApp extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.tealBlue, width: 2),
+            borderSide: const BorderSide(color: AppColors.primaryBrown, width: 2),
           ),
         ),
         
