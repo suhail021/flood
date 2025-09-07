@@ -150,13 +150,13 @@ class _SettingScreenState extends State<SettingScreen> {
       
                     _buildActionButton(
                       icon: Icons.help,
-                      title: 'المساعدة',
+                      title: ' المساعدة والدعم',
                       subtitle: 'الدعم والمساعدة',
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SecurityHelpScreen(),
+                            builder: (context) =>  HelpPage(),
                           ),
                         );
                       },

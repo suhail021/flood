@@ -57,28 +57,17 @@ class _HomeScreenState extends State<HomeScreen> {
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    setState(() {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId('my_location'),
-          position: LatLng(position.latitude, position.longitude),
-          infoWindow: const InfoWindow(title: "موقعي الحالي"),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        ),
-      );
-    });
-
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(
       CameraUpdate.newLatLngZoom(
         LatLng(position.latitude, position.longitude),
-        14,
+        13.1,
       ),
     );
   }
 
   /// إنشاء مناطق الخطر
- void _createFloodZones() {
+  void _createFloodZones() {
     // منطقة صنعاء - خطر منخفض (أخضر)
     _floodZones.add(
       Polyline(
@@ -231,6 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -250,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-  
+
             child: SafeArea(
               child: Row(
                 children: [
@@ -305,6 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             flex: 2,
             child: GoogleMap(
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
               mapType: MapType.normal,
               initialCameraPosition: const CameraPosition(
                 target: LatLng(15.3694, 44.1910),
@@ -388,21 +380,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         'حرج',
                         Colors.red,
                         0.9,
-                        const LatLng(15.4503057, 44.2213646),
+                        const LatLng(15.4340281, 44.2216007),
                       ),
                       _buildRiskCard(
                         'منطقة السالية القديمة',
                         'منخفض',
                         Colors.green,
                         0.3,
-                        const LatLng(15.3582071, 44.2100876),
+                        const LatLng(15.3450521, 44.2152535),
                       ),
                       _buildRiskCard(
                         'منطقة السالية الجديدة',
                         'متوسط',
                         Colors.yellow,
                         0.6,
-                        const LatLng(15.4082544, 44.2205278),
+                        const LatLng(15.3724301, 44.2118893),
                       ),
                     ],
                   ),
@@ -426,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () async {
         final GoogleMapController controller = await _controller.future;
         controller.animateCamera(
-          CameraUpdate.newLatLngZoom(targetLocation, 15),
+          CameraUpdate.newLatLngZoom(targetLocation, 13.2),
         );
       },
       child: Container(
@@ -473,8 +465,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'احتمالية: ${(probability * 100).toInt()}%',
-                    style:
-                        const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),

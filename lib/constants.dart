@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // نظام الألوان المبسط - لونان أساسيان فقط
 class AppColors {
   // اللونان الأساسيان المختاران للتطبيق
-  static const Color primaryBrown = Color(0xFF8B4513); // البني الداكن - اللون الأساسي
+  static const Color primaryBrown = Color(0xFF1E3A8A); // البني الداكن - اللون الأساسي
   static const Color tealBlue = Color(0xFF4A9B8E); // الأزرق المخضر - اللون الثانوي
   
   // ألوان مساعدة
