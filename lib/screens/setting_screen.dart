@@ -3,6 +3,8 @@ import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'phone_login_screen.dart';
+import 'security_help_screen.dart';
+import 'my_reports_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -101,6 +103,20 @@ class _SettingScreenState extends State<SettingScreen> {
                   // أزرار إضافية
                   if (!_isEditing) ...[
                     _buildActionButton(
+                      icon: Icons.assignment,
+                      title: 'بلاغاتي',
+                      subtitle: 'عرض جميع بلاغاتك',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyReportsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    _buildActionButton(
                       icon: Icons.notifications,
                       title: 'الإشعارات',
                       subtitle: 'إدارة الإشعارات',
@@ -115,21 +131,21 @@ class _SettingScreenState extends State<SettingScreen> {
                       },
                     ),
       
-                    const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
       
-                    _buildActionButton(
-                      icon: Icons.security,
-                      title: 'الأمان',
-                      subtitle: 'إعدادات الأمان',
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('سيتم إضافة إعدادات الأمان قريباً'),
-                            backgroundColor: Colors.blue,
-                          ),
-                        );
-                      },
-                    ),
+                    // _buildActionButton(
+                    //   icon: Icons.security,
+                    //   title: 'الأمان',
+                    //   subtitle: 'إعدادات الأمان',
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => const SecurityHelpScreen(),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     const SizedBox(height: 16),
       
                     _buildActionButton(
@@ -137,10 +153,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       title: 'المساعدة',
                       subtitle: 'الدعم والمساعدة',
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('سيتم إضافة صفحة المساعدة قريباً'),
-                            backgroundColor: Colors.blue,
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SecurityHelpScreen(),
                           ),
                         );
                       },
