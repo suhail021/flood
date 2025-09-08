@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'home_screen.dart';
 
 class UserRegistrationScreen extends StatefulWidget {
@@ -17,13 +18,10 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
+  final _passController = TextEditingController();
   final _cityController = TextEditingController();
   bool _isLoading = false;
 
-  final List<String> _cities = [
-    'صنعاء',
-
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -119,48 +117,25 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                     // العنوان
                     _buildTextField(
                       controller: _addressController,
-                      hint: 'العنوان التفصيلي',
-                      icon: Icons.location_on,
+                      pass: true,
+                      hint: ' كلمة السر',
+                      icon: Icons.lock,
                       validator: (value) =>
-                          value!.isEmpty ? 'الرجاء إدخال العنوان' : null,
+                          value!.isEmpty ? 'الرجاء إدخال كلمة السر ' : null,
+                    ),
+              
+                    const SizedBox(height: 20),
+                    _buildTextField(
+                      pass: true,
+                      controller: _passController,
+                      hint: ' تاكيد كلمة السر',
+                      icon: Icons.lock_outline,
+                      validator: (value) =>
+                          value!.isEmpty ? 'الرجاء إدخال تاكيد كلمة السر ' : null,
                     ),
                     const SizedBox(height: 20),
-
+  const SizedBox(height: 15),
                     // المدينة
-                    Container(
-                      decoration: _boxDecoration(),
-                      child: DropdownButtonFormField<String>(
-                        value: _cityController.text.isEmpty
-                            ? null
-                            : _cityController.text,
-                        decoration: const InputDecoration(
-                          hintText: 'اختر المدينة',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
-                          ),
-                          prefixIcon: Icon(Icons.location_city, color: const Color(0xFF1E3A8A)),
-                        ),
-                        items: _cities.map((city) {
-                          return DropdownMenuItem<String>(
-                            value: city,
-                            alignment: Alignment.centerRight,
-                            child: Text(city),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _cityController.text = value ?? '';
-                          });
-                        },
-                        validator: (value) =>
-                            (value == null || value.isEmpty)
-                                ? 'الرجاء اختيار المدينة'
-                                : null,
-                      ),
-                    ),
-                    const SizedBox(height: 40),
 
                     SizedBox(
                       width: double.infinity,
@@ -204,11 +179,13 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
     required TextEditingController controller,
     required String hint,
     required IconData icon,
+    bool  pass = false,
     String? Function(String?)? validator,
   }) {
     return Container(
       decoration: _boxDecoration(),
       child: TextFormField(
+        obscureText: pass,
         controller: controller,
         textAlign: TextAlign.right,
         textDirection: TextDirection.rtl, // النص ومؤشر الماوس RTL

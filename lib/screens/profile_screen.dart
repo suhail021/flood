@@ -12,33 +12,13 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _passController = TextEditingController();
   final _addressController = TextEditingController();
   final _cityController = TextEditingController();
   bool _isEditing = false;
   bool _isLoading = false;
 
-  final List<String> _cities = [
-    'صنعاء',
-    'عدن',
-    'تعز',
-    'الحديدة',
-    'إب',
-    'ذمار',
-    'البيضاء',
-    'حضرموت',
-    'شبوة',
-    'مأرب',
-    'الجوف',
-    'صعدة',
-    'عمران',
-    'ريمة',
-    'أبين',
-    'لحج',
-    'أب',
-    'المحويت',
-    'الضالع',
-    'بيحان',
-  ];
+
 
   @override
   void initState() {
@@ -58,136 +38,133 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'الملف الشخصي',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color(0xFF1E3A8A),
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _isEditing = !_isEditing;
-              });
-            },
-            tooltip: _isEditing ? ' حفظ' : 'تعديل',
-
-            icon: Icon(_isEditing ? Icons.done : Icons.edit),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Color(0xFF60A5FA),
+        appBar: AppBar(
+          title: const Text(
+            'الملف الشخصي',
+            style: TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-          ),
+          backgroundColor: const Color(0xFF1E3A8A),
+          foregroundColor: Colors.white,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _isEditing = !_isEditing;
+                });
+              },
+              tooltip: _isEditing ? ' حفظ' : 'تعديل',
+      
+              icon: Icon(_isEditing ? Icons.done : Icons.edit),
+            ),
+          ],
         ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // صورة الملف الشخصي
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(60),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Color(0xFF1E3A8A),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // اسم المستخدم
-                  Text(
-                    _nameController.text,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-
-                  Text(
-                    'مستخدم نشط',
-                    style: const TextStyle(fontSize: 16, color: Colors.white70),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 40),
-
-                  // معلومات المستخدم
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      children: [
-                        // حقل الاسم
-                        _buildInfoField(
-                          label: 'الاسم الكامل',
-                          icon: Icons.person,
-                          controller: _nameController,
-                          enabled: _isEditing,
-                        ),
-                        const SizedBox(height: 20),
-
-                        // حقل العنوان
-                        _buildInfoField(
-                          label: 'العنوان',
-                          icon: Icons.location_on,
-                          controller: _addressController,
-                          enabled: _isEditing,
-                        ),
-                        const SizedBox(height: 20),
-
-                        // حقل المدينة
-                        _buildCityField(),
-                        const SizedBox(height: 20),
-
-                        // إحصائيات
-                        if (!_isEditing) ...[
-                          const Divider(),
-                          const SizedBox(height: 20),
-                          _buildStatsRow(),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
+            ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // صورة الملف الشخصي
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(60),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
                         ],
-                      ],
+                      ),
+                      child: const Icon(
+                        Icons.person,
+                        size: 60,
+                        color: Color(0xFF1E3A8A),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // أزرار إضافية
-                ],
+                    const SizedBox(height: 24),
+      
+                    // اسم المستخدم
+                    Text(
+                      _nameController.text,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+      
+                    Text(
+                      'مستخدم نشط',
+                      style: const TextStyle(fontSize: 16, color: Colors.white70),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 40),
+      
+                    // معلومات المستخدم
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        children: [
+                          // حقل الاسم
+                          _buildInfoField(
+                            label: 'الاسم الكامل',
+                            icon: Icons.person,
+                            controller: _nameController,
+                            enabled: _isEditing,
+                          ),
+                          const SizedBox(height: 20),
+                          _buildInfoField(
+                            label: 'رقم الهاتف',
+                            icon: Icons.phone,
+                            controller: _passController,
+                            enabled: _isEditing,
+                          ),
+                          const SizedBox(height: 20),
+      
+      
+                        
+      
+                          // إحصائيات
+                          if (!_isEditing) ...[
+                          ],
+                        ],
+                      ),
+                    ),
+      
+                    // أزرار إضافية
+                  ],
+                ),
               ),
             ),
           ),
@@ -245,74 +222,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildCityField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'المدينة',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF1E3A8A),
-          ),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          value: _cityController.text.isEmpty ? null : _cityController.text,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(
-              Icons.location_city,
-              color: Color(0xFF1E3A8A),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: _isEditing ? const Color(0xFF1E3A8A) : Colors.grey,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF1E3A8A)),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
-            ),
-            filled: true,
-            fillColor: _isEditing ? Colors.white : Colors.grey.withOpacity(0.1),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-          ),
-          items:
-              _cities.map((String city) {
-                return DropdownMenuItem<String>(value: city, child: Text(city));
-              }).toList(),
-          onChanged:
-              _isEditing
-                  ? (String? newValue) {
-                    setState(() {
-                      _cityController.text = newValue ?? '';
-                    });
-                  }
-                  : null,
-        ),
-      ],
-    );
-  }
+  
 
-  Widget _buildStatsRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildStatItem('البلاغات', '12', Icons.report),
-        _buildStatItem('النقاط', '450', Icons.stars),
-        _buildStatItem('المستوى', 'ذهبي', Icons.emoji_events),
-      ],
-    );
-  }
+
 
   Widget _buildStatItem(String label, String value, IconData icon) {
     return Column(

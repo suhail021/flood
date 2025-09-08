@@ -153,21 +153,21 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: ElevatedButton.icon(
-                                    onPressed: _pickImageFromGallery,
-                                    icon: const Icon(Icons.photo_library),
-                                    label: const Text('اختيار من المعرض'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF3B82F6),
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // const SizedBox(width: 12),
+                                // Expanded(
+                                //   child: ElevatedButton.icon(
+                                //     onPressed: _pickImageFromGallery,
+                                //     icon: const Icon(Icons.photo_library),
+                                //     label: const Text('اختيار من المعرض'),
+                                //     style: ElevatedButton.styleFrom(
+                                //       backgroundColor: const Color(0xFF3B82F6),
+                                //       foregroundColor: Colors.white,
+                                //       shape: RoundedRectangleBorder(
+                                //         borderRadius: BorderRadius.circular(12),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
@@ -229,21 +229,21 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: ElevatedButton.icon(
-                                    onPressed: _selectLocationOnMap,
-                                    icon: const Icon(Icons.map),
-                                    label: const Text('اختيار من الخريطة'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFF59E0B),
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // const SizedBox(width: 12),
+                                // Expanded(
+                                //   child: ElevatedButton.icon(
+                                //     onPressed: _selectLocationOnMap,
+                                //     icon: const Icon(Icons.map),
+                                //     label: const Text('اختيار من الخريطة'),
+                                //     style: ElevatedButton.styleFrom(
+                                //       backgroundColor: const Color(0xFFF59E0B),
+                                //       foregroundColor: Colors.white,
+                                //       shape: RoundedRectangleBorder(
+                                //         borderRadius: BorderRadius.circular(12),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

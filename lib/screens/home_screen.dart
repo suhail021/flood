@@ -343,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // البطاقات
           Container(
-            height: 400,
+            height: 350,
             padding: const EdgeInsets.only(bottom: 0, left: 16, right: 16, top: 16),
             decoration: const BoxDecoration(
               color: Colors.white,

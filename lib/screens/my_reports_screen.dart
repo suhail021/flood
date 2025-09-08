@@ -17,14 +17,12 @@ class MyReportsScreen extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.all(24.0),
           children: [
-            const SizedBox(height: 16),
             // مثال على بلاغ
             Card(
               child: ListTile(
                 leading: const Icon(Icons.report, color: Color(0xFF1E3A8A)),
                 title: const Text('بلاغ سيول في شارع الزبيري'),
                 subtitle: const Text('تم الإرسال: 2025-09-01\nالحالة: قيد المعالجة'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 18),
                 onTap: () {
                   // تفاصيل البلاغ
                 },
@@ -36,7 +34,6 @@ class MyReportsScreen extends StatelessWidget {
                 leading: const Icon(Icons.report, color: Color(0xFF1E3A8A)),
                 title: const Text('بلاغ تجمع مياه في حي الأصبحي'),
                 subtitle: const Text('تم الإرسال: 2025-08-28\nالحالة: تم الحل'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 18),
                 onTap: () {},
               ),
             ),
