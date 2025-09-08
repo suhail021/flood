@@ -18,6 +18,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
   LatLng? _selectedLocation;
   bool _isLoading = false;
   bool _isLocationLoading = false;
+  String? _selectedReportType;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                       style: TextStyle(fontSize: 16, color: Colors.white70),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 20),
       
                     // حقل الوصف
                     Container(
@@ -298,8 +299,82 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 40),
-      
+                    const SizedBox(height: 24),
+      Container(
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.1),
+        blurRadius: 10,
+        offset: const Offset(0, 5),
+      ),
+    ],
+  ),
+  child: Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                value: _selectedReportType,
+                hint: const Text("اختر نوع البلاغ"),
+                items: const [
+                  DropdownMenuItem(
+                    value: "water",
+                    child: Text("تجمع مياه"),
+                  ),
+                  DropdownMenuItem(
+                    value: "drowning",
+                    child: Text("حالة غرق"),
+                  ),
+                  DropdownMenuItem(
+                    value: "flood",
+                    child: Text("الإبلاغ عن سيول"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedReportType = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      if (_selectedReportType != null) ...[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            "نوع البلاغ: ${_selectedReportType == "water" ? "تجمع مياه" : _selectedReportType == "drowning" ? "حالة غرق" : "الإبلاغ عن سيول"}",
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    ],
+  ),
+)
+,SizedBox(height: 20,),
                     // زر إرسال البلاغ
                     SizedBox(
                       width: double.infinity,
