@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/profile_screen.dart';
+import 'package:google/widgets/custom_text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'phone_login_screen.dart';
 import 'security_help_screen.dart';
@@ -65,130 +66,121 @@ class _SettingScreenState extends State<SettingScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor:   Color(0xFF60A5FA),
+        backgroundColor: Color(0xFFF8FAFC),
         appBar: AppBar(
-          title: const Text('الأعدادات ', style: TextStyle(color: Colors.white)),
-          backgroundColor: const Color(0xFF1E3A8A),
+          title: const Text(
+            'الأعدادات ',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: const Color(0xFF2C3E50),
           foregroundColor: Colors.white,
           elevation: 0,
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-            ),
-          ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  // صورة الملف الشخصي
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                // صورة الملف الشخصي
+                _buildActionButton(
+                  icon: Icons.person,
+                  title: 'الملف الشخصي',
+                  subtitle: ' إدارة الملف الشخصي',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                // أزرار إضافية
+                if (!_isEditing) ...[
                   _buildActionButton(
-                    icon: Icons.person,
-                    title: 'الملف الشخصي',
-                    subtitle: ' إدارة الملف الشخصي',
+                    icon: Icons.assignment,
+                    title: 'بلاغاتي',
+                    subtitle: 'عرض جميع بلاغاتك',
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProfileScreen(),
+                          builder: (context) => const MyReportsScreen(),
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 16),
-                  // أزرار إضافية
-                  if (!_isEditing) ...[
-                    _buildActionButton(
-                      icon: Icons.assignment,
-                      title: 'بلاغاتي',
-                      subtitle: 'عرض جميع بلاغاتك',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyReportsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    _buildActionButton(
-                      icon: Icons.notifications,
-                      title: 'الإشعارات',
-                      subtitle: 'إدارة الإشعارات',
-                      onTap: () {
-      
-                           Navigator.push(
+                  _buildActionButton(
+                    icon: Icons.notifications,
+                    title: 'الإشعارات',
+                    subtitle: 'إدارة الإشعارات',
+                    onTap: () {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const NotificationsScreen(),
                         ),
                       );
-                      },
-                    ),
-      
-                    // const SizedBox(height: 16),
-      
-                    // _buildActionButton(
-                    //   icon: Icons.security,
-                    //   title: 'الأمان',
-                    //   subtitle: 'إعدادات الأمان',
-                    //   onTap: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) => const SecurityHelpScreen(),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
-                    const SizedBox(height: 16),
-      
-                    _buildActionButton(
-                      icon: Icons.help,
-                      title: ' المساعدة والدعم',
-                      subtitle: 'الدعم والمساعدة',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>  HelpPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-      
-                    // زر تسجيل الخروج
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton(
-                        onPressed: _logout,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 0,
+                    },
+                  ),
+
+                  // const SizedBox(height: 16),
+
+                  // _buildActionButton(
+                  //   icon: Icons.security,
+                  //   title: 'الأمان',
+                  //   subtitle: 'إعدادات الأمان',
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const SecurityHelpScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  const SizedBox(height: 16),
+
+                  _buildActionButton(
+                    icon: Icons.help,
+                    title: ' المساعدة والدعم',
+                    subtitle: 'الدعم والمساعدة',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HelpPage()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+
+                  // زر تسجيل الخروج
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: _logout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Text(
-                          'تسجيل الخروج',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'تسجيل الخروج',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ],
-              ),
+              ],
             ),
           ),
         ),
@@ -210,36 +202,15 @@ class _SettingScreenState extends State<SettingScreen> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
         const SizedBox(height: 8),
-        TextFormField(
+        CustomTextFormField(
           controller: controller,
           enabled: enabled,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: const Color(0xFF1E3A8A)),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: enabled ? const Color(0xFF1E3A8A) : Colors.grey,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF1E3A8A)),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
-            ),
-            filled: true,
-            fillColor: enabled ? Colors.white : Colors.grey.withOpacity(0.1),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-          ),
+          hintText: label,
+          prefixIcon: icon,
         ),
       ],
     );
@@ -254,7 +225,7 @@ class _SettingScreenState extends State<SettingScreen> {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
         const SizedBox(height: 8),
@@ -263,24 +234,24 @@ class _SettingScreenState extends State<SettingScreen> {
           decoration: InputDecoration(
             prefixIcon: const Icon(
               Icons.location_city,
-              color: Color(0xFF1E3A8A),
+              color: Color(0xFF64748B),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: _isEditing ? const Color(0xFF1E3A8A) : Colors.grey,
+                color: _isEditing ? const Color(0xFF2C3E50) : Color(0xFFE2E8F0),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF1E3A8A)),
+              borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Color(0xFFE2E8F0)),
             ),
             filled: true,
-            fillColor: _isEditing ? Colors.white : Colors.grey.withOpacity(0.1),
+            fillColor: _isEditing ? Colors.white : Color(0xFFF8FAFC),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 16,
@@ -321,10 +292,10 @@ class _SettingScreenState extends State<SettingScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF1E3A8A).withOpacity(0.1),
+            color: const Color(0xFF2C3E50).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
+          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -332,10 +303,13 @@ class _SettingScreenState extends State<SettingScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+        ),
       ],
     );
   }
@@ -364,26 +338,26 @@ class _SettingScreenState extends State<SettingScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF1E3A8A).withOpacity(0.1),
+            color: const Color(0xFF2C3E50).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
+          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
         ),
         title: Text(
           title,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
+          style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
-          color: Color(0xFF1E3A8A),
+          color: Color(0xFF2C3E50),
           size: 20,
         ),
       ),

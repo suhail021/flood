@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'phone_login_screen.dart';
+import 'package:google/widgets/custom_text_form_field.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,8 +18,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _cityController = TextEditingController();
   bool _isEditing = false;
   bool _isLoading = false;
-
-
 
   @override
   void initState() {
@@ -41,13 +40,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Color(0xFF60A5FA),
+        backgroundColor: Color(0xFFF8FAFC),
         appBar: AppBar(
           title: const Text(
             'الملف الشخصي',
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: const Color(0xFF1E3A8A),
+          backgroundColor: const Color(0xFF2C3E50),
           foregroundColor: Colors.white,
           elevation: 0,
           actions: [
@@ -58,113 +57,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               },
               tooltip: _isEditing ? ' حفظ' : 'تعديل',
-      
+
               icon: Icon(_isEditing ? Icons.done : Icons.edit),
             ),
           ],
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-            ),
-          ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // صورة الملف الشخصي
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(60),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.person,
-                        size: 60,
-                        color: Color(0xFF1E3A8A),
-                      ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // صورة الملف الشخصي
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(60),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 24),
-      
-                    // اسم المستخدم
-                    Text(
-                      _nameController.text,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: const Icon(
+                      Icons.person,
+                      size: 60,
+                      color: Color(0xFF2C3E50),
                     ),
-                    const SizedBox(height: 8),
-      
-                    Text(
-                      'مستخدم نشط',
-                      style: const TextStyle(fontSize: 16, color: Colors.white70),
-                      textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+
+                  // اسم المستخدم
+                  Text(
+                    _nameController.text,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2C3E50),
                     ),
-                    const SizedBox(height: 40),
-      
-                    // معلومات المستخدم
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        children: [
-                          // حقل الاسم
-                          _buildInfoField(
-                            label: 'الاسم الكامل',
-                            icon: Icons.person,
-                            controller: _nameController,
-                            enabled: _isEditing,
-                          ),
-                          const SizedBox(height: 20),
-                          _buildInfoField(
-                            label: 'رقم الهاتف',
-                            icon: Icons.phone,
-                            controller: _passController,
-                            enabled: _isEditing,
-                          ),
-                          const SizedBox(height: 20),
-      
-      
-                        
-      
-                          // إحصائيات
-                          if (!_isEditing) ...[
-                          ],
-                        ],
-                      ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+
+                  Text(
+                    'مستخدم نشط',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF64748B),
                     ),
-      
-                    // أزرار إضافية
-                  ],
-                ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 40),
+
+                  // معلومات المستخدم
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        // حقل الاسم
+                        _buildInfoField(
+                          label: 'الاسم الكامل',
+                          icon: Icons.person,
+                          controller: _nameController,
+                          enabled: _isEditing,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildInfoField(
+                          label: 'رقم الهاتف',
+                          icon: Icons.phone,
+                          controller: _passController,
+                          enabled: _isEditing,
+                        ),
+                        const SizedBox(height: 20),
+
+                        // إحصائيات
+                        if (!_isEditing) ...[],
+                      ],
+                    ),
+                  ),
+
+                  // أزرار إضافية
+                ],
               ),
             ),
           ),
@@ -187,44 +176,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
         const SizedBox(height: 8),
-        TextFormField(
+        CustomTextFormField(
           controller: controller,
           enabled: enabled,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: const Color(0xFF1E3A8A)),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: enabled ? const Color(0xFF1E3A8A) : Colors.grey,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF1E3A8A)),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
-            ),
-            filled: true,
-            fillColor: enabled ? Colors.white : Colors.grey.withOpacity(0.1),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-          ),
+          hintText: label,
+          prefixIcon: icon,
         ),
       ],
     );
   }
-
-  
-
-
 
   Widget _buildStatItem(String label, String value, IconData icon) {
     return Column(
@@ -233,10 +197,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF1E3A8A).withOpacity(0.1),
+            color: const Color(0xFF2C3E50).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
+          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -244,10 +208,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+        ),
       ],
     );
   }
@@ -276,26 +243,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF1E3A8A).withOpacity(0.1),
+            color: const Color(0xFF2C3E50).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
+          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
         ),
         title: Text(
           title,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
+          style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,
-          color: Color(0xFF1E3A8A),
+          color: Color(0xFF2C3E50),
           size: 20,
         ),
       ),

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'report_flood_screen.dart';
-import 'profile_screen.dart';
+
 import 'notifications_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -223,218 +223,240 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          // AppBar
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: const BoxDecoration(
-              color: Color(0xFF1E3A8A),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SettingScreen(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            // AppBar
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              decoration: BoxDecoration(
+                color: Color(0xFF2C3E50),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
                   ),
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        'نظام التنبؤ الذكي للسيول',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                ],
+              ),
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                    const Expanded(
+                      child: Center(
+                        child: Text(
+                          'نظام التنبؤ الذكي للسيول',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsScreen(),
-                        ),
-                      );
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationsScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // الخريطة
+            Expanded(
+              flex: 2,
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
+                    mapType: MapType.normal,
+                    initialCameraPosition: const CameraPosition(
+                      target: LatLng(15.3694, 44.1910),
+                      zoom: 13.0,
+                    ),
+                    polylines: _floodZones,
+                    markers: _markers,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
                     },
-                    icon: const Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: 28,
+                  ),
+
+                  // Search Bar - أضفنا هنا شريط البحث الشفاف
+                  Positioned(
+                    top: 10,
+                    left: 16,
+                    right: 16,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Color(0xFFE2E8F0),
+                          width: 1.5,
+                        ),
+                        color: Colors.white.withOpacity(0.95),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        textAlign: TextAlign.right,
+                        decoration: InputDecoration(
+                          hintText: '   البحث  ',
+                          hintStyle: TextStyle(color: Colors.grey.shade600),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Color(0xFF64748B),
+                            size: 24,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                            top: 12,
+                            right: 12,
+                            bottom: 12,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
 
-          // الخريطة
-          Expanded(
-            flex: 2,
-            child: Stack(
-              children: [
-                GoogleMap(
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  mapType: MapType.normal,
-                  initialCameraPosition: const CameraPosition(
-                    target: LatLng(15.3694, 44.1910),
-                    zoom: 13.0,
-                  ),
-                  polylines: _floodZones,
-                  markers: _markers,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                ),
-                
-                // Search Bar - أضفنا هنا شريط البحث الشفاف
-                Positioned(
-                  top: 10,
-                  left: 16,
-                  right: 16,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1.5),
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                    child: TextField(
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        hintText: '   البحث  ',
-                        hintStyle: TextStyle(color: Colors.grey.shade600),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Color(0xFF1E3A8A).withOpacity(0.7),
-                          size: 24,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(top: 12,right: 12,bottom: 12),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // البطاقات
-          Container(
-            height: 350,
-            padding: const EdgeInsets.only(bottom: 0, left: 16, right: 16, top: 16),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+            // البطاقات
+            Container(
+              height: 350,
+              padding: const EdgeInsets.only(
+                bottom: 0,
+                left: 16,
+                right: 16,
+                top: 16,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, -2),
+              decoration: BoxDecoration(
+                color: Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'مناطق محتملة للسيول',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E3A8A),
-                      ),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E3A8A),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ReportFloodScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'تقديم بلاغ',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.only(top: 0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 15,
+                    offset: Offset(0, -3),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildRiskCard(
-                        'منطقة السالية الشمالية',
-                        'حرج',
-                        Colors.red,
-                        0.9,
-                        const LatLng(15.4340281, 44.2216007),
+                      const Text(
+                        'مناطق محتملة للسيول',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2C3E50),
+                        ),
                       ),
-                      _buildRiskCard(
-                        'منطقة السالية الجديدة',
-                        'متوسط',
-                        Colors.yellow,
-                        0.6,
-                        const LatLng(15.3724301, 44.2118893),
-                      ),
-                      _buildRiskCard(
-                        'منطقة السالية القديمة',
-                        'منخفض',
-                        Colors.green,
-                        0.3,
-                        const LatLng(15.3450521, 44.2152535),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFF2C3E50),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReportFloodScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'تقديم بلاغ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.only(top: 0),
+                      children: [
+                        _buildRiskCard(
+                          'منطقة السالية الشمالية',
+                          'حرج',
+                          Colors.red,
+                          0.9,
+                          const LatLng(15.4340281, 44.2216007),
+                        ),
+                        _buildRiskCard(
+                          'منطقة السالية الجديدة',
+                          'متوسط',
+                          Colors.yellow,
+                          0.6,
+                          const LatLng(15.3724301, 44.2118893),
+                        ),
+                        _buildRiskCard(
+                          'منطقة السالية القديمة',
+                          'منخفض',
+                          Colors.green,
+                          0.3,
+                          const LatLng(15.3450521, 44.2152535),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

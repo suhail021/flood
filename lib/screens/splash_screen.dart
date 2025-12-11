@@ -10,7 +10,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<Offset> logoSlideAnimation;
   late Animation<Offset> titleSlideAnimation;
@@ -36,52 +37,50 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     );
-    
+
     // أنيمشن الشعار
     logoSlideAnimation = Tween<Offset>(
       begin: const Offset(0, 2),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeOutCubic,
-    ));
-    
+    ).animate(
+      CurvedAnimation(parent: animationController, curve: Curves.easeOutCubic),
+    );
+
     // أنيمشن العنوان الرئيسي
     titleSlideAnimation = Tween<Offset>(
       begin: const Offset(0, 3),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
-    ));
-    
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
+
     // أنيمشن العنوان الفرعي
     subtitleSlideAnimation = Tween<Offset>(
       begin: const Offset(0, 4),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: const Interval(0.4, 1.0, curve: Curves.easeOutCubic),
-    ));
-    
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: const Interval(0.4, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
+
     // أنيمشن الأمواج
-    waveAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: const Interval(0.6, 1.0, curve: Curves.easeInOut),
-    ));
-    
+    waveAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: const Interval(0.6, 1.0, curve: Curves.easeInOut),
+      ),
+    );
+
     // أنيمشن التلاشي
-    fadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeIn,
-    ));
-    
+    fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: animationController, curve: Curves.easeIn),
+    );
+
     animationController.forward();
   }
 
@@ -102,9 +101,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF1E3A8A),
-              Color(0xFF3B82F6),
-              Color(0xFF60A5FA),// لون أزرق فاتح في الأسفل
+              Color(0xFFF8FAFC), // أبيض مزرق فاتح
+              Color(0xFFE2E8F0), // رمادي فاتح جداً
+              Color(0xFFCBD5E1), // رمادي فاتح
             ],
           ),
         ),
@@ -125,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 },
               ),
             ),
-            
+
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -155,9 +154,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-              
+
                   const SizedBox(height: 40),
-                   
+
                   // العنوان الرئيسي
                   SlideTransition(
                     position: titleSlideAnimation,
@@ -168,12 +167,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Color(0xFF2C3E50),
                           shadows: [
                             Shadow(
                               blurRadius: 5,
-                              color: Colors.black26,
-                              offset: Offset(0, 3),
+                              color: Colors.black12,
+                              offset: Offset(0, 2),
                             ),
                           ],
                         ),
@@ -181,9 +180,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 15),
-                  
+
                   // العنوان الفرعي
                   SlideTransition(
                     position: subtitleSlideAnimation,
@@ -193,16 +192,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         "للتنبيه المبكر وحماية الأرواح والممتلكات",
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Color(0xFF64748B),
                           fontWeight: FontWeight.w300,
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 50),
-                  
+
                   // شريط التقدم
                   SlideTransition(
                     position: subtitleSlideAnimation,
@@ -214,8 +213,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                           borderRadius: BorderRadius.circular(8),
                           child: const LinearProgressIndicator(
                             minHeight: 8,
-                            backgroundColor: Colors.white38,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            backgroundColor: Color(0xFFE2E8F0),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Color(0xFF2C3E50),
+                            ),
                           ),
                         ),
                       ),
@@ -234,54 +235,56 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 // رسام مخصص لتأثير الموجات
 class WavePainter extends CustomPainter {
   final double animationValue;
-  
+
   WavePainter(this.animationValue);
-  
+
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withOpacity(0.3)
-      ..style = PaintingStyle.fill;
-    
+    final paint =
+        Paint()
+          ..color = const Color(0xFF94A3B8).withOpacity(0.2)
+          ..style = PaintingStyle.fill;
+
     final path = Path();
-    
+
     // الموجة الأولى
     path.moveTo(0, size.height * 0.8);
-    
+
     for (double i = 0; i <= size.width; i++) {
       path.lineTo(
-        i, 
-        size.height * 0.8 + 
-          sin((i / size.width * 4 * 3.14) + (animationValue * 10)) * 20
+        i,
+        size.height * 0.8 +
+            sin((i / size.width * 4 * 3.14) + (animationValue * 10)) * 20,
       );
     }
-    
+
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
-    
+
     canvas.drawPath(path, paint);
-    
+
     // الموجة الثانية (أكثر شفافية)
     final path2 = Path();
-    final paint2 = Paint()
-      ..color = Colors.white.withOpacity(0.2)
-      ..style = PaintingStyle.fill;
-    
+    final paint2 =
+        Paint()
+          ..color = const Color(0xFF94A3B8).withOpacity(0.1)
+          ..style = PaintingStyle.fill;
+
     path2.moveTo(0, size.height * 0.85);
-    
+
     for (double i = 0; i <= size.width; i++) {
       path2.lineTo(
-        i, 
-        size.height * 0.85 + 
-          sin((i / size.width * 3 * 3.14) + (animationValue * 8)) * 15
+        i,
+        size.height * 0.85 +
+            sin((i / size.width * 3 * 3.14) + (animationValue * 8)) * 15,
       );
     }
-    
+
     path2.lineTo(size.width, size.height);
     path2.lineTo(0, size.height);
     path2.close();
-    
+
     canvas.drawPath(path2, paint2);
   }
 

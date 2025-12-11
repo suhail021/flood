@@ -5,6 +5,7 @@ import 'package:google/screens/home_screen.dart';
 import 'package:google/screens/phone_forgetpass_screen.dart';
 import 'package:google/screens/phone_registration_screen%20copy.dart';
 import 'phone_verification_screen.dart';
+import 'package:google/widgets/custom_text_form_field.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key});
@@ -17,20 +18,14 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF60A5FA),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-          ),
-        ),
-        child: SafeArea(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(top: 2.0, right: 24, left: 24),
             child: SingleChildScrollView(
@@ -48,13 +43,6 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(60),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.black.withOpacity(0.1),
-                          //     blurRadius: 20,
-                          //     offset: const Offset(0, 10),
-                          //   ),
-                          // ],
                         ),
                         child: Image.asset('assets/images/logo.png'),
                       ),
@@ -63,100 +51,51 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
                     // عنوان التطبيق
                     const Text(
-                                  '  تسجيل الدخول',
+                      '  تسجيل الدخول',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Color(0xFF2C3E50),
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
 
                     // حقل إدخال رقم الهاتف
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(13),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: const InputDecoration(
-                          hintText: 'رقم الهاتف',
-                          prefixIcon: Icon(
-                            Icons.phone,
-                            color: Color(0xFF1E3A8A),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'الرجاء إدخال رقم الهاتف';
-                          }
-                          if (value.length < 9) {
-                            return 'رقم الهاتف غير صحيح';
-                          }
-                          return null;
-                        },
-                      ),
+                    CustomTextFormField(
+                      controller: _phoneController,
+                      hintText: 'رقم الهاتف',
+                      prefixIcon: Icons.phone,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      autovalidateMode: _autovalidateMode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء إدخال رقم الهاتف';
+                        }
+                        if (value.length < 9) {
+                          return 'رقم الهاتف غير صحيح';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 15),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(13),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: TextFormField(
-                        obscureText: true,
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: const InputDecoration(
-                          
-                          hintText: ' كلمة السر',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Color(0xFF1E3A8A),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'الرجاء إدخال رقم الهاتف';
-                          }
-                          if (value.length < 9) {
-                            return 'رقم الهاتف غير صحيح';
-                          }
-                          return null;
-                        },
-                      ),
+                    CustomTextFormField(
+                      obscureText: true,
+                      hintText: ' كلمة السر',
+                      prefixIcon: Icons.lock,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      autovalidateMode: _autovalidateMode,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء إدخال كلمة السر';
+                        }
+                        if (value.length < 9) {
+                          return 'رقم الهاتف غير صحيح';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 25),
                     // زر إرسال رمز التحقق
@@ -166,8 +105,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _sendVerificationCode,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF1E3A8A),
+                          backgroundColor: const Color(0xFF2C3E50),
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
                           ),
@@ -177,7 +116,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                             _isLoading
                                 ? const CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF1E3A8A),
+                                    Colors.white,
                                   ),
                                 )
                                 : const Text(
@@ -205,7 +144,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           },
                           child: const Text(
                             'نسيت كلمة السر ؟ ',
-                            style: TextStyle(color: Colors.white, fontSize: 16,),
+                            style: TextStyle(
+                              color: Color(0xFF64748B),
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                         TextButton(
@@ -219,7 +161,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           },
                           child: const Text(
                             'انشاء حساب الان ',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            style: TextStyle(
+                              color: Color(0xFF2C3E50),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -235,6 +181,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   }
 
   void _sendVerificationCode() async {
+    setState(() {
+      _autovalidateMode = AutovalidateMode.onUserInteraction;
+    });
+
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -250,16 +200,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       // الانتقال إلى صفحة التحقق
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-                  HomeScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }
   }
-
-
 
   @override
   void dispose() {

@@ -5,13 +5,11 @@ import 'user_registration_screen.dart';
 class PhoneVerificationScreen extends StatefulWidget {
   final String phoneNumber;
 
-  const PhoneVerificationScreen({
-    super.key,
-    required this.phoneNumber,
-  });
+  const PhoneVerificationScreen({super.key, required this.phoneNumber});
 
   @override
-  State<PhoneVerificationScreen> createState() => _PhoneVerificationScreenState();
+  State<PhoneVerificationScreen> createState() =>
+      _PhoneVerificationScreenState();
 }
 
 class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
@@ -19,10 +17,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
     6,
     (index) => TextEditingController(),
   );
-  final List<FocusNode> _focusNodes = List.generate(
-    6,
-    (index) => FocusNode(),
-  );
+  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   int _remainingTime = 60;
@@ -52,191 +47,196 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-                  resizeToAvoidBottomInset: false,
-
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1E3A8A),
-              Color(0xFF3B82F6),
-              Color(0xFF60A5FA),
-            ],
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              color: Color(0xFF2C3E50),
+              size: 28,
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // زر العودة
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                        size: 28,
+          const SizedBox(width: 10),
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+
+                // أيقونة التحقق
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
-                    ),
+                    ],
                   ),
-                  
-                  const SizedBox(height: 40),
-                  
-                  // أيقونة التحقق
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
+                  child: const Icon(
+                    Icons.verified_user,
+                    size: 50,
+                    color: Color(0xFF2C3E50),
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // عنوان الصفحة
+                const Text(
+                  'تحقق من رقم الهاتف',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3E50),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+
+                Text(
+                  'تم إرسال رمز التحقق إلى ${widget.phoneNumber}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF64748B),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+
+                // حقول إدخال رمز التحقق
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(
+                    6,
+                    (index) => SizedBox(
+                      width: 50,
+                      height: 60,
+                      child: TextFormField(
+                        controller: _controllers[index],
+                        focusNode: _focusNodes[index],
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(1),
+                        ],
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2C3E50),
                         ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.verified_user,
-                      size: 50,
-                      color: Color(0xFF1E3A8A),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  
-                  // عنوان الصفحة
-                  const Text(
-                    'تحقق من رقم الهاتف',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  Text(
-                    'تم إرسال رمز التحقق إلى ${widget.phoneNumber}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 40),
-                  
-                  // حقول إدخال رمز التحقق
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(
-                      6,
-                      (index) => SizedBox(
-                        width: 50,
-                        height: 60,
-                        child: TextFormField(
-                          controller: _controllers[index],
-                          focusNode: _focusNodes[index],
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(1),
-                          ],
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Color(0xFFE2E8F0)),
                           ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Color(0xFFE2E8F0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Color(0xFF2C3E50),
+                              width: 2,
                             ),
-                            contentPadding: const EdgeInsets.all(16),
                           ),
-                          onChanged: (value) {
-                            if (value.isNotEmpty && index < 5) {
-                              _focusNodes[index + 1].requestFocus();
-                            }
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '';
-                            }
-                            return null;
-                          },
+                          contentPadding: const EdgeInsets.all(16),
                         ),
+                        onChanged: (value) {
+                          if (value.isNotEmpty && index < 5) {
+                            _focusNodes[index + 1].requestFocus();
+                          }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  
-                  // زر التحقق
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _verifyCode,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF1E3A8A),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 0,
+                ),
+                const SizedBox(height: 40),
+
+                // زر التحقق
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _verifyCode,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2C3E50),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: _isLoading
-                          ? const CircularProgressIndicator(
+                      elevation: 0,
+                    ),
+                    child:
+                        _isLoading
+                            ? const CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFF1E3A8A),
+                                Colors.white,
                               ),
                             )
-                          : const Text(
+                            : const Text(
                               'تحقق',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // زر إعادة الإرسال
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'لم تستلم الرمز؟ ',
+                      style: TextStyle(color: Color(0xFF64748B), fontSize: 16),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  
-                  // زر إعادة الإرسال
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'لم تستلم الرمز؟ ',
+                    TextButton(
+                      onPressed: _canResend ? _resendCode : null,
+                      child: Text(
+                        _canResend
+                            ? 'إعادة الإرسال'
+                            : 'إعادة الإرسال بعد $_remainingTime ثانية',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color:
+                              _canResend
+                                  ? Color(0xFF2C3E50)
+                                  : Color(0xFF94A3B8),
                           fontSize: 16,
+                          decoration:
+                              _canResend ? TextDecoration.underline : null,
                         ),
                       ),
-                      TextButton(
-                        onPressed: _canResend ? _resendCode : null,
-                        child: Text(
-                          _canResend ? 'إعادة الإرسال' : 'إعادة الإرسال بعد $_remainingTime ثانية',
-                          style: TextStyle(
-                            color: _canResend ? Colors.white : Colors.white.withOpacity(0.5),
-                            fontSize: 16,
-                            decoration: _canResend ? TextDecoration.underline : null,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -261,9 +261,9 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => UserRegistrationScreen(
-            phoneNumber: widget.phoneNumber,
-          ),
+          builder:
+              (context) =>
+                  UserRegistrationScreen(phoneNumber: widget.phoneNumber),
         ),
       );
     }

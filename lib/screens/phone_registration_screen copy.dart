@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google/screens/phone_login_screen.dart';
 import 'phone_verification_screen.dart';
+import 'package:google/widgets/custom_text_form_field.dart';
 
 class PhoneRegistrationScreen extends StatefulWidget {
   const PhoneRegistrationScreen({super.key});
@@ -19,31 +20,25 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            highlightColor: Colors.transparent,
+            padding: EdgeInsets.only(right: 24),
             onPressed: () => Navigator.pop(context),
             icon: const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
+              Icons.arrow_back_ios,
+              color: Color(0xFF2C3E50),
               size: 28,
             ),
           ),
-          const SizedBox(width: 10),
-        ],
-      ),
-      backgroundColor: Color(0xFF60A5FA),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-          ),
         ),
-        child: SafeArea(
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(top: 2.0, right: 24, left: 24),
             child: SingleChildScrollView(
@@ -61,13 +56,6 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(60),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.black.withOpacity(0.1),
-                          //     blurRadius: 20,
-                          //     offset: const Offset(0, 10),
-                          //   ),
-                          // ],
                         ),
                         child: Image.asset('assets/images/logo.png'),
                       ),
@@ -80,60 +68,35 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Color(0xFF2C3E50),
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 0),
+                    const SizedBox(height: 8),
 
                     const Text(
                       'أدخل رقم هاتفك للبدء',
-                      style: TextStyle(fontSize: 16, color: Colors.white70),
+                      style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 25),
 
                     // حقل إدخال رقم الهاتف
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(13),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: const InputDecoration(
-                          hintText: 'رقم الهاتف',
-                          prefixIcon: Icon(
-                            Icons.phone,
-                            color: Color(0xFF1E3A8A),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'الرجاء إدخال رقم الهاتف';
-                          }
-                          if (value.length < 9) {
-                            return 'رقم الهاتف غير صحيح';
-                          }
-                          return null;
-                        },
-                      ),
+                    CustomTextFormField(
+                      controller: _phoneController,
+                      hintText: 'رقم الهاتف',
+                      prefixIcon: Icons.phone,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء إدخال رقم الهاتف';
+                        }
+                        if (value.length < 9) {
+                          return 'رقم الهاتف غير صحيح';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 32),
 
@@ -144,8 +107,8 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _sendVerificationCode,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF1E3A8A),
+                          backgroundColor: const Color(0xFF2C3E50),
+                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
                           ),
@@ -155,7 +118,7 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                             _isLoading
                                 ? const CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF1E3A8A),
+                                    Colors.white,
                                   ),
                                 )
                                 : const Text(
@@ -174,15 +137,16 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder:
-                                (context) => PhoneLoginScreen(
-                                ),
+                            builder: (context) => PhoneLoginScreen(),
                           ),
                         );
                       },
                       child: const Text(
                         'لدي حساب بالفعل ',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                          color: Color(0xFF64748B),
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ],

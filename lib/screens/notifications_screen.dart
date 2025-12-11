@@ -56,9 +56,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        backgroundColor: Color(0xFFF8FAFC),
         appBar: AppBar(
           title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
-          backgroundColor: const Color(0xFF1E3A8A),
+          backgroundColor: const Color(0xFF2C3E50),
           foregroundColor: Colors.white,
           elevation: 0,
           actions: [
@@ -69,77 +70,68 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ),
           ],
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6), Color(0xFF60A5FA)],
-            ),
-          ),
-          child: SafeArea(
-            child: Column(
-              children: [
-                // إحصائيات سريعة
-                Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
+        body: SafeArea(
+          child: Column(
+            children: [
+              // إحصائيات سريعة
+              Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildStatItem(
+                      'إجمالي الإشعارات',
+                      '${_notifications.length}',
+                      Icons.notifications,
+                    ),
+                    _buildStatItem(
+                      'غير مقروءة',
+                      '${_notifications.where((n) => !n.isRead).length}',
+                      Icons.mark_email_unread,
+                    ),
+                    _buildStatItem(
+                      'اليوم',
+                      '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
+                      Icons.today,
+                    ),
+                  ],
+                ),
+              ),
+
+              // قائمة الإشعارات
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildStatItem(
-                        'إجمالي الإشعارات',
-                        '${_notifications.length}',
-                        Icons.notifications,
-                      ),
-                      _buildStatItem(
-                        'غير مقروءة',
-                        '${_notifications.where((n) => !n.isRead).length}',
-                        Icons.mark_email_unread,
-                      ),
-                      _buildStatItem(
-                        'اليوم',
-                        '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
-                        Icons.today,
-                      ),
-                    ],
-                  ),
-                ),
-      
-                // قائمة الإشعارات
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _notifications.length,
-                      itemBuilder: (context, index) {
-                        final notification = _notifications[index];
-                        return _buildNotificationCard(notification);
-                      },
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                   ),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _notifications.length,
+                    itemBuilder: (context, index) {
+                      final notification = _notifications[index];
+                      return _buildNotificationCard(notification);
+                    },
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -153,10 +145,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF1E3A8A).withOpacity(0.1),
+            color: const Color(0xFF2C3E50).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF1E3A8A), size: 24),
+          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -164,12 +156,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF1E3A8A),
+            color: Color(0xFF2C3E50),
           ),
         ),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
           textAlign: TextAlign.center,
         ),
       ],
@@ -180,13 +172,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color:
-            notification.isRead ? Colors.grey.withOpacity(0.05) : Colors.white,
+        color: notification.isRead ? Color(0xFFF8FAFC) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color:
               notification.isRead
-                  ? Colors.grey.withOpacity(0.2)
+                  ? Color(0xFFE2E8F0)
                   : _getNotificationColor(notification.type).withOpacity(0.3),
           width: 1,
         ),
@@ -222,7 +213,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   fontSize: 16,
                   fontWeight:
                       notification.isRead ? FontWeight.normal : FontWeight.bold,
-                  color: notification.isRead ? Colors.grey : Colors.black87,
+                  color:
+                      notification.isRead
+                          ? Color(0xFF64748B)
+                          : Color(0xFF2C3E50),
                 ),
               ),
             ),
@@ -245,13 +239,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               notification.message,
               style: TextStyle(
                 fontSize: 14,
-                color: notification.isRead ? Colors.grey : Colors.black54,
+                color:
+                    notification.isRead ? Color(0xFF94A3B8) : Color(0xFF64748B),
               ),
             ),
             const SizedBox(height: 8),
             Text(
               _formatTimestamp(notification.timestamp),
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
             ),
           ],
         ),

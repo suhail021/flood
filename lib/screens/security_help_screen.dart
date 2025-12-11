@@ -7,57 +7,55 @@ class HelpPage extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        backgroundColor: Color(0xFFF8FAFC),
         appBar: AppBar(
-          title: Text('المساعدة والدعم'),
+          title: Text('المساعدة والدعم', style: TextStyle(color: Colors.white)),
           centerTitle: true,
+          backgroundColor: Color(0xFF2C3E50),
+          foregroundColor: Colors.white,
+          elevation: 0,
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHelpSection(
-                'كيفية استخدام التطبيق',
-                [
-                  _buildHelpItem(
-                    'التنبيهات والإشعارات',
-                    'يقوم التطبيق بإرسال تنبيهات في حالة وجود احتمالية لحدوث سيول في منطقتك. تأكد من تفعيل الإشعارات في إعدادات التطبيق.',
-                    Icons.notifications_active,
-                  ),
-                  _buildHelpItem(
-                    'خريطة المخاطر',
-                    'استخدم خريطة المخاطر لمعرفة المناطق المعرضة للسيول. اللون الأحمر يشير إلى مخاطر عالية، البرتقالي متوسطة، والأخضر منخفضة.',
-                    Icons.map,
-                  ),
-             
-                  _buildHelpItem(
-                    'إرشادات الأمان',
-                    'اطلع على إرشادات الأمان وخطط الإخلاء المقترحة في حالات الطوارئ.',
-                    Icons.health_and_safety,
-                  ),
-                ],
-              ),
+              _buildHelpSection('كيفية استخدام التطبيق', [
+                _buildHelpItem(
+                  'التنبيهات والإشعارات',
+                  'يقوم التطبيق بإرسال تنبيهات في حالة وجود احتمالية لحدوث سيول في منطقتك. تأكد من تفعيل الإشعارات في إعدادات التطبيق.',
+                  Icons.notifications_active,
+                ),
+                _buildHelpItem(
+                  'خريطة المخاطر',
+                  'استخدم خريطة المخاطر لمعرفة المناطق المعرضة للسيول. اللون الأحمر يشير إلى مخاطر عالية، البرتقالي متوسطة، والأخضر منخفضة.',
+                  Icons.map,
+                ),
+
+                _buildHelpItem(
+                  'إرشادات الأمان',
+                  'اطلع على إرشادات الأمان وخطط الإخلاء المقترحة في حالات الطوارئ.',
+                  Icons.health_and_safety,
+                ),
+              ]),
               SizedBox(height: 24),
-              _buildHelpSection(
-                'الإجراءات في حالات الطوارئ',
-                [
-                  _buildHelpItem(
-                    'قبل حدوث السيول',
-                    'تابع نشرات الأرصاد وتنبيهات التطبيق، وجهز حقيبة طوارئ تحتوي على مستلزمات أساسية وأدوية ووثائق مهمة.',
-                    Icons.access_time,
-                  ),
-                  _buildHelpItem(
-                    'أثناء حدوث السيول',
-                    'ابتعد فوراً عن مجاري الأودية والمناطق المنخفضة، ولا تحاول عبور مناطق تجمع المياه مهما كان عمقها.',
-                    Icons.warning,
-                  ),
-                  _buildHelpItem(
-                    'بعد انحسار السيول',
-                    'تأكد من سلامة المكان قبل العودة إليه، وتجنب لمس الأسلاك الكهربائية المبللة.',
-                    Icons.restore,
-                  ),
-                ],
-              ),
+              _buildHelpSection('الإجراءات في حالات الطوارئ', [
+                _buildHelpItem(
+                  'قبل حدوث السيول',
+                  'تابع نشرات الأرصاد وتنبيهات التطبيق، وجهز حقيبة طوارئ تحتوي على مستلزمات أساسية وأدوية ووثائق مهمة.',
+                  Icons.access_time,
+                ),
+                _buildHelpItem(
+                  'أثناء حدوث السيول',
+                  'ابتعد فوراً عن مجاري الأودية والمناطق المنخفضة، ولا تحاول عبور مناطق تجمع المياه مهما كان عمقها.',
+                  Icons.warning,
+                ),
+                _buildHelpItem(
+                  'بعد انحسار السيول',
+                  'تأكد من سلامة المكان قبل العودة إليه، وتجنب لمس الأسلاك الكهربائية المبللة.',
+                  Icons.restore,
+                ),
+              ]),
               SizedBox(height: 24),
               _buildEmergencyContactsCard(),
               SizedBox(height: 24),
@@ -80,7 +78,7 @@ class HelpPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.blue[800],
+            color: Color(0xFF2C3E50),
           ),
         ),
         SizedBox(height: 16),
@@ -91,10 +89,12 @@ class HelpPage extends StatelessWidget {
 
   Widget _buildHelpItem(String title, String content, IconData icon) {
     return Card(
-      elevation: 2,
+      elevation: 0,
       margin: EdgeInsets.only(bottom: 16),
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Color(0xFFE2E8F0)),
       ),
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -106,10 +106,10 @@ class HelpPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.blue[50],
+                    color: Color(0xFFF1F5F9),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: Colors.blue[700]),
+                  child: Icon(icon, color: Color(0xFF2C3E50)),
                 ),
                 SizedBox(width: 12),
                 Text(
@@ -117,6 +117,7 @@ class HelpPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3E50),
                   ),
                 ),
               ],
@@ -124,10 +125,7 @@ class HelpPage extends StatelessWidget {
             SizedBox(height: 12),
             Text(
               content,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[700],
-              ),
+              style: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
             ),
           ],
         ),
@@ -137,11 +135,11 @@ class HelpPage extends StatelessWidget {
 
   Widget _buildEmergencyContactsCard() {
     return Card(
-      elevation: 3,
-      color: Colors.red[50],
+      elevation: 0,
+      color: Color(0xFFFEF2F2),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.red[200]!),
+        side: BorderSide(color: Color(0xFFFECACA)),
       ),
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -163,13 +161,13 @@ class HelpPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16),
-            _buildEmergencyContact('الدفاع المدني', '199'),
+            _buildEmergencyContact('الدفاع المدني', '191'),
             Divider(color: Colors.red[100]),
-            _buildEmergencyContact('الهلال الأحمر', '191'),
+            _buildEmergencyContact(' النجدة', '199'),
             Divider(color: Colors.red[100]),
             _buildEmergencyContact(' الإسعاف', '195'),
             Divider(color: Colors.red[100]),
-            _buildEmergencyContact('شرطة النجدة', '194'),
+            _buildEmergencyContact(' حوادث المرور', '194'),
           ],
         ),
       ),
@@ -182,13 +180,7 @@ class HelpPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[800],
-            ),
-          ),
+          Text(name, style: TextStyle(fontSize: 16, color: Colors.grey[800])),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
@@ -217,9 +209,11 @@ class HelpPage extends StatelessWidget {
 
   Widget _buildFAQSection() {
     return Card(
-      elevation: 2,
+      elevation: 0,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Color(0xFFE2E8F0)),
       ),
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -228,14 +222,14 @@ class HelpPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.question_answer, color: Colors.blue[700]),
+                Icon(Icons.question_answer, color: Color(0xFF2C3E50)),
                 SizedBox(width: 8),
                 Text(
                   'الأسئلة الشائعة',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue[800],
+                    color: Color(0xFF2C3E50),
                   ),
                 ),
               ],
@@ -266,17 +260,13 @@ class HelpPage extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 15,
+          color: Color(0xFF2C3E50),
         ),
       ),
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Text(
-            answer,
-            style: TextStyle(
-              color: Colors.grey[700],
-            ),
-          ),
+          child: Text(answer, style: TextStyle(color: Color(0xFF64748B))),
         ),
       ],
     );
@@ -284,9 +274,11 @@ class HelpPage extends StatelessWidget {
 
   Widget _buildContactUsSection() {
     return Card(
-      elevation: 2,
+      elevation: 0,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Color(0xFFE2E8F0)),
       ),
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -313,11 +305,7 @@ class HelpPage extends StatelessWidget {
               'support@floodapp.gov.sa',
               Icons.email,
             ),
-            _buildContactItem(
-              'رقم الدعم الفني',
-              '8001234567',
-              Icons.phone,
-            ),
+            _buildContactItem('رقم الدعم الفني', '8001234567', Icons.phone),
             _buildContactItem(
               'ساعات العمل',
               'على مدار الساعة طوال أيام الأسبوع',
@@ -331,6 +319,8 @@ class HelpPage extends StatelessWidget {
                 icon: Icon(Icons.message),
                 label: Text('إرسال ملاحظات'),
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF2C3E50),
+                  foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -363,15 +353,13 @@ class HelpPage extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Color(0xFF64748B), fontSize: 12),
               ),
               Text(
                 content,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Color(0xFF2C3E50),
                 ),
               ),
             ],
