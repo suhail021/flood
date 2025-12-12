@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:google/screens/phone_login_screen.dart';
 import 'phone_verification_screen.dart';
-import 'package:google/widgets/custom_text_form_field.dart';
+import 'package:google/core/widgets/custom_text_form_field.dart';
 
 class PhoneRegistrationScreen extends StatefulWidget {
   const PhoneRegistrationScreen({super.key});
@@ -134,12 +133,7 @@ class _PhoneRegistrationScreenState extends State<PhoneRegistrationScreen> {
                     // زر الاتصال المباشر
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PhoneLoginScreen(),
-                          ),
-                        );
+                        Navigator.pop(context);
                       },
                       child: const Text(
                         'لدي حساب بالفعل ',

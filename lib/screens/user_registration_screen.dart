@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_screen.dart';
-import 'package:google/widgets/custom_text_form_field.dart';
+import 'package:google/core/widgets/custom_text_form_field.dart';
 
 class UserRegistrationScreen extends StatefulWidget {
   final String phoneNumber;

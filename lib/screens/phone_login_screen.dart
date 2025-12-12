@@ -5,7 +5,7 @@ import 'package:google/screens/home_screen.dart';
 import 'package:google/screens/phone_forgetpass_screen.dart';
 import 'package:google/screens/phone_registration_screen%20copy.dart';
 import 'phone_verification_screen.dart';
-import 'package:google/widgets/custom_text_form_field.dart';
+import 'package:google/core/widgets/custom_text_form_field.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key});

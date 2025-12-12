@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google/widgets/custom_text_form_field.dart';
+import 'package:google/core/widgets/custom_text_form_field.dart';
 
 class ReportFloodScreen extends StatefulWidget {
   const ReportFloodScreen({super.key});

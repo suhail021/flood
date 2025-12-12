@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/profile_screen.dart';
-import 'package:google/widgets/custom_text_form_field.dart';
+import 'package:google/core/widgets/custom_text_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'phone_login_screen.dart';
 import 'security_help_screen.dart';

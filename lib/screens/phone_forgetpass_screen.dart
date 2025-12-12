@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google/screens/phone_login_screen.dart';
 import 'phone_verification_screen.dart';
-import 'package:google/widgets/custom_text_form_field.dart';
+import 'package:google/core/widgets/custom_text_form_field.dart';
 
 class PhoneForgetpassScreen extends StatefulWidget {
   const PhoneForgetpassScreen({super.key});
