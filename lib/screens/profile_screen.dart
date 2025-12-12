@@ -1,100 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'phone_login_screen.dart';
+import 'package:get/get.dart';
+import 'package:google/controllers/profile_controller.dart';
 import 'package:google/core/widgets/custom_text_form_field.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _passController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _cityController = TextEditingController();
-  bool _isEditing = false;
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _nameController.text = prefs.getString('user_name') ?? 'أحمد محمد';
-      _addressController.text =
-          prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
-      _cityController.text = prefs.getString('user_city') ?? 'صنعاء';
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text(
-            'الملف الشخصي',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: const Color(0xFF2C3E50),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _isEditing = !_isEditing;
-                });
-              },
-              tooltip: _isEditing ? ' حفظ' : 'تعديل',
+    // Put controller
+    final controller = Get.put(ProfileController());
 
-              icon: Icon(_isEditing ? Icons.done : Icons.edit),
-            ),
-          ],
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+                centerTitle: true,
+
+        title: const Text(
+          'الملف الشخصي',
+          style: TextStyle(color: Colors.white),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // صورة الملف الشخصي
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(60),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Color(0xFF2C3E50),
-                    ),
+        backgroundColor: const Color(0xFF2C3E50),
+        foregroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          Obx(
+            () => IconButton(
+              onPressed: () {
+                if (controller.isEditing.value) {
+                  controller.saveChanges();
+                } else {
+                  controller.toggleEditing();
+                }
+              },
+              tooltip: controller.isEditing.value ? 'حفظ' : 'تعديل',
+              icon: Icon(controller.isEditing.value ? Icons.done : Icons.edit),
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              children: [
+                // صورة الملف الشخصي
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(60),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
+                  child: const Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Color(0xFF2C3E50),
+                  ),
+                ),
+                const SizedBox(height: 24),
 
-                  // اسم المستخدم
-                  Text(
-                    _nameController.text,
+                // اسم المستخدم
+                Obx(
+                  () => Text(
+                    controller.userName.value,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -102,59 +80,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
+                ),
+                const SizedBox(height: 8),
 
-                  Text(
-                    'مستخدم نشط',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF64748B),
-                    ),
-                    textAlign: TextAlign.center,
+                const Text(
+                  'مستخدم نشط',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+
+                // معلومات المستخدم
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 40),
-
-                  // معلومات المستخدم
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
+                  padding: const EdgeInsets.all(24),
+                  child: Obx(
+                    () => Column(
                       children: [
                         // حقل الاسم
                         _buildInfoField(
                           label: 'الاسم الكامل',
                           icon: Icons.person,
-                          controller: _nameController,
-                          enabled: _isEditing,
+                          controller: controller.nameController,
+                          enabled: controller.isEditing.value,
                         ),
                         const SizedBox(height: 20),
                         _buildInfoField(
                           label: 'رقم الهاتف',
                           icon: Icons.phone,
-                          controller: _passController,
-                          enabled: _isEditing,
+                          controller: controller.phoneController,
+                          enabled: controller.isEditing.value,
                         ),
                         const SizedBox(height: 20),
 
                         // إحصائيات
-                        if (!_isEditing) ...[],
+                        if (!controller.isEditing.value) ...[
+                          // يمكن إضافة إحصائيات هنا
+                        ],
                       ],
                     ),
                   ),
+                ),
 
-                  // أزرار إضافية
-                ],
-              ),
+                // أزرار إضافية
+              ],
             ),
           ),
         ),
@@ -267,84 +246,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _saveChanges() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      // محاكاة حفظ البيانات
-      await Future.delayed(const Duration(seconds: 2));
-
-      // حفظ البيانات في SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_name', _nameController.text);
-      await prefs.setString('user_address', _addressController.text);
-      await prefs.setString('user_city', _cityController.text);
-
-      setState(() {
-        _isLoading = false;
-        _isEditing = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم حفظ التغييرات بنجاح'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
-  }
-
-  void _cancelEdit() {
-    setState(() {
-      _isEditing = false;
-    });
-    _loadUserData(); // إعادة تحميل البيانات الأصلية
-  }
-
-  void _logout() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('تسجيل الخروج'),
-          content: const Text('هل أنت متأكد من تسجيل الخروج؟'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('إلغاء'),
-            ),
-            TextButton(
-              onPressed: () async {
-                // مسح بيانات المستخدم
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();
-
-                Navigator.of(context).pop();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PhoneLoginScreen(),
-                  ),
-                  (route) => false,
-                );
-              },
-              child: const Text('تأكيد'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _addressController.dispose();
-    _cityController.dispose();
-    super.dispose();
   }
 }

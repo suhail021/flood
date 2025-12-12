@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:google/screens/phone_login_screen.dart';
+import 'package:get/get.dart';
+import 'package:google/controllers/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     initAnimations();
-    navigateToPhoneLogin();
+    Get.put(SplashController());
   }
 
   @override
@@ -82,14 +83,6 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     animationController.forward();
-  }
-
-  void navigateToPhoneLogin() {
-    Future.delayed(const Duration(seconds: 4), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const PhoneLoginScreen()),
-      );
-    });
   }
 
   @override

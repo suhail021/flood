@@ -1,100 +1,88 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:google/controllers/report_flood_controller.dart';
 import 'package:google/core/widgets/custom_text_form_field.dart';
 
-class ReportFloodScreen extends StatefulWidget {
+class ReportFloodScreen extends StatelessWidget {
   const ReportFloodScreen({super.key});
 
   @override
-  State<ReportFloodScreen> createState() => _ReportFloodScreenState();
-}
-
-class _ReportFloodScreenState extends State<ReportFloodScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _descriptionController = TextEditingController();
-  File? _selectedImage;
-  LatLng? _selectedLocation;
-  bool _isLoading = false;
-  bool _isLocationLoading = false;
-  String? _selectedReportType;
-
-  @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Color(0xFFF8FAFC),
+    final controller = Get.put(ReportFloodController());
 
-        appBar: AppBar(
-          title: const Text(
-            'تقديم بلاغ سيول',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: const Color(0xFF2C3E50),
-          foregroundColor: Colors.white,
-          elevation: 0,
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'إبلاغ عن سيول',
+          style: TextStyle(color: Colors.white),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // عنوان الصفحة
-                  const Text(
-                    'تقديم بلاغ جديد',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2C3E50),
-                    ),
-                    textAlign: TextAlign.center,
+        backgroundColor: const Color(0xFF2C3E50),
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // عنوان الصفحة
+                const Text(
+                  'بلاغ جديد',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3E50),
                   ),
-                  const SizedBox(height: 8),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
 
-                  const Text(
-                    'ساعدنا في مراقبة مناطق السيول',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
-                    textAlign: TextAlign.center,
+                const Text(
+                  'ساعد في رصد السيول للمحافظة على السلامة',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+
+                // حقل الوصف
+                CustomTextFormField(
+                  controller: controller.descriptionController,
+                  maxLines: 4,
+                  hintText: 'وصف تفصيلي للبلاغ...',
+                  prefixIcon: Icons.description,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال وصف البلاغ';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // اختيار الصورة
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-
-                  // حقل الوصف
-                  CustomTextFormField(
-                    controller: _descriptionController,
-                    maxLines: 4,
-                    hintText: 'وصف تفصيلي للبلاغ...',
-                    prefixIcon: Icons.description,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال وصف البلاغ';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-
-                  // اختيار الصورة
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
+                  child: Obx(
+                    () => Column(
                       children: [
-                        if (_selectedImage != null) ...[
+                        if (controller.selectedImage.value != null) ...[
                           Container(
                             width: double.infinity,
                             height: 200,
@@ -102,7 +90,9 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               image: DecorationImage(
-                                image: FileImage(_selectedImage!),
+                                image: FileImage(
+                                  controller.selectedImage.value!,
+                                ),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -114,7 +104,10 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                             children: [
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: _pickImage,
+                                  onPressed:
+                                      () => controller.pickImage(
+                                        ImageSource.camera,
+                                      ),
                                   icon: const Icon(Icons.camera_alt),
                                   label: const Text('التقاط صورة'),
                                   style: ElevatedButton.styleFrom(
@@ -126,43 +119,30 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                   ),
                                 ),
                               ),
-                              // const SizedBox(width: 12),
-                              // Expanded(
-                              //   child: ElevatedButton.icon(
-                              //     onPressed: _pickImageFromGallery,
-                              //     icon: const Icon(Icons.photo_library),
-                              //     label: const Text('اختيار من المعرض'),
-                              //     style: ElevatedButton.styleFrom(
-                              //       backgroundColor: const Color(0xFF3B82F6),
-                              //       foregroundColor: Colors.white,
-                              //       shape: RoundedRectangleBorder(
-                              //         borderRadius: BorderRadius.circular(12),
-                              //       ),
-                              //     // ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 24),
 
-                  // اختيار الموقع
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
+                // اختيار الموقع
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Obx(
+                    () => Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
@@ -171,11 +151,11 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed:
-                                      _isLocationLoading
+                                      controller.isLocationLoading.value
                                           ? null
-                                          : _getCurrentLocation,
+                                          : controller.getCurrentLocation,
                                   icon:
-                                      _isLocationLoading
+                                      controller.isLocationLoading.value
                                           ? const SizedBox(
                                             width: 20,
                                             height: 20,
@@ -189,7 +169,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                           )
                                           : const Icon(Icons.my_location),
                                   label: Text(
-                                    _isLocationLoading
+                                    controller.isLocationLoading.value
                                         ? 'جاري تحديد الموقع...'
                                         : 'تحديد موقعي',
                                   ),
@@ -202,25 +182,10 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                   ),
                                 ),
                               ),
-                              // const SizedBox(width: 12),
-                              // Expanded(
-                              //   child: ElevatedButton.icon(
-                              //     onPressed: _selectLocationOnMap,
-                              //     icon: const Icon(Icons.map),
-                              //     label: const Text('اختيار من الخريطة'),
-                              //     style: ElevatedButton.styleFrom(
-                              //       backgroundColor: const Color(0xFFF59E0B),
-                              //       foregroundColor: Colors.white,
-                              //       shape: RoundedRectangleBorder(
-                              //         borderRadius: BorderRadius.circular(12),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
-                        if (_selectedLocation != null) ...[
+                        if (controller.selectedLocation.value != null) ...[
                           Container(
                             width: double.infinity,
                             height: 200,
@@ -236,7 +201,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                               borderRadius: BorderRadius.circular(10),
                               child: GoogleMap(
                                 initialCameraPosition: CameraPosition(
-                                  target: _selectedLocation!,
+                                  target: controller.selectedLocation.value!,
                                   zoom: 15.0,
                                 ),
                                 markers: {
@@ -244,7 +209,8 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                     markerId: const MarkerId(
                                       'selected_location',
                                     ),
-                                    position: _selectedLocation!,
+                                    position:
+                                        controller.selectedLocation.value!,
                                     infoWindow: const InfoWindow(
                                       title: 'الموقع المختار',
                                       snippet: 'موقع البلاغ',
@@ -259,7 +225,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              'الموقع: ${_selectedLocation!.latitude.toStringAsFixed(6)}, ${_selectedLocation!.longitude.toStringAsFixed(6)}',
+                              'الإحداثيات: ${controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF64748B),
@@ -271,20 +237,22 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
+                ),
+                const SizedBox(height: 24),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Obx(
+                    () => Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
@@ -301,18 +269,18 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Color(0xFFE2E8F0),
                                       ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Color(0xFFE2E8F0),
                                       ),
                                     ),
                                   ),
-                                  value: _selectedReportType,
+                                  value: controller.selectedReportType.value,
                                   hint: const Text("اختر نوع البلاغ"),
                                   items: const [
                                     DropdownMenuItem(
@@ -325,29 +293,25 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                                     ),
                                     DropdownMenuItem(
                                       value: "flood",
-                                      child: Text("الإبلاغ عن سيول"),
+                                      child: Text("سيول جارفة"),
                                     ),
                                   ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedReportType = value;
-                                    });
-                                  },
+                                  onChanged: controller.setReportType,
                                 ),
                               ),
                             ],
                           ),
                         ),
 
-                        if (_selectedReportType != null) ...[
+                        if (controller.selectedReportType.value != null) ...[
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              "نوع البلاغ: ${_selectedReportType == "water"
-                                  ? "تجمع مياه"
-                                  : _selectedReportType == "drowning"
-                                  ? "حالة غرق"
-                                  : "الإبلاغ عن سيول"}",
+                              "نوع البلاغ: ${controller.selectedReportType.value == "water"
+                                  ? 'تجمع مياه'
+                                  : controller.selectedReportType.value == "drowning"
+                                  ? 'حالة غرق'
+                                  : 'سيول جارفة'}",
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF64748B),
@@ -359,13 +323,18 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
-                  // زر إرسال البلاغ
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _submitReport,
+                ),
+                const SizedBox(height: 20),
+                // زر إرسال البلاغ
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: Obx(
+                    () => ElevatedButton(
+                      onPressed:
+                          controller.isLoading.value
+                              ? null
+                              : controller.submitReport,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2C3E50),
                         foregroundColor: Colors.white,
@@ -375,7 +344,7 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                         elevation: 0,
                       ),
                       child:
-                          _isLoading
+                          controller.isLoading.value
                               ? const CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   Colors.white,
@@ -390,150 +359,12 @@ class _ReportFloodScreenState extends State<ReportFloodScreen> {
                               ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-
-    if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-      });
-    }
-  }
-
-  Future<void> _pickImageFromGallery() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-      });
-    }
-  }
-
-  Future<void> _getCurrentLocation() async {
-    setState(() {
-      _isLocationLoading = true;
-    });
-
-    try {
-      // التحقق من صلاحيات الموقع
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم رفض صلاحية الموقع'),
-              backgroundColor: Colors.red,
-            ),
-          );
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('صلاحيات الموقع مرفوضة بشكل دائم'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      // الحصول على الموقع الحالي
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      setState(() {
-        _selectedLocation = LatLng(position.latitude, position.longitude);
-        _isLocationLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم تحديد موقعك بنجاح'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e) {
-      setState(() {
-        _isLocationLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('حدث خطأ في تحديد الموقع'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  void _selectLocationOnMap() {
-    // TODO: فتح خريطة لاختيار الموقع
-  }
-
-  void _submitReport() async {
-    if (_formKey.currentState!.validate()) {
-      if (_selectedImage == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('الرجاء اختيار صورة'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      if (_selectedLocation == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('الرجاء تحديد الموقع'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      setState(() {
-        _isLoading = true;
-      });
-
-      // محاكاة إرسال البلاغ
-      await Future.delayed(const Duration(seconds: 3));
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      // عرض رسالة نجاح
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم إرسال البلاغ بنجاح'),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      // العودة للصفحة السابقة
-      Navigator.pop(context);
-    }
-  }
-
-  @override
-  void dispose() {
-    _descriptionController.dispose();
-    super.dispose();
   }
 }

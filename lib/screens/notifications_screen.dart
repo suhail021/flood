@@ -1,138 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google/controllers/notifications_controller.dart';
+import 'package:google/models/notification_model.dart';
 
-class NotificationsScreen extends StatefulWidget {
+class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
 
   @override
-  State<NotificationsScreen> createState() => _NotificationsScreenState();
-}
-
-class _NotificationsScreenState extends State<NotificationsScreen> {
-  final List<NotificationItem> _notifications = [
-    NotificationItem(
-      id: '1',
-      title: 'تحذير من السيول',
-      message: 'احتمال حدوث سيول في منطقة صنعاء القديمة خلال الساعات القادمة',
-      type: NotificationType.warning,
-      timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
-      isRead: false,
-    ),
-    NotificationItem(
-      id: '2',
-      title: 'تحديث حالة المنطقة',
-      message: 'تم تحديث مستوى الخطر في منطقة صنعاء الشرقية من متوسط إلى عالي',
-      type: NotificationType.info,
-      timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-      isRead: true,
-    ),
-    NotificationItem(
-      id: '3',
-      title: 'بلاغ جديد',
-      message: 'تم استلام بلاغ جديد عن وجود مياه راكدة في منطقة صنعاء الغربية',
-      type: NotificationType.alert,
-      timestamp: DateTime.now().subtract(const Duration(hours: 4)),
-      isRead: true,
-    ),
-    NotificationItem(
-      id: '4',
-      title: 'تحديث الطقس',
-      message: 'توقعات هطول أمطار غزيرة في صنعاء خلال اليومين القادمين',
-      type: NotificationType.weather,
-      timestamp: DateTime.now().subtract(const Duration(hours: 6)),
-      isRead: true,
-    ),
-    NotificationItem(
-      id: '5',
-      title: 'نظام التنبؤ',
-      message: 'تم تحديث خوارزميات التنبؤ بالسيول لتحسين دقة التوقعات',
-      type: NotificationType.system,
-      timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-    ),
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
-          backgroundColor: const Color(0xFF2C3E50),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: _markAllAsRead,
-              icon: const Icon(Icons.done_all),
-              tooltip: 'تحديد الكل كمقروء',
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // إحصائيات سريعة
-              Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: Row(
+    final controller = Get.put(NotificationsController());
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF2C3E50),
+        foregroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: controller.markAllAsRead,
+            icon: const Icon(Icons.done_all),
+            tooltip: 'تحديد الكل كمقروء',
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // إحصائيات سريعة
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Obx(
+                () => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildStatItem(
                       'إجمالي الإشعارات',
-                      '${_notifications.length}',
+                      '${controller.notifications.length}',
                       Icons.notifications,
                     ),
                     _buildStatItem(
                       'غير مقروءة',
-                      '${_notifications.where((n) => !n.isRead).length}',
+                      '${controller.notifications.where((n) => !n.isRead).length}',
                       Icons.mark_email_unread,
                     ),
                     _buildStatItem(
                       'اليوم',
-                      '${_notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
+                      '${controller.notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
                       Icons.today,
                     ),
                   ],
                 ),
               ),
+            ),
 
-              // قائمة الإشعارات
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+            // قائمة الإشعارات
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  child: ListView.builder(
+                ),
+                child: Obx(
+                  () => ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: _notifications.length,
+                    itemCount: controller.notifications.length,
                     itemBuilder: (context, index) {
-                      final notification = _notifications[index];
-                      return _buildNotificationCard(notification);
+                      final notification = controller.notifications[index];
+                      return _buildNotificationCard(notification, controller);
                     },
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -168,16 +127,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget _buildNotificationCard(NotificationItem notification) {
+  Widget _buildNotificationCard(
+    NotificationItem notification,
+    NotificationsController controller,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: notification.isRead ? Color(0xFFF8FAFC) : Colors.white,
+        color: notification.isRead ? const Color(0xFFF8FAFC) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color:
               notification.isRead
-                  ? Color(0xFFE2E8F0)
+                  ? const Color(0xFFE2E8F0)
                   : _getNotificationColor(notification.type).withOpacity(0.3),
           width: 1,
         ),
@@ -215,8 +177,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       notification.isRead ? FontWeight.normal : FontWeight.bold,
                   color:
                       notification.isRead
-                          ? Color(0xFF64748B)
-                          : Color(0xFF2C3E50),
+                          ? const Color(0xFF64748B)
+                          : const Color(0xFF2C3E50),
                 ),
               ),
             ),
@@ -240,21 +202,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               style: TextStyle(
                 fontSize: 14,
                 color:
-                    notification.isRead ? Color(0xFF94A3B8) : Color(0xFF64748B),
+                    notification.isRead
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF64748B),
               ),
             ),
             const SizedBox(height: 8),
             Text(
               _formatTimestamp(notification.timestamp),
-              style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
             ),
           ],
         ),
-        onTap: () => _markAsRead(notification.id),
+        onTap: () => controller.markAsRead(notification.id),
         trailing: PopupMenuButton<String>(
           onSelected: (value) {
             if (value == 'delete') {
-              _deleteNotification(notification.id);
+              controller.deleteNotification(notification.id);
             }
           },
           itemBuilder:
@@ -319,59 +283,4 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       return 'منذ ${difference.inDays} يوم';
     }
   }
-
-  void _markAsRead(String id) {
-    setState(() {
-      final notification = _notifications.firstWhere((n) => n.id == id);
-      notification.isRead = true;
-    });
-  }
-
-  void _markAllAsRead() {
-    setState(() {
-      for (var notification in _notifications) {
-        notification.isRead = true;
-      }
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('تم تحديد جميع الإشعارات كمقروءة'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
-
-  void _deleteNotification(String id) {
-    setState(() {
-      _notifications.removeWhere((n) => n.id == id);
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('تم حذف الإشعار'),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-}
-
-enum NotificationType { warning, info, alert, weather, system }
-
-class NotificationItem {
-  final String id;
-  final String title;
-  final String message;
-  final NotificationType type;
-  final DateTime timestamp;
-  bool isRead;
-
-  NotificationItem({
-    required this.id,
-    required this.title,
-    required this.message,
-    required this.type,
-    required this.timestamp,
-    this.isRead = false,
-  });
 }

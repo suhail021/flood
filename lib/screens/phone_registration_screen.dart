@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google/controllers/forget_pass_controller.dart';
+import 'package:google/controllers/registration_controller.dart';
 import 'package:google/core/widgets/custom_text_form_field.dart';
 
-class PhoneForgetpassScreen extends StatelessWidget {
-  const PhoneForgetpassScreen({super.key});
+class PhoneRegistrationScreen extends StatelessWidget {
+  const PhoneRegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ForgetPassController());
+    final controller = Get.put(RegistrationController());
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
+                centerTitle: true,
+
         elevation: 0,
         leading: IconButton(
           highlightColor: Colors.transparent,
-          padding: EdgeInsets.only(right: 24),
+          padding: const EdgeInsets.only(right: 24),
           onPressed: controller.goBack,
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -55,7 +55,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
 
                   // عنوان التطبيق
                   const Text(
-                    'تغيير كلمة السر',
+                    'إنشاء حساب',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   const Text(
-                    'أدخل رقم هاتفك وكلمة السر الجديدة',
+                    'أدخل رقم هاتفك للمتابعة',
                     style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
                     textAlign: TextAlign.center,
                   ),
@@ -84,27 +84,12 @@ class PhoneForgetpassScreen extends StatelessWidget {
                         return 'الرجاء إدخال رقم الهاتف';
                       }
                       if (value.length < 9) {
-                        return 'رقم الهاتف غير صحيح';
+                        return 'رقم الهاتف يجب أن يتكون من 9 أرقام على الأقل';
                       }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
-                  CustomTextFormField(
-                    controller: controller.newPasswordController,
-                    obscureText: true,
-                    hintText: ' كلمة السر الجديدة',
-                    prefixIcon: Icons.lock,
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال كلمة السر';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 32),
 
                   // زر إرسال رمز التحقق
                   SizedBox(
@@ -115,7 +100,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
                         onPressed:
                             controller.isLoading.value
                                 ? null
-                                : controller.sendVerificationCode,
+                                : controller.register,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2C3E50),
                           foregroundColor: Colors.white,
@@ -142,6 +127,14 @@ class PhoneForgetpassScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
+                  // زر الاتصال المباشر
+                  TextButton(
+                    onPressed: controller.goBack,
+                    child: const Text(
+                      'لديك حساب بالفعل؟',
+                      style: TextStyle(color: Color(0xFF64748B), fontSize: 16),
+                    ),
+                  ),
                 ],
               ),
             ),

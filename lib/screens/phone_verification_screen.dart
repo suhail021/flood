@@ -1,74 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'user_registration_screen.dart';
+import 'package:get/get.dart';
+import 'package:google/controllers/verification_controller.dart';
 
-class PhoneVerificationScreen extends StatefulWidget {
+class PhoneVerificationScreen extends StatelessWidget {
   final String phoneNumber;
 
   const PhoneVerificationScreen({super.key, required this.phoneNumber});
 
   @override
-  State<PhoneVerificationScreen> createState() =>
-      _PhoneVerificationScreenState();
-}
-
-class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
-  final List<TextEditingController> _controllers = List.generate(
-    6,
-    (index) => TextEditingController(),
-  );
-  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
-  final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-  int _remainingTime = 60;
-  bool _canResend = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer();
-  }
-
-  void _startTimer() {
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted && _remainingTime > 0) {
-        setState(() {
-          _remainingTime--;
-        });
-        _startTimer();
-      } else if (mounted) {
-        setState(() {
-          _canResend = true;
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Using tag to ensure unique controller if needed, or just standard put.
+    // Since we might have multiple verification screens in stack (unlikely), standard put is fine.
+    // However, if we resend and come back, we want fresh timer.
+    // Get.put keeps the instance if in stack.
+    // Logic: Registration -> Verification. Back -> Registration -> Verification.
+    // If we go back, Verification is popped, controller disposed (if Get routes are used or auto-dispose).
+    // Get.to uses generic routes, GetX usually auto-disposes controller if related view is removed from tree.
+    final controller = Get.put(VerificationController());
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+                centerTitle: true,
+
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_forward_ios,
-              color: Color(0xFF2C3E50),
-              size: 28,
-            ),
+
+        leading: IconButton(
+          padding: EdgeInsets.only(right: 24),
+
+          onPressed: () => Get.back(),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Color(0xFF2C3E50),
+            size: 28,
           ),
-          const SizedBox(width: 10),
-        ],
+        ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.only(top: 2.0, right: 24, left: 24),
           child: Form(
-            key: _formKey,
+            key: controller.formKey,
             child: Column(
               children: [
                 const SizedBox(height: 40),
@@ -109,7 +84,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                 const SizedBox(height: 16),
 
                 Text(
-                  'تم إرسال رمز التحقق إلى ${widget.phoneNumber}',
+                  'تم إرسال رمز التحقق إلى $phoneNumber',
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xFF64748B),
@@ -118,7 +93,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                 ),
                 const SizedBox(height: 40),
 
-                // حقول إدخال رمز التحقق
+                // حقل إدخال رمز التحقق
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(
@@ -127,8 +102,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                       width: 50,
                       height: 60,
                       child: TextFormField(
-                        controller: _controllers[index],
-                        focusNode: _focusNodes[index],
+                        controller: controller.otpControllers[index],
+                        focusNode: controller.focusNodes[index],
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         inputFormatters: [
@@ -145,26 +120,27 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Color(0xFFE2E8F0)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFE2E8F0),
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Color(0xFFE2E8F0)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFE2E8F0),
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFF2C3E50),
                               width: 2,
                             ),
                           ),
                           contentPadding: const EdgeInsets.all(16),
                         ),
-                        onChanged: (value) {
-                          if (value.isNotEmpty && index < 5) {
-                            _focusNodes[index + 1].requestFocus();
-                          }
-                        },
+                        onChanged:
+                            (value) => controller.onOtpChanged(value, index),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return '';
@@ -181,30 +157,35 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 56,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _verifyCode,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2C3E50),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                  child: Obx(
+                    () => ElevatedButton(
+                      onPressed:
+                          controller.isLoading.value
+                              ? null
+                              : () => controller.verifyCode(phoneNumber),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2C3E50),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
+                      child:
+                          controller.isLoading.value
+                              ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              )
+                              : const Text(
+                                'تحقق',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                     ),
-                    child:
-                        _isLoading
-                            ? const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            )
-                            : const Text(
-                              'تحقق',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -213,24 +194,31 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'لم تستلم الرمز؟ ',
                       style: TextStyle(color: Color(0xFF64748B), fontSize: 16),
                     ),
-                    TextButton(
-                      onPressed: _canResend ? _resendCode : null,
-                      child: Text(
-                        _canResend
-                            ? 'إعادة الإرسال'
-                            : 'إعادة الإرسال بعد $_remainingTime ثانية',
-                        style: TextStyle(
-                          color:
-                              _canResend
-                                  ? Color(0xFF2C3E50)
-                                  : Color(0xFF94A3B8),
-                          fontSize: 16,
-                          decoration:
-                              _canResend ? TextDecoration.underline : null,
+                    Obx(
+                      () => TextButton(
+                        onPressed:
+                            controller.canResend.value
+                                ? () => controller.resendCode(phoneNumber)
+                                : null,
+                        child: Text(
+                          controller.canResend.value
+                              ? 'إعادة الإرسال'
+                              : 'إعادة الإرسال بعد ${controller.remainingTime.value} ثانية',
+                          style: TextStyle(
+                            color:
+                                controller.canResend.value
+                                    ? const Color(0xFF2C3E50)
+                                    : const Color(0xFF94A3B8),
+                            fontSize: 16,
+                            decoration:
+                                controller.canResend.value
+                                    ? TextDecoration.underline
+                                    : null,
+                          ),
                         ),
                       ),
                     ),
@@ -242,60 +230,5 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
         ),
       ),
     );
-  }
-
-  void _verifyCode() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      // محاكاة التحقق من الرمز
-      await Future.delayed(const Duration(seconds: 2));
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      // الانتقال إلى صفحة التسجيل
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-                  UserRegistrationScreen(phoneNumber: widget.phoneNumber),
-        ),
-      );
-    }
-  }
-
-  void _resendCode() async {
-    setState(() {
-      _canResend = false;
-      _remainingTime = 60;
-    });
-
-    // محاكاة إعادة إرسال الرمز
-    await Future.delayed(const Duration(seconds: 1));
-
-    _startTimer();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('تم إعادة إرسال رمز التحقق'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
-    super.dispose();
   }
 }
