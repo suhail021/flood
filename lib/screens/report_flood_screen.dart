@@ -13,14 +13,14 @@ class ReportFloodScreen extends StatelessWidget {
     final controller = Get.put(ReportFloodController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'report_flood_title'.tr,
           style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF2C3E50),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -38,7 +38,7 @@ class ReportFloodScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C3E50),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -46,9 +46,9 @@ class ReportFloodScreen extends StatelessWidget {
 
                 Text(
                   'report_flood_desc'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF64748B),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -72,7 +72,7 @@ class ReportFloodScreen extends StatelessWidget {
                 // اختيار الصورة
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -114,7 +114,8 @@ class ReportFloodScreen extends StatelessWidget {
                                   icon: const Icon(Icons.camera_alt),
                                   label: Text('take_photo'.tr),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF2C3E50),
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -134,7 +135,7 @@ class ReportFloodScreen extends StatelessWidget {
                 // اختيار الموقع
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -230,9 +231,9 @@ class ReportFloodScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               '${'coordinates'.tr}: ${controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: Color(0xFF64748B),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -245,7 +246,7 @@ class ReportFloodScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -266,21 +267,21 @@ class ReportFloodScreen extends StatelessWidget {
                                 child: DropdownButtonFormField<String>(
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Theme.of(context).cardColor,
                                     contentPadding: const EdgeInsets.symmetric(
                                       vertical: 12,
                                       horizontal: 16,
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFE2E8F0),
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).dividerColor,
                                       ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFE2E8F0),
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).dividerColor,
                                       ),
                                     ),
                                   ),
@@ -316,9 +317,9 @@ class ReportFloodScreen extends StatelessWidget {
                                   : controller.selectedReportType.value == "drowning"
                                   ? 'type_drowning'.tr
                                   : 'type_flood'.tr}",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
-                                color: Color(0xFF64748B),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -340,7 +341,7 @@ class ReportFloodScreen extends StatelessWidget {
                               ? null
                               : controller.submitReport,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2C3E50),
+                        backgroundColor: Theme.of(context).primaryColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -356,7 +357,7 @@ class ReportFloodScreen extends StatelessWidget {
                               )
                               : Text(
                                 'submit_report'.tr,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),

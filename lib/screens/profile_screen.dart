@@ -12,12 +12,12 @@ class ProfileScreen extends StatelessWidget {
     final controller = Get.put(ProfileController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
 
         title: Text('profile'.tr, style: const TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF2C3E50),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(60),
                     boxShadow: [
                       BoxShadow(
@@ -58,10 +58,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.person,
                     size: 60,
-                    color: Color(0xFF2C3E50),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -70,10 +70,10 @@ class ProfileScreen extends StatelessWidget {
                 Obx(
                   () => Text(
                     controller.userName.value,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2C3E50),
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -82,9 +82,9 @@ class ProfileScreen extends StatelessWidget {
 
                 Text(
                   'active_user'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF64748B),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -93,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
                 // معلومات المستخدم
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -109,6 +109,7 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         // حقل الاسم
                         _buildInfoField(
+                          context,
                           label: 'full_name'.tr,
                           icon: Icons.person,
                           controller: controller.nameController,
@@ -116,6 +117,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         _buildInfoField(
+                          context,
                           label: 'phone_number'.tr,
                           icon: Icons.phone,
                           controller: controller.phoneController,
@@ -141,7 +143,8 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoField({
+  Widget _buildInfoField(
+    BuildContext context, {
     required String label,
     required IconData icon,
     required TextEditingController controller,
@@ -152,10 +155,10 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF2C3E50),
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         const SizedBox(height: 8),
@@ -169,17 +172,26 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon) {
+  Widget _buildStatItem(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
     return Column(
       children: [
         Container(
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF2C3E50).withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.primary,
+            size: 24,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
@@ -192,59 +204,12 @@ class ProfileScreen extends StatelessWidget {
         ),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: const Color(0xFF2C3E50).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF2C3E50),
-          ),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          color: Color(0xFF2C3E50),
-          size: 20,
-        ),
-      ),
     );
   }
 }

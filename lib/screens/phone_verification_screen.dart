@@ -32,9 +32,9 @@ class PhoneVerificationScreen extends StatelessWidget {
           padding: EdgeInsets.only(right: 24),
 
           onPressed: () => Get.back(),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
-            color: Color(0xFF2C3E50),
+            color: Theme.of(context).colorScheme.primary,
             size: 28,
           ),
         ),
@@ -53,7 +53,7 @@ class PhoneVerificationScreen extends StatelessWidget {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(50),
                     boxShadow: [
                       BoxShadow(
@@ -70,10 +70,10 @@ class PhoneVerificationScreen extends StatelessWidget {
                 // عنوان الصفحة
                 Text(
                   'verify_phone_title'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C3E50),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -81,9 +81,9 @@ class PhoneVerificationScreen extends StatelessWidget {
 
                 Text(
                   'verification_sent_to'.trParams({'phone': phoneNumber}),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF64748B),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -106,30 +106,30 @@ class PhoneVerificationScreen extends StatelessWidget {
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(1),
                         ],
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2C3E50),
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Theme.of(context).cardColor,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Color(0xFFE2E8F0),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor,
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Color(0xFFE2E8F0),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF2C3E50),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
                               width: 2,
                             ),
                           ),
@@ -160,7 +160,7 @@ class PhoneVerificationScreen extends StatelessWidget {
                               ? null
                               : () => controller.verifyCode(phoneNumber),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2C3E50),
+                        backgroundColor: Theme.of(context).primaryColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -192,8 +192,8 @@ class PhoneVerificationScreen extends StatelessWidget {
                   children: [
                     Text(
                       'didnt_receive_code'.tr,
-                      style: const TextStyle(
-                        color: Color(0xFF64748B),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
                         fontSize: 16,
                       ),
                     ),
@@ -212,8 +212,8 @@ class PhoneVerificationScreen extends StatelessWidget {
                           style: TextStyle(
                             color:
                                 controller.canResend.value
-                                    ? const Color(0xFF2C3E50)
-                                    : const Color(0xFF94A3B8),
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).disabledColor,
                             fontSize: 16,
                             decoration:
                                 controller.canResend.value

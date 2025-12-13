@@ -11,14 +11,14 @@ class NotificationsScreen extends StatelessWidget {
     final controller = Get.put(NotificationsController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'notifications_title'.tr,
           style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF2C3E50),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -37,7 +37,7 @@ class NotificationsScreen extends StatelessWidget {
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -52,16 +52,19 @@ class NotificationsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildStatItem(
+                      context,
                       'total_notifications'.tr,
                       '${controller.notifications.length}',
                       Icons.notifications,
                     ),
                     _buildStatItem(
+                      context,
                       'unread'.tr,
                       '${controller.notifications.where((n) => !n.isRead).length}',
                       Icons.mark_email_unread,
                     ),
                     _buildStatItem(
+                      context,
                       'today'.tr,
                       '${controller.notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
                       Icons.today,
@@ -75,8 +78,8 @@ class NotificationsScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -88,7 +91,11 @@ class NotificationsScreen extends StatelessWidget {
                     itemCount: controller.notifications.length,
                     itemBuilder: (context, index) {
                       final notification = controller.notifications[index];
-                      return _buildNotificationCard(notification, controller);
+                      return _buildNotificationCard(
+                        context,
+                        notification,
+                        controller,
+                      );
                     },
                   ),
                 ),
@@ -100,17 +107,26 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon) {
+  Widget _buildStatItem(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
     return Column(
       children: [
         Container(
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF2C3E50).withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.primary,
+            size: 24,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
@@ -131,19 +147,26 @@ class NotificationsScreen extends StatelessWidget {
   }
 
   Widget _buildNotificationCard(
+    BuildContext context,
     NotificationItem notification,
     NotificationsController controller,
   ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: notification.isRead ? const Color(0xFFF8FAFC) : Colors.white,
+        color:
+            notification.isRead
+                ? Theme.of(context).scaffoldBackgroundColor
+                : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color:
               notification.isRead
                   ? const Color(0xFFE2E8F0)
-                  : _getNotificationColor(notification.type).withOpacity(0.3),
+                  : _getNotificationColor(
+                    context,
+                    notification.type,
+                  ).withOpacity(0.3),
           width: 1,
         ),
         boxShadow: [
@@ -160,12 +183,15 @@ class NotificationsScreen extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: _getNotificationColor(notification.type).withOpacity(0.1),
+            color: _getNotificationColor(
+              context,
+              notification.type,
+            ).withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
           child: Icon(
             _getNotificationIcon(notification.type),
-            color: _getNotificationColor(notification.type),
+            color: _getNotificationColor(context, notification.type),
             size: 24,
           ),
         ),
@@ -180,8 +206,8 @@ class NotificationsScreen extends StatelessWidget {
                       notification.isRead ? FontWeight.normal : FontWeight.bold,
                   color:
                       notification.isRead
-                          ? const Color(0xFF64748B)
-                          : const Color(0xFF2C3E50),
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ),
@@ -190,7 +216,10 @@ class NotificationsScreen extends StatelessWidget {
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: _getNotificationColor(notification.type),
+                  color: _getNotificationColor(
+                    context,
+                    notification.type,
+                  ).withOpacity(0.3),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -242,7 +271,7 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  Color _getNotificationColor(NotificationType type) {
+  Color _getNotificationColor(BuildContext context, NotificationType type) {
     switch (type) {
       case NotificationType.warning:
         return Colors.orange;

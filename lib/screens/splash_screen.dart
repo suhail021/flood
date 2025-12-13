@@ -89,14 +89,14 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFF8FAFC), // أبيض مزرق فاتح
-              Color(0xFFE2E8F0), // رمادي فاتح جداً
-              Color(0xFFCBD5E1), // رمادي فاتح
+              Theme.of(context).scaffoldBackgroundColor,
+              Theme.of(context).colorScheme.surface,
+              Theme.of(context).colorScheme.secondary.withOpacity(0.2),
             ],
           ),
         ),
@@ -157,10 +157,10 @@ class _SplashScreenState extends State<SplashScreen>
                       opacity: fadeAnimation,
                       child: Text(
                         'app_title_splash'.tr,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2C3E50),
+                          color: Theme.of(context).colorScheme.primary,
                           shadows: [
                             Shadow(
                               blurRadius: 5,
@@ -204,11 +204,13 @@ class _SplashScreenState extends State<SplashScreen>
                         width: 220,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: const LinearProgressIndicator(
+                          child: LinearProgressIndicator(
                             minHeight: 8,
-                            backgroundColor: Color(0xFFE2E8F0),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.secondary.withOpacity(0.2),
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Color(0xFF2C3E50),
+                              Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ),

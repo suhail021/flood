@@ -20,11 +20,11 @@ class PhoneRegistrationScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           highlightColor: Colors.transparent,
-          padding: const EdgeInsets.only(right: 24),
+          padding: const EdgeInsets.only(right: 24, left: 24),
           onPressed: controller.goBack,
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
-            color: Color(0xFF2C3E50),
+            color: Theme.of(context).colorScheme.primary,
             size: 28,
           ),
         ),
@@ -56,10 +56,10 @@ class PhoneRegistrationScreen extends StatelessWidget {
                   // عنوان التطبيق
                   Text(
                     'create_account'.tr,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2C3E50),
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -67,9 +67,9 @@ class PhoneRegistrationScreen extends StatelessWidget {
 
                   Text(
                     'enter_phone_to_continue'.tr,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF64748B),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -105,7 +105,7 @@ class PhoneRegistrationScreen extends StatelessWidget {
                                 ? null
                                 : controller.register,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2C3E50),
+                          backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
@@ -135,7 +135,10 @@ class PhoneRegistrationScreen extends StatelessWidget {
                     onPressed: controller.goBack,
                     child: Text(
                       'already_have_account'.tr,
-                      style: TextStyle(color: Color(0xFF64748B), fontSize: 16),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ],

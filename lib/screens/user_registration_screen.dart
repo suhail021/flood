@@ -13,7 +13,7 @@ class UserRegistrationScreen extends StatelessWidget {
     final controller = Get.put(UserRegistrationController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
 
@@ -24,9 +24,9 @@ class UserRegistrationScreen extends StatelessWidget {
           highlightColor: Colors.transparent,
           padding: const EdgeInsets.only(right: 24),
           onPressed: controller.goBack,
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
-            color: Color(0xFF2C3E50),
+            color: Theme.of(context).colorScheme.primary,
             size: 28,
           ),
         ),
@@ -44,7 +44,7 @@ class UserRegistrationScreen extends StatelessWidget {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(50),
                     boxShadow: [
                       BoxShadow(
@@ -54,20 +54,20 @@ class UserRegistrationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.person_add,
                     size: 50,
-                    color: Color(0xFF2C3E50),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 32),
 
                 Text(
                   'complete_registration'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C3E50),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -75,9 +75,9 @@ class UserRegistrationScreen extends StatelessWidget {
 
                 Text(
                   'enter_personal_data'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF64748B),
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -130,7 +130,7 @@ class UserRegistrationScreen extends StatelessWidget {
                               ? null
                               : controller.completeRegistration,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2C3E50),
+                        backgroundColor: Theme.of(context).primaryColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),

@@ -14,17 +14,16 @@ class PhoneForgetpassScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           highlightColor: Colors.transparent,
-          padding: EdgeInsets.only(right: 24),
+          padding: EdgeInsets.only(right: 24, left: 24),
           onPressed: controller.goBack,
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
-            color: Color(0xFF2C3E50),
+            color: Theme.of(context).colorScheme.primary,
             size: 28,
           ),
         ),
@@ -56,10 +55,10 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   // عنوان التطبيق
                   Text(
                     'change_password'.tr,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2C3E50),
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -67,9 +66,9 @@ class PhoneForgetpassScreen extends StatelessWidget {
 
                   Text(
                     'enter_phone_new_pass'.tr,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF64748B),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -120,7 +119,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
                                 ? null
                                 : controller.sendVerificationCode,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2C3E50),
+                          backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),

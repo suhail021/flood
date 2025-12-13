@@ -39,10 +39,10 @@ class PhoneLoginScreen extends StatelessWidget {
                   // عنوان التطبيق
                   Text(
                     'login'.tr,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2C3E50),
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -98,7 +98,7 @@ class PhoneLoginScreen extends StatelessWidget {
                                 ? null
                                 : controller.login,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2C3E50),
+                          backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(13),
@@ -132,7 +132,7 @@ class PhoneLoginScreen extends StatelessWidget {
                         child: Text(
                           'forgot_password_question'.tr,
                           style: TextStyle(
-                            color: Color(0xFF64748B),
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 16,
                           ),
                         ),
@@ -142,7 +142,7 @@ class PhoneLoginScreen extends StatelessWidget {
                         child: Text(
                           'create_account'.tr,
                           style: TextStyle(
-                            color: Color(0xFF2C3E50),
+                            color: Theme.of(context).primaryColor,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

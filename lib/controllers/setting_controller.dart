@@ -14,6 +14,9 @@ import 'package:google/screens/security_help_screen.dart';
 // So HelpPage is likely in `security_help_screen.dart`.
 
 class SettingController extends GetxController {
+  final RxString currentLang = 'ar'.obs;
+  final Rx<ThemeMode> currentTheme = ThemeMode.system.obs;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController addressController;
@@ -52,6 +55,8 @@ class SettingController extends GetxController {
     addressController = TextEditingController();
     cityController = TextEditingController();
     loadUserData();
+    loadLanguage();
+    loadTheme();
   }
 
   @override
@@ -131,9 +136,52 @@ class SettingController extends GetxController {
   }
 
   void changeLanguage(String langCode) async {
-    var locale = Locale(langCode);
-    Get.updateLocale(locale);
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('language_code', langCode);
+    Get.updateLocale(Locale(langCode));
+    Get.back(); // Close the dialog
+    Get.snackbar(
+      'language_change_success_title'.tr,
+      'language_change_success_body'.tr,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+  }
+
+  void loadLanguage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? langCode = prefs.getString('language_code');
+    if (langCode != null) {
+      currentLang.value = langCode;
+      Get.updateLocale(Locale(langCode));
+    }
+  }
+
+  void changeTheme(ThemeMode mode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String themeString = 'system';
+    if (mode == ThemeMode.light) themeString = 'light';
+    if (mode == ThemeMode.dark) themeString = 'dark';
+
+    await prefs.setString('theme_mode', themeString);
+    Get.changeThemeMode(mode);
+    currentTheme.value = mode;
+    Get.back();
+  }
+
+  void loadTheme() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? themeString = prefs.getString('theme_mode');
+    if (themeString == 'light') {
+      currentTheme.value = ThemeMode.light;
+      Get.changeThemeMode(ThemeMode.light);
+    } else if (themeString == 'dark') {
+      currentTheme.value = ThemeMode.dark;
+      Get.changeThemeMode(ThemeMode.dark);
+    } else {
+      currentTheme.value = ThemeMode.system;
+      Get.changeThemeMode(ThemeMode.system);
+    }
   }
 }

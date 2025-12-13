@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF2C3E50),
+              color: Theme.of(context).appBarTheme.backgroundColor,
               boxShadow: [
                 const BoxShadow(
                   color: Colors.black12,
@@ -92,10 +92,10 @@ class HomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
-                        color: const Color(0xFFE2E8F0),
+                        color: Theme.of(context).dividerColor,
                         width: 1.5,
                       ),
-                      color: Colors.white.withOpacity(0.95),
+                      color: Theme.of(context).cardColor.withOpacity(0.95),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
@@ -137,7 +137,7 @@ class HomeScreen extends StatelessWidget {
               top: 16,
             ),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
@@ -157,15 +157,15 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       'potential_flood_areas'.tr,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF2C3E50),
+                        color: Theme.of(context).textTheme.titleLarge?.color,
                       ),
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFF2C3E50),
+                        backgroundColor: Theme.of(context).primaryColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 12,
@@ -192,6 +192,7 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 0),
                     children: [
                       _buildRiskCard(
+                        context,
                         controller,
                         'area_north_saliyah'.tr,
                         'risk_critical'.tr,
@@ -200,6 +201,7 @@ class HomeScreen extends StatelessWidget {
                         const LatLng(15.4340281, 44.2216007),
                       ),
                       _buildRiskCard(
+                        context,
                         controller,
                         'area_new_saliyah'.tr,
                         'risk_medium'.tr,
@@ -208,6 +210,7 @@ class HomeScreen extends StatelessWidget {
                         const LatLng(15.3724301, 44.2118893),
                       ),
                       _buildRiskCard(
+                        context,
                         controller,
                         'area_old_saliyah'.tr,
                         'risk_low'.tr,
@@ -227,6 +230,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildRiskCard(
+    BuildContext context,
     HomeController controller,
     String name,
     String risk,
@@ -263,9 +267,10 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),

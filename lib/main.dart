@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google/screens/splash_screen.dart';
 import 'core/localization/messages.dart';
+import 'core/utils/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,26 +24,11 @@ class FloodAlertApp extends StatelessWidget {
       translations: Messages(),
       locale: initialLang != null ? Locale(initialLang!) : const Locale('ar'),
       fallbackLocale: const Locale('ar'),
-      theme: ThemeData(
-        // الخط
-        fontFamily: 'Cairo',
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF8FAFC),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF2C3E50),
-          primary: const Color(0xFF2C3E50),
-          secondary: const Color(0xFF64748B),
-          background: const Color(
-            0xFFF8FAFC,
-          ), // Corrected property name if needed, or just keep as is if custom
-          surface: Colors.white,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF2C3E50),
-          foregroundColor: Colors.white,
-          elevation: 0,
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode:
+          ThemeMode
+              .system, // Will be overridden by controller/GetX logic but good default
       builder: (context, child) {
         // Obx to listen to locale changes if needed, but GetMaterialApp usually handles it.
         // However, standard Directionality needs to be updated if we want to support LTR.

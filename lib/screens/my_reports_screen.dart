@@ -10,12 +10,12 @@ class MyReportsScreen extends StatelessWidget {
     final controller = Get.put(MyReportsController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: true,
 
         title: Text('reports'.tr, style: const TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF2C3E50),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -25,30 +25,35 @@ class MyReportsScreen extends StatelessWidget {
           // مثال على بلاغ
           Card(
             elevation: 0,
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(color: Color(0xFFE2E8F0)),
+              side: BorderSide(color: Theme.of(context).dividerColor),
             ),
             child: ListTile(
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.report, color: Color(0xFF2C3E50)),
+                child: Icon(
+                  Icons.report,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
-              title: const Text(
+              title: Text(
                 'بلاغ سيول في شارع الزبيري',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2C3E50),
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               subtitle: Text(
                 '${'date_sent'.tr}: 2025-09-01\n${'status'.tr}: ${'status_processing'.tr}',
-                style: const TextStyle(color: Color(0xFF64748B)),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
               onTap: () {
                 // تفاصيل البلاغ
@@ -58,30 +63,32 @@ class MyReportsScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Card(
             elevation: 0,
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(color: Color(0xFFE2E8F0)),
+              side: BorderSide(color: Theme.of(context).dividerColor),
             ),
             child: ListTile(
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(Icons.check_circle, color: Colors.green),
               ),
-              title: const Text(
+              title: Text(
                 'تجمع مياه في حي الأصبحي',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2C3E50),
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               subtitle: Text(
                 '${'date_sent'.tr}: 2025-08-28\n${'status'.tr}: ${'status_solved'.tr}',
-                style: const TextStyle(color: Color(0xFF64748B)),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
               onTap: () {},
             ),
@@ -92,7 +99,7 @@ class MyReportsScreen extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: controller.goToReportFlood,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2C3E50),
+                backgroundColor: Theme.of(context).primaryColor,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,

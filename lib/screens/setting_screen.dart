@@ -10,7 +10,6 @@ class SettingScreen extends StatelessWidget {
     final controller = Get.put(SettingController());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         centerTitle: true,
         title: Text('settings'.tr, style: const TextStyle(color: Colors.white)),
@@ -26,6 +25,7 @@ class SettingScreen extends StatelessWidget {
               children: [
                 // صورة الملف الشخصي
                 _buildActionButton(
+                  context,
                   icon: Icons.person,
                   title: 'profile'.tr,
                   subtitle: 'manage_profile'.tr,
@@ -33,6 +33,7 @@ class SettingScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 _buildActionButton(
+                  context,
                   icon: Icons.language,
                   title: 'language'.tr,
                   subtitle:
@@ -79,6 +80,7 @@ class SettingScreen extends StatelessWidget {
                 // أزرار إضافية
                 if (!controller.isEditing.value) ...[
                   _buildActionButton(
+                    context,
                     icon: Icons.assignment,
                     title: 'reports'.tr,
                     subtitle: 'view_reports'.tr,
@@ -86,6 +88,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   _buildActionButton(
+                    context,
                     icon: Icons.notifications,
                     title: 'notifications'.tr,
                     subtitle: 'manage_notifications'.tr,
@@ -94,10 +97,59 @@ class SettingScreen extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   _buildActionButton(
+                    context,
                     icon: Icons.help,
                     title: 'help_support'.tr,
                     subtitle: 'support_desc'.tr,
                     onTap: controller.goToHelp,
+                  ),
+                  const SizedBox(height: 24),
+
+                  _buildActionButton(
+                    context,
+                    icon: Icons.brightness_6,
+                    title: 'theme'.tr,
+                    subtitle: 'select_theme'.tr,
+                    onTap: () {
+                      Get.defaultDialog(
+                        title: 'select_theme'.tr,
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              title: Text('system_default'.tr),
+                              leading: const Icon(Icons.brightness_auto),
+                              onTap: () {
+                                controller.changeTheme(ThemeMode.system);
+                              },
+                              selected:
+                                  controller.currentTheme.value ==
+                                  ThemeMode.system,
+                            ),
+                            ListTile(
+                              title: Text('light_mode'.tr),
+                              leading: const Icon(Icons.light_mode),
+                              onTap: () {
+                                controller.changeTheme(ThemeMode.light);
+                              },
+                              selected:
+                                  controller.currentTheme.value ==
+                                  ThemeMode.light,
+                            ),
+                            ListTile(
+                              title: Text('dark_mode'.tr),
+                              leading: const Icon(Icons.dark_mode),
+                              onTap: () {
+                                controller.changeTheme(ThemeMode.dark);
+                              },
+                              selected:
+                                  controller.currentTheme.value ==
+                                  ThemeMode.dark,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 24),
 
@@ -133,7 +185,8 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton({
+  Widget _buildActionButton(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -141,7 +194,7 @@ class SettingScreen extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -157,26 +210,36 @@ class SettingScreen extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: const Color(0xFF2C3E50).withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Icon(icon, color: const Color(0xFF2C3E50), size: 24),
+          child: Icon(
+            icon,
+            color:
+                Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Theme.of(context).primaryColor,
+            size: 24,
+          ),
         ),
         title: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2C3E50),
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
         ),
-        trailing: const Icon(
+        trailing: Icon(
           Icons.arrow_forward_ios,
-          color: Color(0xFF2C3E50),
+          color: Theme.of(context).iconTheme.color,
           size: 20,
         ),
       ),
