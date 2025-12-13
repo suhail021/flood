@@ -23,7 +23,7 @@ class PhoneVerificationScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-                centerTitle: true,
+        centerTitle: true,
 
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -63,18 +63,14 @@ class PhoneVerificationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.verified_user,
-                    size: 50,
-                    color: Color(0xFF2C3E50),
-                  ),
+                  child: const Icon(Icons.verified_user, size: 50),
                 ),
                 const SizedBox(height: 32),
 
                 // عنوان الصفحة
-                const Text(
-                  'تحقق من رقم الهاتف',
-                  style: TextStyle(
+                Text(
+                  'verify_phone_title'.tr,
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF2C3E50),
@@ -84,7 +80,7 @@ class PhoneVerificationScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 Text(
-                  'تم إرسال رمز التحقق إلى $phoneNumber',
+                  'verification_sent_to'.trParams({'phone': phoneNumber}),
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xFF64748B),
@@ -178,9 +174,9 @@ class PhoneVerificationScreen extends StatelessWidget {
                                   Colors.white,
                                 ),
                               )
-                              : const Text(
-                                'تحقق',
-                                style: TextStyle(
+                              : Text(
+                                'verify_button'.tr,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -194,9 +190,12 @@ class PhoneVerificationScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'لم تستلم الرمز؟ ',
-                      style: TextStyle(color: Color(0xFF64748B), fontSize: 16),
+                    Text(
+                      'didnt_receive_code'.tr,
+                      style: const TextStyle(
+                        color: Color(0xFF64748B),
+                        fontSize: 16,
+                      ),
                     ),
                     Obx(
                       () => TextButton(
@@ -206,8 +205,10 @@ class PhoneVerificationScreen extends StatelessWidget {
                                 : null,
                         child: Text(
                           controller.canResend.value
-                              ? 'إعادة الإرسال'
-                              : 'إعادة الإرسال بعد ${controller.remainingTime.value} ثانية',
+                              ? 'resend'.tr
+                              : 'resend_after'.trParams({
+                                'seconds': '${controller.remainingTime.value}',
+                              }),
                           style: TextStyle(
                             color:
                                 controller.canResend.value

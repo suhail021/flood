@@ -37,9 +37,9 @@ class PhoneLoginScreen extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   // عنوان التطبيق
-                  const Text(
-                    'تسجيل الدخول',
-                    style: TextStyle(
+                  Text(
+                    'login'.tr,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF2C3E50),
@@ -52,17 +52,17 @@ class PhoneLoginScreen extends StatelessWidget {
                   Obx(
                     () => CustomTextFormField(
                       controller: controller.phoneController,
-                      hintText: 'رقم الهاتف',
+                      hintText: 'phone_number'.tr,
                       prefixIcon: Icons.phone,
                       keyboardType: TextInputType.phone,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       autovalidateMode: controller.autovalidateMode.value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'الرجاء إدخال رقم الهاتف';
+                          return 'enter_phone_error'.tr;
                         }
                         if (value.length < 9) {
-                          return 'رقم الهاتف يجب أن يتكون من 9 أرقام على الأقل';
+                          return 'phone_length_error'.tr;
                         }
                         return null;
                       },
@@ -73,14 +73,14 @@ class PhoneLoginScreen extends StatelessWidget {
                     () => CustomTextFormField(
                       controller: controller.passwordController,
                       obscureText: true,
-                      hintText: 'كلمة المرور',
+                      hintText: 'password_hint'.tr,
                       prefixIcon: Icons.lock,
                       keyboardType: TextInputType.phone,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       autovalidateMode: controller.autovalidateMode.value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'الرجاء إدخال كلمة المرور';
+                          return 'enter_password_error'.tr;
                         }
                         return null;
                       },
@@ -112,9 +112,9 @@ class PhoneLoginScreen extends StatelessWidget {
                                     Colors.white,
                                   ),
                                 )
-                                : const Text(
-                                  'تسجيل الدخول',
-                                  style: TextStyle(
+                                : Text(
+                                  'login'.tr,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -129,8 +129,8 @@ class PhoneLoginScreen extends StatelessWidget {
                     children: [
                       TextButton(
                         onPressed: controller.goToForgotPassword,
-                        child: const Text(
-                          'نسيت كلمة المرور؟',
+                        child: Text(
+                          'forgot_password_question'.tr,
                           style: TextStyle(
                             color: Color(0xFF64748B),
                             fontSize: 16,
@@ -139,8 +139,8 @@ class PhoneLoginScreen extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: controller.goToRegistration,
-                        child: const Text(
-                          'إنشاء حساب',
+                        child: Text(
+                          'create_account'.tr,
                           style: TextStyle(
                             color: Color(0xFF2C3E50),
                             fontSize: 16,

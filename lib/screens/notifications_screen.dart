@@ -14,7 +14,10 @@ class NotificationsScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('الإشعارات', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'notifications_title'.tr,
+          style: const TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color(0xFF2C3E50),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -22,7 +25,7 @@ class NotificationsScreen extends StatelessWidget {
           IconButton(
             onPressed: controller.markAllAsRead,
             icon: const Icon(Icons.done_all),
-            tooltip: 'تحديد الكل كمقروء',
+            tooltip: 'mark_all_read'.tr,
           ),
         ],
       ),
@@ -49,17 +52,17 @@ class NotificationsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildStatItem(
-                      'إجمالي الإشعارات',
+                      'total_notifications'.tr,
                       '${controller.notifications.length}',
                       Icons.notifications,
                     ),
                     _buildStatItem(
-                      'غير مقروءة',
+                      'unread'.tr,
                       '${controller.notifications.where((n) => !n.isRead).length}',
                       Icons.mark_email_unread,
                     ),
                     _buildStatItem(
-                      'اليوم',
+                      'today'.tr,
                       '${controller.notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
                       Icons.today,
                     ),
@@ -223,13 +226,13 @@ class NotificationsScreen extends StatelessWidget {
           },
           itemBuilder:
               (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'delete',
                   child: Row(
                     children: [
                       Icon(Icons.delete, color: Colors.red),
                       SizedBox(width: 8),
-                      Text('حذف'),
+                      Text('delete'.tr),
                     ],
                   ),
                 ),
@@ -274,13 +277,13 @@ class NotificationsScreen extends StatelessWidget {
     final difference = now.difference(timestamp);
 
     if (difference.inMinutes < 1) {
-      return 'الآن';
+      return 'now'.tr;
     } else if (difference.inMinutes < 60) {
-      return 'منذ ${difference.inMinutes} دقيقة';
+      return 'since_minutes'.trParams({'minutes': '${difference.inMinutes}'});
     } else if (difference.inHours < 24) {
-      return 'منذ ${difference.inHours} ساعة';
+      return 'since_hours'.trParams({'hours': '${difference.inHours}'});
     } else {
-      return 'منذ ${difference.inDays} يوم';
+      return 'since_days'.trParams({'days': '${difference.inDays}'});
     }
   }
 }

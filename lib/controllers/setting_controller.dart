@@ -86,8 +86,8 @@ class SettingController extends GetxController {
       isEditing.value = false;
 
       Get.snackbar(
-        'نجاح',
-        'تم حفظ التغييرات بنجاح',
+        'success'.tr,
+        'save_success'.tr,
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
@@ -101,10 +101,10 @@ class SettingController extends GetxController {
 
   void logout() {
     Get.defaultDialog(
-      title: 'تسجيل الخروج',
-      middleText: 'هل أنت متأكد من تسجيل الخروج؟',
-      textConfirm: 'تأكيد',
-      textCancel: 'إلغاء',
+      title: 'logout'.tr,
+      middleText: 'logout_confirmation'.tr,
+      textConfirm: 'confirm'.tr,
+      textCancel: 'cancel'.tr,
       confirmTextColor: Colors.white,
       onConfirm: () async {
         final prefs = await SharedPreferences.getInstance();
@@ -128,5 +128,12 @@ class SettingController extends GetxController {
 
   void goToHelp() {
     Get.to(() => const SecurityHelpScreen());
+  }
+
+  void changeLanguage(String langCode) async {
+    var locale = Locale(langCode);
+    Get.updateLocale(locale);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language_code', langCode);
   }
 }

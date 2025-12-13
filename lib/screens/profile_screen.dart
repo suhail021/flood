@@ -14,12 +14,9 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-                centerTitle: true,
+        centerTitle: true,
 
-        title: const Text(
-          'الملف الشخصي',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text('profile'.tr, style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2C3E50),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -33,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
                   controller.toggleEditing();
                 }
               },
-              tooltip: controller.isEditing.value ? 'حفظ' : 'تعديل',
+              tooltip: controller.isEditing.value ? 'save'.tr : 'edit'.tr,
               icon: Icon(controller.isEditing.value ? Icons.done : Icons.edit),
             ),
           ),
@@ -83,9 +80,12 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
 
-                const Text(
-                  'مستخدم نشط',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                Text(
+                  'active_user'.tr,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF64748B),
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
@@ -109,14 +109,14 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         // حقل الاسم
                         _buildInfoField(
-                          label: 'الاسم الكامل',
+                          label: 'full_name'.tr,
                           icon: Icons.person,
                           controller: controller.nameController,
                           enabled: controller.isEditing.value,
                         ),
                         const SizedBox(height: 20),
                         _buildInfoField(
-                          label: 'رقم الهاتف',
+                          label: 'phone_number'.tr,
                           icon: Icons.phone,
                           controller: controller.phoneController,
                           enabled: controller.isEditing.value,

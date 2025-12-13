@@ -13,7 +13,7 @@ class SettingScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('الإعدادات', style: TextStyle(color: Colors.white)),
+        title: Text('settings'.tr, style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2C3E50),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -27,32 +27,76 @@ class SettingScreen extends StatelessWidget {
                 // صورة الملف الشخصي
                 _buildActionButton(
                   icon: Icons.person,
-                  title: 'الملف الشخصي',
-                  subtitle: 'إدارة الملف الشخصي',
+                  title: 'profile'.tr,
+                  subtitle: 'manage_profile'.tr,
                   onTap: controller.goToProfile,
+                ),
+                const SizedBox(height: 16),
+                _buildActionButton(
+                  icon: Icons.language,
+                  title: 'language'.tr,
+                  subtitle:
+                      Get.locale?.languageCode == 'ar' ? 'العربية' : 'English',
+                  onTap: () {
+                    Get.defaultDialog(
+                      title: 'change_language'.tr,
+                      content: Column(
+                        children: [
+                          ListTile(
+                            title: const Text('العربية'),
+                            onTap: () {
+                              controller.changeLanguage('ar');
+                              Get.back();
+                            },
+                            trailing:
+                                Get.locale?.languageCode == 'ar'
+                                    ? const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    )
+                                    : null,
+                          ),
+                          ListTile(
+                            title: const Text('English'),
+                            onTap: () {
+                              controller.changeLanguage('en');
+                              Get.back();
+                            },
+                            trailing:
+                                Get.locale?.languageCode == 'en'
+                                    ? const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    )
+                                    : null,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 // أزرار إضافية
                 if (!controller.isEditing.value) ...[
                   _buildActionButton(
                     icon: Icons.assignment,
-                    title: 'البلاغات',
-                    subtitle: 'عرض جميع بلاغاتك',
+                    title: 'reports'.tr,
+                    subtitle: 'view_reports'.tr,
                     onTap: controller.goToMyReports,
                   ),
                   const SizedBox(height: 16),
                   _buildActionButton(
                     icon: Icons.notifications,
-                    title: 'الإشعارات',
-                    subtitle: 'إدارة الإشعارات',
+                    title: 'notifications'.tr,
+                    subtitle: 'manage_notifications'.tr,
                     onTap: controller.goToNotifications,
                   ),
                   const SizedBox(height: 16),
 
                   _buildActionButton(
                     icon: Icons.help,
-                    title: 'المساعدة والدعم',
-                    subtitle: 'الدعم والمساعدة',
+                    title: 'help_support'.tr,
+                    subtitle: 'support_desc'.tr,
                     onTap: controller.goToHelp,
                   ),
                   const SizedBox(height: 24),
@@ -71,8 +115,8 @@ class SettingScreen extends StatelessWidget {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'تسجيل الخروج',
+                      child: Text(
+                        'logout'.tr,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

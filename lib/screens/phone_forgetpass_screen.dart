@@ -54,9 +54,9 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   // عنوان التطبيق
-                  const Text(
-                    'تغيير كلمة السر',
-                    style: TextStyle(
+                  Text(
+                    'change_password'.tr,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF2C3E50),
@@ -65,9 +65,12 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  const Text(
-                    'أدخل رقم هاتفك وكلمة السر الجديدة',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                  Text(
+                    'enter_phone_new_pass'.tr,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF64748B),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 25),
@@ -75,16 +78,16 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   // حقل إدخال رقم الهاتف
                   CustomTextFormField(
                     controller: controller.phoneController,
-                    hintText: 'رقم الهاتف',
+                    hintText: 'phone_number'.tr,
                     prefixIcon: Icons.phone,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال رقم الهاتف';
+                        return 'enter_phone_error'.tr;
                       }
                       if (value.length < 9) {
-                        return 'رقم الهاتف غير صحيح';
+                        return 'invalid_phone_error'.tr;
                       }
                       return null;
                     },
@@ -93,13 +96,13 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   CustomTextFormField(
                     controller: controller.newPasswordController,
                     obscureText: true,
-                    hintText: ' كلمة السر الجديدة',
+                    hintText: 'new_password_hint'.tr,
                     prefixIcon: Icons.lock,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال كلمة السر';
+                        return 'enter_password_error'.tr;
                       }
                       return null;
                     },
@@ -131,9 +134,9 @@ class PhoneForgetpassScreen extends StatelessWidget {
                                     Colors.white,
                                   ),
                                 )
-                                : const Text(
-                                  'إرسال رمز التحقق',
-                                  style: TextStyle(
+                                : Text(
+                                  'send_verification_code'.tr,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),

@@ -14,7 +14,7 @@ class MyReportsScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
 
-        title: const Text('البلاغات', style: TextStyle(color: Colors.white)),
+        title: Text('reports'.tr, style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2C3E50),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -46,9 +46,9 @@ class MyReportsScreen extends StatelessWidget {
                   color: Color(0xFF2C3E50),
                 ),
               ),
-              subtitle: const Text(
-                'تاريخ الإرسال: 2025-09-01\nالحالة: قيد المعالجة',
-                style: TextStyle(color: Color(0xFF64748B)),
+              subtitle: Text(
+                '${'date_sent'.tr}: 2025-09-01\n${'status'.tr}: ${'status_processing'.tr}',
+                style: const TextStyle(color: Color(0xFF64748B)),
               ),
               onTap: () {
                 // تفاصيل البلاغ
@@ -79,9 +79,9 @@ class MyReportsScreen extends StatelessWidget {
                   color: Color(0xFF2C3E50),
                 ),
               ),
-              subtitle: const Text(
-                'تاريخ الإرسال: 2025-08-28\nالحالة: تم الحل',
-                style: TextStyle(color: Color(0xFF64748B)),
+              subtitle: Text(
+                '${'date_sent'.tr}: 2025-08-28\n${'status'.tr}: ${'status_solved'.tr}',
+                style: const TextStyle(color: Color(0xFF64748B)),
               ),
               onTap: () {},
             ),
@@ -103,7 +103,7 @@ class MyReportsScreen extends StatelessWidget {
                 ),
               ),
               icon: const Icon(Icons.add),
-              label: const Text('إضافة بلاغ جديد'),
+              label: Text('add_new_report'.tr),
             ),
           ),
         ],

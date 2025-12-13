@@ -155,9 +155,9 @@ class _SplashScreenState extends State<SplashScreen>
                     position: titleSlideAnimation,
                     child: FadeTransition(
                       opacity: fadeAnimation,
-                      child: const Text(
-                        "نظام التنبؤ الذكي للسيول",
-                        style: TextStyle(
+                      child: Text(
+                        'app_title_splash'.tr,
+                        style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF2C3E50),
@@ -181,9 +181,9 @@ class _SplashScreenState extends State<SplashScreen>
                     position: subtitleSlideAnimation,
                     child: FadeTransition(
                       opacity: fadeAnimation,
-                      child: const Text(
-                        "للتنبيه المبكر وحماية الأرواح والممتلكات",
-                        style: TextStyle(
+                      child: Text(
+                        'app_subtitle'.tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Color(0xFF64748B),
                           fontWeight: FontWeight.w300,

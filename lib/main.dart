@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google/screens/splash_screen.dart';
+import 'core/localization/messages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,7 @@ class FloodAlertApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'نظام التنبؤ الذكي للسيول',
       debugShowCheckedModeBanner: false,
+      translations: Messages(),
       locale: initialLang != null ? Locale(initialLang!) : const Locale('ar'),
       fallbackLocale: const Locale('ar'),
       theme: ThemeData(
@@ -42,7 +44,16 @@ class FloodAlertApp extends StatelessWidget {
         ),
       ),
       builder: (context, child) {
-        return Directionality(textDirection: TextDirection.rtl, child: child!);
+        // Obx to listen to locale changes if needed, but GetMaterialApp usually handles it.
+        // However, standard Directionality needs to be updated if we want to support LTR.
+        // Get.locale might be null initially?
+        return Directionality(
+          textDirection:
+              Get.locale?.languageCode == 'ar'
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
+          child: child!,
+        );
       },
       home: const SplashScreen(),
     );

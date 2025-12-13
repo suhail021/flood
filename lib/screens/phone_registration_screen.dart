@@ -15,7 +15,7 @@ class PhoneRegistrationScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
-                centerTitle: true,
+        centerTitle: true,
 
         elevation: 0,
         leading: IconButton(
@@ -54,9 +54,9 @@ class PhoneRegistrationScreen extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   // عنوان التطبيق
-                  const Text(
-                    'إنشاء حساب',
-                    style: TextStyle(
+                  Text(
+                    'create_account'.tr,
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF2C3E50),
@@ -65,9 +65,12 @@ class PhoneRegistrationScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  const Text(
-                    'أدخل رقم هاتفك للمتابعة',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                  Text(
+                    'enter_phone_to_continue'.tr,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF64748B),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 25),
@@ -75,16 +78,16 @@ class PhoneRegistrationScreen extends StatelessWidget {
                   // حقل إدخال رقم الهاتف
                   CustomTextFormField(
                     controller: controller.phoneController,
-                    hintText: 'رقم الهاتف',
+                    hintText: 'phone_number'.tr,
                     prefixIcon: Icons.phone,
                     keyboardType: TextInputType.phone,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال رقم الهاتف';
+                        return 'enter_phone_error'.tr;
                       }
                       if (value.length < 9) {
-                        return 'رقم الهاتف يجب أن يتكون من 9 أرقام على الأقل';
+                        return 'phone_length_error'.tr;
                       }
                       return null;
                     },
@@ -116,9 +119,9 @@ class PhoneRegistrationScreen extends StatelessWidget {
                                     Colors.white,
                                   ),
                                 )
-                                : const Text(
-                                  'إرسال رمز التحقق',
-                                  style: TextStyle(
+                                : Text(
+                                  'send_verification_code'.tr,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -130,8 +133,8 @@ class PhoneRegistrationScreen extends StatelessWidget {
                   // زر الاتصال المباشر
                   TextButton(
                     onPressed: controller.goBack,
-                    child: const Text(
-                      'لديك حساب بالفعل؟',
+                    child: Text(
+                      'already_have_account'.tr,
                       style: TextStyle(color: Color(0xFF64748B), fontSize: 16),
                     ),
                   ),

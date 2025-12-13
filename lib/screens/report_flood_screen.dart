@@ -16,9 +16,9 @@ class ReportFloodScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'إبلاغ عن سيول',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          'report_flood_title'.tr,
+          style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF2C3E50),
         foregroundColor: Colors.white,
@@ -33,8 +33,8 @@ class ReportFloodScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // عنوان الصفحة
-                const Text(
-                  'بلاغ جديد',
+                Text(
+                  'new_report'.tr,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -44,9 +44,12 @@ class ReportFloodScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
 
-                const Text(
-                  'ساعد في رصد السيول للمحافظة على السلامة',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+                Text(
+                  'report_flood_desc'.tr,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF64748B),
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
@@ -55,11 +58,11 @@ class ReportFloodScreen extends StatelessWidget {
                 CustomTextFormField(
                   controller: controller.descriptionController,
                   maxLines: 4,
-                  hintText: 'وصف تفصيلي للبلاغ...',
+                  hintText: 'report_desc_hint'.tr,
                   prefixIcon: Icons.description,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'الرجاء إدخال وصف البلاغ';
+                      return 'desc_required_error'.tr;
                     }
                     return null;
                   },
@@ -109,7 +112,7 @@ class ReportFloodScreen extends StatelessWidget {
                                         ImageSource.camera,
                                       ),
                                   icon: const Icon(Icons.camera_alt),
-                                  label: const Text('التقاط صورة'),
+                                  label: Text('take_photo'.tr),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF2C3E50),
                                     foregroundColor: Colors.white,
@@ -170,8 +173,8 @@ class ReportFloodScreen extends StatelessWidget {
                                           : const Icon(Icons.my_location),
                                   label: Text(
                                     controller.isLocationLoading.value
-                                        ? 'جاري تحديد الموقع...'
-                                        : 'تحديد موقعي',
+                                        ? 'locating'.tr
+                                        : 'locate_me'.tr,
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF10B981),
@@ -185,6 +188,7 @@ class ReportFloodScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+
                         if (controller.selectedLocation.value != null) ...[
                           Container(
                             width: double.infinity,
@@ -211,9 +215,9 @@ class ReportFloodScreen extends StatelessWidget {
                                     ),
                                     position:
                                         controller.selectedLocation.value!,
-                                    infoWindow: const InfoWindow(
-                                      title: 'الموقع المختار',
-                                      snippet: 'موقع البلاغ',
+                                    infoWindow: InfoWindow(
+                                      title: 'selected_location'.tr,
+                                      snippet: 'report_location'.tr,
                                     ),
                                   ),
                                 },
@@ -225,7 +229,7 @@ class ReportFloodScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              'الإحداثيات: ${controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
+                              '${'coordinates'.tr}: ${controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF64748B),
@@ -281,19 +285,19 @@ class ReportFloodScreen extends StatelessWidget {
                                     ),
                                   ),
                                   value: controller.selectedReportType.value,
-                                  hint: const Text("اختر نوع البلاغ"),
-                                  items: const [
+                                  hint: Text("choose_report_type".tr),
+                                  items: [
                                     DropdownMenuItem(
                                       value: "water",
-                                      child: Text("تجمع مياه"),
+                                      child: Text("type_water_gathering".tr),
                                     ),
                                     DropdownMenuItem(
                                       value: "drowning",
-                                      child: Text("حالة غرق"),
+                                      child: Text("type_drowning".tr),
                                     ),
                                     DropdownMenuItem(
                                       value: "flood",
-                                      child: Text("سيول جارفة"),
+                                      child: Text("type_flood".tr),
                                     ),
                                   ],
                                   onChanged: controller.setReportType,
@@ -307,11 +311,11 @@ class ReportFloodScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              "نوع البلاغ: ${controller.selectedReportType.value == "water"
-                                  ? 'تجمع مياه'
+                              "${'report_type'.tr}: ${controller.selectedReportType.value == "water"
+                                  ? 'type_water_gathering'.tr
                                   : controller.selectedReportType.value == "drowning"
-                                  ? 'حالة غرق'
-                                  : 'سيول جارفة'}",
+                                  ? 'type_drowning'.tr
+                                  : 'type_flood'.tr}",
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF64748B),
@@ -350,9 +354,9 @@ class ReportFloodScreen extends StatelessWidget {
                                   Colors.white,
                                 ),
                               )
-                              : const Text(
-                                'إرسال البلاغ',
-                                style: TextStyle(
+                              : Text(
+                                'submit_report'.tr,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),

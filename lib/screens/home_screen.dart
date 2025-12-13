@@ -40,9 +40,9 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Center(
-                      child: const Text(
-                        'نظام التنبؤ الذكي للسيول',
-                        style: TextStyle(
+                      child: Text(
+                        'app_title'.tr,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -105,9 +105,8 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                     child: TextField(
-                      textAlign: TextAlign.right,
                       decoration: InputDecoration(
-                        hintText: '   البحث  ',
+                        hintText: 'search'.tr,
                         hintStyle: TextStyle(color: Colors.grey.shade600),
                         prefixIcon: const Icon(
                           Icons.search,
@@ -156,9 +155,9 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'مناطق محتملة للسيول',
-                      style: TextStyle(
+                    Text(
+                      'potential_flood_areas'.tr,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF2C3E50),
@@ -176,8 +175,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: controller.goToReportFlood,
-                      child: const Text(
-                        'تقديم بلاغ',
+                      child: Text(
+                        'submit_report'.tr,
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -194,24 +193,24 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       _buildRiskCard(
                         controller,
-                        'منطقة السالية الشمالية',
-                        'حرج',
+                        'area_north_saliyah'.tr,
+                        'risk_critical'.tr,
                         Colors.red,
                         0.9,
                         const LatLng(15.4340281, 44.2216007),
                       ),
                       _buildRiskCard(
                         controller,
-                        'منطقة السالية الجديدة',
-                        'متوسط',
+                        'area_new_saliyah'.tr,
+                        'risk_medium'.tr,
                         Colors.yellow,
                         0.6,
                         const LatLng(15.3724301, 44.2118893),
                       ),
                       _buildRiskCard(
                         controller,
-                        'منطقة السالية القديمة',
-                        'منخفض',
+                        'area_old_saliyah'.tr,
+                        'risk_low'.tr,
                         Colors.green,
                         0.3,
                         const LatLng(15.3450521, 44.2152535),
@@ -271,7 +270,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'مستوى الخطر: $risk',
+                    '${'risk_level'.tr}: $risk',
                     style: TextStyle(
                       fontSize: 14,
                       color: color,
@@ -280,7 +279,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'احتمالية: ${(probability * 100).toInt()}%',
+                    '${'probability'.tr}: ${(probability * 100).toInt()}%',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
@@ -325,13 +324,13 @@ class HomeScreen extends StatelessWidget {
 
   IconData _getRiskIcon(String risk) {
     switch (risk) {
-      case 'منخفض':
+      case 'risk_low':
         return Icons.check_circle;
-      case 'متوسط':
+      case 'risk_medium':
         return Icons.info;
-      case 'عالي':
+      case 'risk_high':
         return Icons.warning;
-      case 'حرج':
+      case 'risk_critical':
         return Icons.dangerous;
       default:
         return Icons.help;

@@ -15,7 +15,7 @@ class UserRegistrationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-                centerTitle: true,
+        centerTitle: true,
 
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -39,7 +39,7 @@ class UserRegistrationScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-    
+
                 Container(
                   width: 100,
                   height: 100,
@@ -61,10 +61,10 @@ class UserRegistrationScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-    
-                const Text(
-                  'إكمال التسجيل',
-                  style: TextStyle(
+
+                Text(
+                  'complete_registration'.tr,
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF2C3E50),
@@ -72,50 +72,53 @@ class UserRegistrationScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-    
-                const Text(
-                  'أدخل بياناتك الشخصية',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
+
+                Text(
+                  'enter_personal_data'.tr,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF64748B),
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
-    
+
                 // الاسم
                 CustomTextFormField(
                   controller: controller.nameController,
-                  hintText: 'الاسم الكامل',
+                  hintText: 'full_name_hint'.tr,
                   prefixIcon: Icons.person,
                   validator:
-                      (value) => value!.isEmpty ? 'الرجاء إدخال الاسم' : null,
+                      (value) => value!.isEmpty ? 'enter_name_error'.tr : null,
                 ),
                 const SizedBox(height: 20),
-    
+
                 // العنوان (كلمة السر)
                 CustomTextFormField(
                   controller: controller.passwordController,
                   obscureText: true,
-                  hintText: ' كلمة السر',
+                  hintText: 'password_hint'.tr,
                   prefixIcon: Icons.lock,
                   validator:
                       (value) =>
-                          value!.isEmpty ? 'الرجاء إدخال كلمة السر ' : null,
+                          value!.isEmpty ? 'enter_password_error'.tr : null,
                 ),
-    
+
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   obscureText: true,
                   controller: controller.confirmPasswordController,
-                  hintText: ' تاكيد كلمة السر',
+                  hintText: 'confirm_password_hint'.tr,
                   prefixIcon: Icons.lock_outline,
                   validator:
                       (value) =>
                           value!.isEmpty
-                              ? 'الرجاء إدخال تاكيد كلمة السر '
+                              ? 'enter_confirm_password_error'.tr
                               : null,
                 ),
                 const SizedBox(height: 20),
                 const SizedBox(height: 15),
-    
+
                 // المدينة
                 SizedBox(
                   width: double.infinity,
@@ -141,9 +144,9 @@ class UserRegistrationScreen extends StatelessWidget {
                                   Colors.white,
                                 ),
                               )
-                              : const Text(
-                                'إكمال التسجيل',
-                                style: TextStyle(
+                              : Text(
+                                'complete_registration'.tr,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
