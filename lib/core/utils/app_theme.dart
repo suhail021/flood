@@ -28,16 +28,12 @@ class AppTheme {
     brightness: Brightness.dark,
     useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate 900
-    primaryColor: const Color(
-      0xFF3B82F6,
-    ), // Blue 500 for better visibility in dark
+    primaryColor: const Color(0xFF2C3E50), // Main Brand Color
     cardColor: const Color(0xFF1E293B), // Slate 800
     dividerColor: const Color(0xFF334155), // Slate 700
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF3B82F6),
+      seedColor: const Color(0xFF2C3E50), // Unified Seed Color
       brightness: Brightness.dark,
-      primary: const Color(0xFF60A5FA), // Blue 400
-      secondary: const Color(0xFF94A3B8), // Slate 400
       surface: const Color(0xFF1E293B), // Slate 800
       onSurface: const Color(0xFFF1F5F9), // Slate 100
       background: const Color(0xFF0F172A),
@@ -51,7 +47,7 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF3B82F6),
+        backgroundColor: const Color(0xFF2C3E50), // Brand Color
         foregroundColor: Colors.white,
       ),
     ),
@@ -66,7 +62,9 @@ class AppTheme {
         borderRadius: BorderRadius.circular(16),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Color(0xFF60A5FA)),
+        borderSide: const BorderSide(
+          color: Color(0xFF60A5FA),
+        ), // Lighter Blue for focus
         borderRadius: BorderRadius.circular(16),
       ),
       hintStyle: const TextStyle(color: Color(0xFF64748B)),

@@ -194,6 +194,7 @@ class SettingScreen extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Container(
+      
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
