@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google/controllers/report_flood_controller.dart';
+
+class FloodReportLocationPicker extends StatelessWidget {
+  final ReportFloodController controller;
+
+  const FloodReportLocationPicker({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Obx(
+        () => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed:
+                          controller.isLocationLoading.value
+                              ? null
+                              : controller.getCurrentLocation,
+                      icon:
+                          controller.isLocationLoading.value
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                              : const Icon(Icons.my_location),
+                      label: Text(
+                        controller.isLocationLoading.value
+                            ? 'locating'.tr
+                            : 'locate_me'.tr,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF10B981),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            if (controller.selectedLocation.value != null) ...[
+              Container(
+                width: double.infinity,
+                height: 200,
+                margin: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF2C3E50), width: 2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: controller.selectedLocation.value!,
+                      zoom: 15.0,
+                    ),
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId('selected_location'),
+                        position: controller.selectedLocation.value!,
+                        infoWindow: InfoWindow(
+                          title: 'selected_location'.tr,
+                          snippet: 'report_location'.tr,
+                        ),
+                      ),
+                    },
+                    onMapCreated: (GoogleMapController controller) {},
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '${'coordinates'.tr}: ${controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

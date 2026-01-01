@@ -32,6 +32,7 @@ class SettingScreen extends StatelessWidget {
                   onTap: controller.goToProfile,
                 ),
                 const SizedBox(height: 16),
+
                 _buildActionButton(
                   context,
                   icon: Icons.language,
@@ -47,7 +48,7 @@ class SettingScreen extends StatelessWidget {
                             title: const Text('العربية'),
                             onTap: () {
                               controller.changeLanguage('ar');
-                              Get.back();
+                              // Get.back();
                             },
                             trailing:
                                 Get.locale?.languageCode == 'ar'
@@ -61,7 +62,7 @@ class SettingScreen extends StatelessWidget {
                             title: const Text('English'),
                             onTap: () {
                               controller.changeLanguage('en');
-                              Get.back();
+                              // Get.back();
                             },
                             trailing:
                                 Get.locale?.languageCode == 'en'
@@ -103,7 +104,7 @@ class SettingScreen extends StatelessWidget {
                     subtitle: 'support_desc'.tr,
                     onTap: controller.goToHelp,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
                   _buildActionButton(
                     context,
@@ -203,6 +204,7 @@ class SettingScreen extends StatelessWidget {
             offset: const Offset(0, 5),
           ),
         ],
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: ListTile(
         onTap: onTap,
@@ -210,7 +212,10 @@ class SettingScreen extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color:
+                Theme.of(context).brightness == Brightness.dark
+                    ? Theme.of(context).primaryColor.withOpacity(0.6)
+                    : Theme.of(context).primaryColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(25),
           ),
           child: Icon(
@@ -236,11 +241,6 @@ class SettingScreen extends StatelessWidget {
             fontSize: 14,
             color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          color: Theme.of(context).iconTheme.color,
-          size: 20,
         ),
       ),
     );

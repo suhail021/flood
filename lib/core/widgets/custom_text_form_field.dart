@@ -79,24 +79,29 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            color: widget.enabled ? Colors.white : const Color(0xFFF8FAFC),
+            color:
+                widget.enabled
+                    ? Theme.of(context).cardColor
+                    : Theme.of(context).disabledColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color:
                   _errorMessage != null
-                      ? const Color(0xFFEF4444)
+                      ? Theme.of(context).colorScheme.error
                       : _isFocused
-                      ? const Color(0xFF2C3E50)
-                      : const Color(0xFFE2E8F0),
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).dividerColor,
               width: _isFocused || _errorMessage != null ? 1.5 : 1.0,
             ),
             boxShadow: [
               BoxShadow(
                 color:
                     _errorMessage != null
-                        ? const Color(0xFFEF4444).withOpacity(0.15)
+                        ? Theme.of(context).colorScheme.error.withOpacity(0.15)
                         : _isFocused
-                        ? const Color(0xFF2C3E50).withOpacity(0.15)
+                        ? Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.15)
                         : Colors.black.withOpacity(0.05),
                 blurRadius: _isFocused || _errorMessage != null ? 15 : 10,
                 offset: const Offset(0, 5),
@@ -114,23 +119,25 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             validator: _validateField,
             onChanged: widget.onChanged,
             autovalidateMode: widget.autovalidateMode,
-            style: const TextStyle(
-              color: Color(0xFF2C3E50),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.w500,
             ),
             decoration: InputDecoration(
               hintText: widget.hintText,
-              hintStyle: const TextStyle(color: Color(0xFF94A3B8)),
+              hintStyle: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               prefixIcon:
                   widget.prefixIcon != null
                       ? Icon(
                         widget.prefixIcon,
                         color:
                             _errorMessage != null
-                                ? const Color(0xFFEF4444)
+                                ? Theme.of(context).colorScheme.error
                                 : _isFocused
-                                ? const Color(0xFF2C3E50)
-                                : const Color(0xFF64748B),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.secondary,
                       )
                       : null,
               suffixIcon: widget.suffixIcon,

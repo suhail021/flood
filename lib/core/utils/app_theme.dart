@@ -28,29 +28,48 @@ class AppTheme {
     brightness: Brightness.dark,
     useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate 900
-    primaryColor: const Color(0xFF2C3E50),
+    primaryColor: const Color(
+      0xFF3B82F6,
+    ), // Blue 500 for better visibility in dark
+    cardColor: const Color(0xFF1E293B), // Slate 800
+    dividerColor: const Color(0xFF334155), // Slate 700
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(
-        0xFF3B82F6,
-      ), // Blue 500 for better contrast or keep brand? Let's try to match brand but adapted.
+      seedColor: const Color(0xFF3B82F6),
       brightness: Brightness.dark,
-      primary: const Color(0xFF60A5FA), // Blue 400 - lighter for dark mode
+      primary: const Color(0xFF60A5FA), // Blue 400
       secondary: const Color(0xFF94A3B8), // Slate 400
       surface: const Color(0xFF1E293B), // Slate 800
       onSurface: const Color(0xFFF1F5F9), // Slate 100
       background: const Color(0xFF0F172A),
+      outline: const Color(0xFF475569), // Slate 600
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF1E293B), // Slate 800
       foregroundColor: Colors.white,
       elevation: 0,
+      iconTheme: IconThemeData(color: Colors.white),
     ),
-    // Customize other components as needed for dark mode visibility
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF3B82F6), // Blue 500
+        backgroundColor: const Color(0xFF3B82F6),
         foregroundColor: Colors.white,
       ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      fillColor: const Color(0xFF1E293B),
+      border: OutlineInputBorder(
+        borderSide: const BorderSide(color: Color(0xFF334155)),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Color(0xFF334155)),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Color(0xFF60A5FA)),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      hintStyle: const TextStyle(color: Color(0xFF64748B)),
     ),
   );
 }
