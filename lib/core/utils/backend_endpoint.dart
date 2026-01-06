@@ -14,6 +14,7 @@ class ApiConstants {
       'https://mintcream-kudu-673423.hostingersite.com/api';
 
   static const String riskAreas = '/flood/risk-areas';
+  static const String criticalAlerts = '/flood/critical-alerts';
 
   // Auth Endpoints
   static const String register = '/auth/register';

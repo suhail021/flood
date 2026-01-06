@@ -5,8 +5,18 @@ import 'package:google/screens/splash_screen.dart';
 import 'core/localization/messages.dart';
 import 'core/utils/app_theme.dart';
 
+import 'package:google/services/notification_service.dart';
+import 'package:google/controllers/alert_controller.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize notifications
+  await NotificationService().init();
+
+  // Initialize AlertController immediately to start polling
+  Get.put(AlertController());
+
   final prefs = await SharedPreferences.getInstance();
   final String? savedLang = prefs.getString('language_code');
   runApp(FloodAlertApp(initialLang: savedLang));
