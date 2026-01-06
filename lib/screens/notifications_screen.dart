@@ -1,318 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google/controllers/notifications_controller.dart';
-import 'package:google/models/notification_model.dart';
+import 'package:google/controllers/alert_controller.dart';
+import 'package:google/screens/widgets/notification_card.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NotificationsController());
+    final AlertController controller = Get.find<AlertController>();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        title: const Text('الإشعارات والتحذيرات'),
         centerTitle: true,
-        title: Text(
-          'notifications_title'.tr,
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: controller.markAllAsRead,
-            icon: const Icon(Icons.done_all),
-            tooltip: 'mark_all_read'.tr,
-          ),
-        ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // إحصائيات سريعة
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStatItem(
-                      context,
-                      'total_notifications'.tr,
-                      '${controller.notifications.length}',
-                      Icons.notifications,
-                    ),
-                    _buildStatItem(
-                      context,
-                      'unread'.tr,
-                      '${controller.notifications.where((n) => !n.isRead).length}',
-                      Icons.mark_email_unread,
-                    ),
-                    _buildStatItem(
-                      context,
-                      'today'.tr,
-                      '${controller.notifications.where((n) => n.timestamp.isAfter(DateTime.now().subtract(const Duration(days: 1)))).length}',
-                      Icons.today,
-                    ),
-                  ],
+      body: Obx(() {
+        if (controller.notificationHistory.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.notifications_off_outlined,
+                  size: 64,
+                  color: Colors.grey[400],
                 ),
-              ),
-            ),
-
-            // قائمة الإشعارات
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: controller.notifications.length,
-                    itemBuilder: (context, index) {
-                      final notification = controller.notifications[index];
-                      return _buildNotificationCard(
-                        context,
-                        notification,
-                        controller,
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatItem(
-    BuildContext context,
-    String label,
-    String value,
-    IconData icon,
-  ) {
-    return Column(
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Icon(
-            icon,
-            color: Theme.of(context).colorScheme.primary,
-            size: 24,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF2C3E50),
-          ),
-        ),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildNotificationCard(
-    BuildContext context,
-    NotificationItem notification,
-    NotificationsController controller,
-  ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color:
-            notification.isRead
-                ? Theme.of(context).scaffoldBackgroundColor
-                : Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color:
-              notification.isRead
-                  ? const Color(0xFFE2E8F0)
-                  : _getNotificationColor(
-                    context,
-                    notification.type,
-                  ).withOpacity(0.3),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: _getNotificationColor(
-              context,
-              notification.type,
-            ).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Icon(
-            _getNotificationIcon(notification.type),
-            color: _getNotificationColor(context, notification.type),
-            size: 24,
-          ),
-        ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                notification.title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight:
-                      notification.isRead ? FontWeight.normal : FontWeight.bold,
-                  color:
-                      notification.isRead
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-              ),
-            ),
-            if (!notification.isRead)
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: _getNotificationColor(
-                    context,
-                    notification.type,
-                  ).withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-              ),
-          ],
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            Text(
-              notification.message,
-              style: TextStyle(
-                fontSize: 14,
-                color:
-                    notification.isRead
-                        ? const Color(0xFF94A3B8)
-                        : const Color(0xFF64748B),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              _formatTimestamp(notification.timestamp),
-              style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
-            ),
-          ],
-        ),
-        onTap: () => controller.markAsRead(notification.id),
-        trailing: PopupMenuButton<String>(
-          onSelected: (value) {
-            if (value == 'delete') {
-              controller.deleteNotification(notification.id);
-            }
-          },
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: 'delete',
-                  child: Row(
-                    children: [
-                      Icon(Icons.delete, color: Colors.red),
-                      SizedBox(width: 8),
-                      Text('delete'.tr),
-                    ],
-                  ),
+                const SizedBox(height: 16),
+                Text(
+                  'لا توجد إشعارات حالياً',
+                  style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                 ),
               ],
-        ),
-      ),
+            ),
+          );
+        }
+
+        return ListView.builder(
+          itemCount: controller.notificationHistory.length,
+          padding: const EdgeInsets.only(top: 16, bottom: 20),
+          itemBuilder: (context, index) {
+            final alert = controller.notificationHistory[index];
+            return NotificationCard(alert: alert);
+          },
+        );
+      }),
     );
-  }
-
-  Color _getNotificationColor(BuildContext context, NotificationType type) {
-    switch (type) {
-      case NotificationType.warning:
-        return Colors.orange;
-      case NotificationType.info:
-        return Colors.blue;
-      case NotificationType.alert:
-        return Colors.red;
-      case NotificationType.weather:
-        return Colors.cyan;
-      case NotificationType.system:
-        return Colors.purple;
-    }
-  }
-
-  IconData _getNotificationIcon(NotificationType type) {
-    switch (type) {
-      case NotificationType.warning:
-        return Icons.warning;
-      case NotificationType.info:
-        return Icons.info;
-      case NotificationType.alert:
-        return Icons.notification_important;
-      case NotificationType.weather:
-        return Icons.cloud;
-      case NotificationType.system:
-        return Icons.settings;
-    }
-  }
-
-  String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inMinutes < 1) {
-      return 'now'.tr;
-    } else if (difference.inMinutes < 60) {
-      return 'since_minutes'.trParams({'minutes': '${difference.inMinutes}'});
-    } else if (difference.inHours < 24) {
-      return 'since_hours'.trParams({'hours': '${difference.inHours}'});
-    } else {
-      return 'since_days'.trParams({'days': '${difference.inDays}'});
-    }
   }
 }

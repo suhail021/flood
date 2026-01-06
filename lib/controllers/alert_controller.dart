@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:google/services/flood_service.dart';
 import 'package:google/services/notification_service.dart';
@@ -11,11 +12,44 @@ class AlertController extends GetxController {
   Timer? _timer;
   final RxBool hasAlerts = false.obs;
   final RxList<CriticalAlert> criticalAlerts = <CriticalAlert>[].obs;
+  final RxList<CriticalAlert> notificationHistory = <CriticalAlert>[].obs;
+
+  static const String _historyKey = 'notification_history_list';
 
   @override
   void onInit() {
     super.onInit();
+    _loadHistory();
     _startPolling();
+  }
+
+  Future<void> _loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? historyJson = prefs.getString(_historyKey);
+    if (historyJson != null) {
+      final List<dynamic> decoded = jsonDecode(historyJson);
+      notificationHistory.assignAll(
+        decoded.map((e) => CriticalAlert.fromJson(e)).toList(),
+      );
+    }
+  }
+
+  Future<void> _addToHistory(CriticalAlert alert) async {
+    // Avoid duplicates in history based on ID and lastUpdatedAt
+    final exists = notificationHistory.any(
+      (element) =>
+          element.id == alert.id &&
+          element.lastUpdatedAt == alert.lastUpdatedAt,
+    );
+
+    if (!exists) {
+      notificationHistory.insert(0, alert); // Add new alerts to the top
+      final prefs = await SharedPreferences.getInstance();
+      final String encoded = jsonEncode(
+        notificationHistory.map((e) => e.toJson()).toList(),
+      );
+      await prefs.setString(_historyKey, encoded);
+    }
   }
 
   void _startPolling() {
@@ -66,6 +100,7 @@ class AlertController extends GetxController {
         '${alert.alertTypeName}. ${alert.timeRemaining}. يرجى الحذر!',
       );
 
+      await _addToHistory(alert);
       await prefs.setBool(notifiedKey, true);
     }
   }

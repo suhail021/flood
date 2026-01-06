@@ -18,7 +18,8 @@ class CriticalAlertResponse {
       success: json['success'] ?? false,
       hasAlerts: json['has_alerts'] ?? false,
       count: AlertCounts.fromJson(json['count']),
-      alerts: json['alerts'] != null ? AlertsList.fromJson(json['alerts']) : null,
+      alerts:
+          json['alerts'] != null ? AlertsList.fromJson(json['alerts']) : null,
       lastUpdated: json['last_updated'] ?? '',
     );
   }
@@ -48,18 +49,17 @@ class AlertsList {
   final List<CriticalAlert> fromAi;
   final List<CriticalAlert> fromEmployees;
 
-  AlertsList({
-    required this.fromAi,
-    required this.fromEmployees,
-  });
+  AlertsList({required this.fromAi, required this.fromEmployees});
 
   factory AlertsList.fromJson(Map<String, dynamic> json) {
     return AlertsList(
-      fromAi: (json['from_ai'] as List?)
+      fromAi:
+          (json['from_ai'] as List?)
               ?.map((e) => CriticalAlert.fromJson(e))
               .toList() ??
           [],
-      fromEmployees: (json['from_employees'] as List?)
+      fromEmployees:
+          (json['from_employees'] as List?)
               ?.map((e) => CriticalAlert.fromJson(e))
               .toList() ??
           [],
@@ -120,5 +120,25 @@ class CriticalAlert {
       expiresAt: json['expires_at'] ?? '',
       timeRemaining: json['time_remaining'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': type,
+      'source': source,
+      'location_name': locationName,
+      'latitude': latitude,
+      'longitude': longitude,
+      'risk_level': riskLevel,
+      'predictions_count': predictionsCount,
+      'alert_type': alertType,
+      'alert_type_name': alertTypeName,
+      'duration_hours': durationHours,
+      'first_detected_at': firstDetectedAt,
+      'last_updated_at': lastUpdatedAt,
+      'expires_at': expiresAt,
+      'time_remaining': timeRemaining,
+    };
   }
 }

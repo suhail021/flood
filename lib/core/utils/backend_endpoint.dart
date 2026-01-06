@@ -15,6 +15,9 @@ class ApiConstants {
 
   static const String riskAreas = '/flood/risk-areas';
   static const String criticalAlerts = '/flood/critical-alerts';
+  static const String updates = '/flood/updates';
+  static const String alarms = '/alarms';
+  static const String myAlarms = '/alarms/my-alarms';
 
   // Auth Endpoints
   static const String register = '/auth/register';

@@ -20,7 +20,9 @@ class HomeController extends GetxController {
   final FloodService _floodService = FloodService();
   final RxList<ManualAlert> criticalAlerts = <ManualAlert>[].obs;
   final RxList<AiPrediction> aiPredictions = <AiPrediction>[].obs;
+
   final RxBool isLoading = false.obs;
+  Timer? _pollingTimer;
 
   @override
   void onInit() {
@@ -28,11 +30,18 @@ class HomeController extends GetxController {
     _createFloodZones();
     _getCurrentLocation();
     fetchRiskAreas();
+    _startPolling();
+  }
+
+  @override
+  void onClose() {
+    _pollingTimer?.cancel();
+    super.onClose();
   }
 
   Future<void> fetchRiskAreas() async {
     try {
-      isLoading.value = true;
+      if (!isLoading.value) isLoading.value = true;
       final response = await _floodService.getRiskAreas();
 
       criticalAlerts.assignAll(response.data.criticalAlerts.fromEmployees);
@@ -43,6 +52,35 @@ class HomeController extends GetxController {
       Get.snackbar('Error', 'Failed to update risk areas');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _startPolling() {
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      _checkForUpdates();
+    });
+  }
+
+  Future<void> _checkForUpdates() async {
+    try {
+      final updatesResponse = await _floodService.checkForUpdates();
+      if (updatesResponse.success && updatesResponse.hasUpdates) {
+        bool needsRefresh = false;
+        for (var update in updatesResponse.updates) {
+          if ((update.type == 'critical_alert' && update.action == 'new') ||
+              update.type == 'risk_area' ||
+              update.type == 'critical_alert') {
+            needsRefresh = true;
+          }
+        }
+
+        if (needsRefresh) {
+          await fetchRiskAreas();
+        }
+      }
+    } catch (e) {
+      // Silently fail on polling errors to avoid annoying the user
+      debugPrint('Polling error: $e');
     }
   }
 
