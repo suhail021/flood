@@ -66,38 +66,62 @@ class HomeRiskCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(top: 0),
-              children: [
-                RiskAreaItem(
-                  controller: controller,
-                  name: 'area_north_saliyah'.tr,
-                  risk: 'risk_critical'.tr,
-                  color: Colors.red,
-                  probability: 0.9,
-                  targetLocation: const LatLng(15.4340281, 44.2216007),
-                ),
-                RiskAreaItem(
-                  controller: controller,
-                  name: 'area_new_saliyah'.tr,
-                  risk: 'risk_medium'.tr,
-                  color: Colors.yellow,
-                  probability: 0.6,
-                  targetLocation: const LatLng(15.3724301, 44.2118893),
-                ),
-                RiskAreaItem(
-                  controller: controller,
-                  name: 'area_old_saliyah'.tr,
-                  risk: 'risk_low'.tr,
-                  color: Colors.green,
-                  probability: 0.3,
-                  targetLocation: const LatLng(15.3450521, 44.2152535),
-                ),
-              ],
-            ),
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.criticalAlerts.isEmpty && controller.aiPredictions.isEmpty) {
+                return Center(
+                  child: Text(
+                    'no_risks_found'.tr,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                );
+              }
+
+              return ListView(
+                padding: const EdgeInsets.only(top: 0),
+                children: [
+                  ...controller.criticalAlerts.map((alert) => RiskAreaItem(
+                    controller: controller,
+                    name: alert.locationName,
+                    risk: _mapRiskLevel(alert.riskLevel),
+                    color: Colors.red,
+                    probability: alert.riskLevel / 100.0,
+                    targetLocation: LatLng(alert.latitude, alert.longitude),
+                  )),
+                  ...controller.aiPredictions.map((pred) => RiskAreaItem(
+                    controller: controller,
+                    name: pred.locationName,
+                    risk: _mapRiskLevel(pred.riskLevel),
+                    color: _parseColor(pred.riskColor),
+                    probability: pred.riskLevel / 100.0,
+                    targetLocation: LatLng(pred.latitude, pred.longitude),
+                  )),
+                ],
+              );
+            }),
           ),
         ],
       ),
     );
   }
+
+  String _mapRiskLevel(int level) {
+    if (level >= 75) return 'risk_critical'.tr;
+    if (level >= 50) return 'risk_high'.tr;
+    if (level >= 25) return 'risk_medium'.tr;
+    return 'risk_low'.tr;
+  }
+
+  Color _parseColor(String? hexColor) {
+    if (hexColor == null || hexColor.isEmpty) return Colors.green;
+    try {
+      return Color(int.parse(hexColor.replaceAll('#', '0xFF')));
+    } catch (_) {
+      return Colors.green;
+    }
+  }
 }
+

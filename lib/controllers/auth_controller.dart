@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google/screens/home_screen.dart';
 import 'package:google/screens/phone_forgetpass_screen.dart';
+import 'package:google/core/utils/user_preferences.dart';
+import 'package:google/models/user_model.dart';
+import 'package:google/screens/phone_login_screen.dart';
 import 'package:google/screens/phone_registration_screen.dart';
+import 'package:google/services/auth_service.dart';
 
 class AuthController extends GetxController {
   late TextEditingController phoneController;
@@ -26,17 +30,59 @@ class AuthController extends GetxController {
     super.onClose();
   }
 
+  final AuthService _authService = Get.put(AuthService());
+
   void login() async {
     autovalidateMode.value = AutovalidateMode.onUserInteraction;
 
     if (loginFormKey.currentState!.validate()) {
       isLoading.value = true;
 
-      // Simulate network request
-      await Future.delayed(const Duration(seconds: 2));
+      try {
+        final response = await _authService.login(
+          phoneController.text,
+          passwordController.text,
+        );
 
-      isLoading.value = false;
-      Get.offAll(() => const HomeScreen());
+        if (response['success'] == true) {
+          // Parse user data
+          final loginUser = UserModel.fromJson(response['user']);
+          final String token = response['token'];
+
+          // Save session
+          final UserPreferences userPrefs = UserPreferences();
+          await userPrefs.saveUser(loginUser);
+          await userPrefs.saveToken(token);
+
+          Get.snackbar(
+            'success'.tr,
+            response['message'] ?? 'login_success'.tr,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+
+          Get.offAll(() => const HomeScreen());
+        } else {
+          Get.snackbar(
+            'error'.tr,
+            response['message'] ?? 'login_failed'.tr,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
+      } catch (e) {
+        Get.snackbar(
+          'error'.tr,
+          e.toString().replaceAll('Exception: ', ''),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      } finally {
+        isLoading.value = false;
+      }
     }
   }
 
@@ -46,5 +92,11 @@ class AuthController extends GetxController {
 
   void goToRegistration() {
     Get.to(() => PhoneRegistrationScreen());
+  }
+
+  void logout() async {
+    final UserPreferences userPrefs = UserPreferences();
+    await userPrefs.clearSession();
+    Get.offAll(() => const PhoneLoginScreen());
   }
 }

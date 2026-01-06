@@ -81,6 +81,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     polylines: controller.floodZones.toSet(),
                     markers: controller.markers.toSet(),
+                    circles: controller.circles.toSet(),
                     onMapCreated: controller.onMapCreated,
                   ),
                 ),

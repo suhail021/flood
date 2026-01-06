@@ -6,6 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google/screens/setting_screen.dart';
 import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/report_flood_screen.dart';
+import 'package:google/services/flood_service.dart';
+import 'package:google/models/risk_area_model.dart';
 
 class HomeController extends GetxController {
   final Completer<GoogleMapController> mapControllerCompleter = Completer();
@@ -13,12 +15,111 @@ class HomeController extends GetxController {
 
   final RxSet<Polyline> floodZones = <Polyline>{}.obs;
   final RxSet<Marker> markers = <Marker>{}.obs;
+  final RxSet<Circle> circles = <Circle>{}.obs;
+
+  final FloodService _floodService = FloodService();
+  final RxList<ManualAlert> criticalAlerts = <ManualAlert>[].obs;
+  final RxList<AiPrediction> aiPredictions = <AiPrediction>[].obs;
+  final RxBool isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     _createFloodZones();
     _getCurrentLocation();
+    fetchRiskAreas();
+  }
+
+  Future<void> fetchRiskAreas() async {
+    try {
+      isLoading.value = true;
+      final response = await _floodService.getRiskAreas();
+
+      criticalAlerts.assignAll(response.data.criticalAlerts.fromEmployees);
+      aiPredictions.assignAll(response.data.aiPredictions);
+
+      _updateMapObjects();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update risk areas');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void _updateMapObjects() {
+    markers.clear();
+    circles.clear();
+
+    // Add markers and circles for critical alerts
+    for (var alert in criticalAlerts) {
+      final latLng = LatLng(alert.latitude, alert.longitude);
+      final color = Colors.red;
+
+      markers.add(
+        Marker(
+          markerId: MarkerId('manual_${alert.id}'),
+          position: latLng,
+          infoWindow: InfoWindow(
+            title: alert.locationName,
+            snippet: '${alert.alertTypeName} - Risk: ${alert.riskLevel}%',
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        ),
+      );
+
+      circles.add(
+        Circle(
+          circleId: CircleId('manual_circle_${alert.id}'),
+          center: latLng,
+          radius: 500, // 500 meters
+          fillColor: color.withOpacity(0.3),
+          strokeColor: color,
+          strokeWidth: 2,
+        ),
+      );
+    }
+
+    // Add markers and circles for AI predictions
+    for (var pred in aiPredictions) {
+      final latLng = LatLng(pred.latitude, pred.longitude);
+      final color = _parseColor(pred.riskColor);
+
+      markers.add(
+        Marker(
+          markerId: MarkerId('ai_${pred.id}'),
+          position: latLng,
+          infoWindow: InfoWindow(
+            title: pred.locationName,
+            snippet: '${pred.riskLevelName} - Risk: ${pred.riskLevel}%',
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            pred.riskLevel > 50
+                ? BitmapDescriptor.hueOrange
+                : BitmapDescriptor.hueGreen,
+          ),
+        ),
+      );
+
+      circles.add(
+        Circle(
+          circleId: CircleId('ai_circle_${pred.id}'),
+          center: latLng,
+          radius: 500, // 500 meters
+          fillColor: color.withOpacity(0.3),
+          strokeColor: color,
+          strokeWidth: 2,
+        ),
+      );
+    }
+  }
+
+  Color _parseColor(String? hexColor) {
+    if (hexColor == null || hexColor.isEmpty) return Colors.green;
+    try {
+      return Color(int.parse(hexColor.replaceAll('#', '0xFF')));
+    } catch (_) {
+      return Colors.green;
+    }
   }
 
   Future<void> _getCurrentLocation() async {
