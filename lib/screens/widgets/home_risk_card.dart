@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google/controllers/home_controller.dart';
 import 'risk_area_item.dart';
+import 'shimmer_helper.dart';
 
 class HomeRiskCard extends StatelessWidget {
   final HomeController controller;
@@ -67,11 +68,14 @@ class HomeRiskCard extends StatelessWidget {
           const SizedBox(height: 16),
           Expanded(
             child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+              if (controller.isLoading.value &&
+                  controller.criticalAlerts.isEmpty &&
+                  controller.aiPredictions.isEmpty) {
+                return const RiskCardShimmer();
               }
 
-              if (controller.criticalAlerts.isEmpty && controller.aiPredictions.isEmpty) {
+              if (controller.criticalAlerts.isEmpty &&
+                  controller.aiPredictions.isEmpty) {
                 return Center(
                   child: Text(
                     'no_risks_found'.tr,
@@ -83,22 +87,26 @@ class HomeRiskCard extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.only(top: 0),
                 children: [
-                  ...controller.criticalAlerts.map((alert) => RiskAreaItem(
-                    controller: controller,
-                    name: alert.locationName,
-                    risk: _mapRiskLevel(alert.riskLevel),
-                    color: Colors.red,
-                    probability: alert.riskLevel / 100.0,
-                    targetLocation: LatLng(alert.latitude, alert.longitude),
-                  )),
-                  ...controller.aiPredictions.map((pred) => RiskAreaItem(
-                    controller: controller,
-                    name: pred.locationName,
-                    risk: _mapRiskLevel(pred.riskLevel),
-                    color: _parseColor(pred.riskColor),
-                    probability: pred.riskLevel / 100.0,
-                    targetLocation: LatLng(pred.latitude, pred.longitude),
-                  )),
+                  ...controller.criticalAlerts.map(
+                    (alert) => RiskAreaItem(
+                      controller: controller,
+                      name: alert.locationName,
+                      risk: _mapRiskLevel(alert.riskLevel),
+                      color: Colors.red,
+                      probability: alert.riskLevel / 100.0,
+                      targetLocation: LatLng(alert.latitude, alert.longitude),
+                    ),
+                  ),
+                  ...controller.aiPredictions.map(
+                    (pred) => RiskAreaItem(
+                      controller: controller,
+                      name: pred.locationName,
+                      risk: _mapRiskLevel(pred.riskLevel),
+                      color: _parseColor(pred.riskColor),
+                      probability: pred.riskLevel / 100.0,
+                      targetLocation: LatLng(pred.latitude, pred.longitude),
+                    ),
+                  ),
                 ],
               );
             }),
@@ -124,4 +132,3 @@ class HomeRiskCard extends StatelessWidget {
     }
   }
 }
-

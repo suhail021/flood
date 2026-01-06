@@ -141,4 +141,45 @@ class CriticalAlert {
       'time_remaining': timeRemaining,
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CriticalAlert &&
+        other.id == id &&
+        other.type == type &&
+        other.source == source &&
+        other.locationName == locationName &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
+        other.riskLevel == riskLevel &&
+        other.predictionsCount == predictionsCount &&
+        other.alertType == alertType &&
+        other.alertTypeName == alertTypeName &&
+        other.durationHours == durationHours &&
+        other.firstDetectedAt == firstDetectedAt &&
+        other.lastUpdatedAt == lastUpdatedAt &&
+        other.expiresAt == expiresAt &&
+        other.timeRemaining == timeRemaining;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        type.hashCode ^
+        source.hashCode ^
+        locationName.hashCode ^
+        latitude.hashCode ^
+        longitude.hashCode ^
+        riskLevel.hashCode ^
+        predictionsCount.hashCode ^
+        alertType.hashCode ^
+        alertTypeName.hashCode ^
+        durationHours.hashCode ^
+        firstDetectedAt.hashCode ^
+        lastUpdatedAt.hashCode ^
+        expiresAt.hashCode ^
+        timeRemaining.hashCode;
+  }
 }

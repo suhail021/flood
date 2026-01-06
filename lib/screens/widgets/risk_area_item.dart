@@ -68,10 +68,10 @@ class RiskAreaItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '${'probability'.tr}: ${(probability * 100).toInt()}%',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  // Text(
+                  //   '${'probability'.tr}: ${(probability * 100).toInt()}%',
+                  //   style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  // ),
                 ],
               ),
             ),

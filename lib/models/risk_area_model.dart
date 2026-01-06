@@ -91,6 +91,35 @@ class ManualAlert {
       timeRemaining: json['time_remaining'] ?? '',
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ManualAlert &&
+        other.id == id &&
+        other.locationName == locationName &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
+        other.riskLevel == riskLevel &&
+        other.alertType == alertType &&
+        other.alertTypeName == alertTypeName &&
+        other.durationHours == durationHours &&
+        other.timeRemaining == timeRemaining;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        locationName.hashCode ^
+        latitude.hashCode ^
+        longitude.hashCode ^
+        riskLevel.hashCode ^
+        alertType.hashCode ^
+        alertTypeName.hashCode ^
+        durationHours.hashCode ^
+        timeRemaining.hashCode;
+  }
 }
 
 class AiPrediction {
@@ -131,6 +160,37 @@ class AiPrediction {
       locationName: json['location_name'] ?? '',
       timeAgo: json['time_ago'] ?? '',
     );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AiPrediction &&
+        other.id == id &&
+        other.event == event &&
+        other.riskLevel == riskLevel &&
+        other.riskCategory == riskCategory &&
+        other.riskLevelName == riskLevelName &&
+        other.riskColor == riskColor &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
+        other.locationName == locationName &&
+        other.timeAgo == timeAgo;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        event.hashCode ^
+        riskLevel.hashCode ^
+        riskCategory.hashCode ^
+        riskLevelName.hashCode ^
+        riskColor.hashCode ^
+        latitude.hashCode ^
+        longitude.hashCode ^
+        locationName.hashCode ^
+        timeAgo.hashCode;
   }
 }
 

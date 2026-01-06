@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google/screens/notifications_screen.dart';
-import 'package:google/screens/profile_screen.dart';
 import 'package:google/screens/my_reports_screen.dart';
 import 'package:google/screens/phone_login_screen.dart';
 import 'package:google/screens/security_help_screen.dart';
+import 'package:google/screens/setting_screen.dart';
 
 // Assuming HelpPage is defined in security_help_screen.dart or similar based on original import
 // Original: import 'security_help_screen.dart'; then Navigator.push(HelpPage())
@@ -120,7 +120,7 @@ class SettingController extends GetxController {
   }
 
   void goToProfile() {
-    Get.to(() => const ProfileScreen());
+    Get.to(() => const SettingScreen());
   }
 
   void goToMyReports() {

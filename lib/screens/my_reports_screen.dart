@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/my_reports_controller.dart';
 import 'package:google/models/report_model.dart';
+import 'package:google/screens/widgets/shimmer_helper.dart';
 
 class MyReportsScreen extends StatelessWidget {
   const MyReportsScreen({super.key});
@@ -25,7 +26,7 @@ class MyReportsScreen extends StatelessWidget {
 
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const ReportCardShimmer();
         }
 
         if (controller.myReports.isEmpty) {
@@ -74,6 +75,15 @@ class MyReportsScreen extends StatelessWidget {
           },
         );
       }),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: controller.goToReportFlood,
+        backgroundColor: Theme.of(context).primaryColor,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: Text(
+          'add_new_report'.tr,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 

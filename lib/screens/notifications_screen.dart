@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/alert_controller.dart';
 import 'package:google/screens/widgets/notification_card.dart';
+import 'package:google/screens/widgets/shimmer_helper.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -17,6 +18,10 @@ class NotificationsScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: Obx(() {
+        if (controller.isLoading.value) {
+          return const NotificationCardShimmer();
+        }
+
         if (controller.notificationHistory.isEmpty) {
           return Center(
             child: Column(

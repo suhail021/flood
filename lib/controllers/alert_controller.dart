@@ -13,6 +13,7 @@ class AlertController extends GetxController {
   final RxBool hasAlerts = false.obs;
   final RxList<CriticalAlert> criticalAlerts = <CriticalAlert>[].obs;
   final RxList<CriticalAlert> notificationHistory = <CriticalAlert>[].obs;
+  final RxBool isLoading = true.obs;
 
   static const String _historyKey = 'notification_history_list';
 
@@ -32,6 +33,7 @@ class AlertController extends GetxController {
         decoded.map((e) => CriticalAlert.fromJson(e)).toList(),
       );
     }
+    isLoading.value = false;
   }
 
   Future<void> _addToHistory(CriticalAlert alert) async {
@@ -57,7 +59,7 @@ class AlertController extends GetxController {
     _checkAlerts();
 
     // Poll every 5 minutes
-    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 30), (timer) {
       _checkAlerts();
     });
   }
@@ -70,15 +72,30 @@ class AlertController extends GetxController {
 
       if (response.hasAlerts && response.alerts != null) {
         // Collect all alerts
-        final allAlerts = [
+        // Check for changes before updating
+        final newAlerts = [
           ...response.alerts!.fromAi,
           ...response.alerts!.fromEmployees,
         ];
 
-        criticalAlerts.assignAll(allAlerts);
+        bool hasChanged = false;
+        if (criticalAlerts.length != newAlerts.length) {
+          hasChanged = true;
+        } else {
+          for (int i = 0; i < criticalAlerts.length; i++) {
+            if (criticalAlerts[i] != newAlerts[i]) {
+              hasChanged = true;
+              break;
+            }
+          }
+        }
 
-        // Check for new alerts to notify
-        for (var alert in allAlerts) {
+        if (hasChanged) {
+          criticalAlerts.assignAll(newAlerts);
+        }
+
+        // Check for new alerts to notify independent of UI list
+        for (var alert in newAlerts) {
           await _notifyIfNew(alert);
         }
       }
