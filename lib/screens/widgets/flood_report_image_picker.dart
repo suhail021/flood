@@ -57,6 +57,23 @@ class FloodReportImagePicker extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed:
+                          () => controller.pickImage(ImageSource.gallery),
+                      icon: const Icon(Icons.photo_library),
+                      label: Text('gallery'.tr),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8B5CF6), // Violet
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

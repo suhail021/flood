@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google/controllers/main_controller.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google/screens/notifications_screen.dart';
-import 'package:google/screens/my_reports_screen.dart';
 import 'package:google/screens/phone_login_screen.dart';
 import 'package:google/screens/security_help_screen.dart';
 import 'package:google/screens/profile_screen.dart';
@@ -120,15 +119,24 @@ class ProfileController extends GetxController {
   }
 
   void goToProfile() {
+    // Already on profile or handle specific profile details logic
+    // For now, if it just opens ProfileScreen, it might be redundant if we are on the tab.
+    // If we want to strictly follow existing logic, we leave it, but typically this button
+    // inside the profile tab might mean "Edit Profile" or just be confusing.
+    // Given the previous state was just pushing ProfileScreen (which is this screen),
+    // let's leave it as is or better, maybe switch to editing mode?
+    // But for now, I will update Reports and Notifications to switch tabs.
     Get.to(() => const ProfileScreen());
   }
 
   void goToMyReports() {
-    Get.to(() => const MyReportsScreen());
+    final MainController mainController = Get.find<MainController>();
+    mainController.changeIndex(1);
   }
 
   void goToNotifications() {
-    Get.to(() => const NotificationsScreen());
+    final MainController mainController = Get.find<MainController>();
+    mainController.changeIndex(2);
   }
 
   void goToHelp() {

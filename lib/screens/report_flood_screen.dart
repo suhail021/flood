@@ -5,7 +5,6 @@ import 'package:google/core/widgets/custom_text_form_field.dart';
 import 'package:google/screens/widgets/flood_report_header.dart';
 import 'package:google/screens/widgets/flood_report_image_picker.dart';
 import 'package:google/screens/widgets/flood_report_location_picker.dart';
-import 'package:google/screens/widgets/flood_report_type_selector.dart';
 
 class ReportFloodScreen extends StatelessWidget {
   const ReportFloodScreen({super.key});
@@ -58,10 +57,6 @@ class ReportFloodScreen extends StatelessWidget {
               // اختيار الموقع
               FloodReportLocationPicker(controller: controller),
               const SizedBox(height: 24),
-
-              // اختيار نوع البلاغ
-              FloodReportTypeSelector(controller: controller),
-              const SizedBox(height: 20),
 
               // زر إرسال البلاغ
               SizedBox(

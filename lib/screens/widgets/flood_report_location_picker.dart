@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google/controllers/report_flood_controller.dart';
+import 'package:google/screens/widgets/map_picker_screen.dart';
 
 class FloodReportLocationPicker extends StatelessWidget {
   final ReportFloodController controller;
@@ -59,6 +60,31 @@ class FloodReportLocationPicker extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        final result = await Get.to(
+                          () => MapPickerScreen(
+                            initialLocation: controller.selectedLocation.value,
+                          ),
+                        );
+                        if (result != null && result is LatLng) {
+                          controller.selectedLocation.value = result;
+                        }
+                      },
+                      icon: const Icon(Icons.map),
+                      label: Text('pick_on_map'.tr),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF3B82F6), // Blue
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
                       ),
                     ),
                   ),

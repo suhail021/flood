@@ -144,6 +144,10 @@ class Messages extends Translations {
       'phone_number': 'رقم الهاتف',
       'edit': 'تعديل',
       'save': 'حفظ',
+      'gallery': 'المعرض',
+      'pick_on_map': 'تحديد على الخريطة',
+      'pick_location': 'اختيار الموقع',
+      'confirm_location': 'تأكيد الموقع',
     },
     'en': {
       'app_title': 'Smart Flood Prediction System',
@@ -286,6 +290,10 @@ class Messages extends Translations {
       'phone_number': 'Phone Number',
       'edit': 'Edit',
       'save': 'Save',
+      'gallery': 'Gallery',
+      'pick_on_map': 'Pick on Map',
+      'pick_location': 'Pick Location',
+      'confirm_location': 'Confirm Location',
     },
   };
 }

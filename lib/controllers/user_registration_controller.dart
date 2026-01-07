@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google/screens/home_screen.dart';
+import 'package:google/screens/main_screen.dart';
 
 class UserRegistrationController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -33,7 +33,7 @@ class UserRegistrationController extends GetxController {
       await Future.delayed(const Duration(seconds: 2));
       isLoading.value = false;
 
-      Get.offAll(() => const HomeScreen());
+      Get.offAll(() => const MainScreen());
     }
   }
 

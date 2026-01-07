@@ -32,14 +32,6 @@ class HomeScreen extends StatelessWidget {
             child: SafeArea(
               child: Row(
                 children: [
-                  IconButton(
-                    onPressed: controller.goToSettings,
-                    icon: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 28,
-                    ),
-                  ),
                   Expanded(
                     child: Center(
                       child: Text(

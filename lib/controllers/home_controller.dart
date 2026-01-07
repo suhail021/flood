@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google/controllers/main_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google/screens/profile_screen.dart';
-import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/report_flood_screen.dart';
 import 'package:google/services/flood_service.dart';
 import 'package:google/models/risk_area_model.dart';
@@ -251,12 +250,14 @@ class HomeController extends GetxController {
     }
   }
 
-  void goToSettings() {
-    Get.to(() => const ProfileScreen());
+  void goToProfile() {
+    final MainController mainController = Get.find<MainController>();
+    mainController.changeIndex(3); // Profile tab
   }
 
   void goToNotifications() {
-    Get.to(() => const NotificationsScreen());
+    final MainController mainController = Get.find<MainController>();
+    mainController.changeIndex(2); // Notifications tab
   }
 
   void goToReportFlood() {

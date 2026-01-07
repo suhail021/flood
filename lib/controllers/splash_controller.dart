@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:google/core/utils/user_preferences.dart';
-import 'package:google/screens/home_screen.dart';
+import 'package:google/screens/main_screen.dart';
 import 'package:google/screens/phone_login_screen.dart';
 
 class SplashController extends GetxController {
@@ -18,7 +18,7 @@ class SplashController extends GetxController {
     final String? token = await userPrefs.getToken();
 
     if (token != null && token.isNotEmpty) {
-      Get.off(() => const HomeScreen());
+      Get.off(() => const MainScreen());
     } else {
       Get.off(() => const PhoneLoginScreen());
     }

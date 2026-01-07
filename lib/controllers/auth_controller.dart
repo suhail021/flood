@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google/screens/home_screen.dart';
+import 'package:google/screens/main_screen.dart';
 import 'package:google/screens/phone_forgetpass_screen.dart';
 import 'package:google/core/utils/user_preferences.dart';
 import 'package:google/models/user_model.dart';
@@ -62,7 +62,7 @@ class AuthController extends GetxController {
             colorText: Colors.white,
           );
 
-          Get.offAll(() => const HomeScreen());
+          Get.offAll(() => const MainScreen());
         } else {
           Get.snackbar(
             'error'.tr,
