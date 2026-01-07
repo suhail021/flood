@@ -47,9 +47,6 @@ class UserRegistrationController extends GetxController {
       try {
         final response = await _authService.sendOtp(
           phoneNumber: phoneController.text,
-          firstName: firstNameController.text,
-          lastName: lastNameController.text,
-          password: passwordController.text,
           type: 'register',
         );
 

@@ -5,6 +5,8 @@ import 'package:google/services/auth_service.dart';
 import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/core/utils/user_preferences.dart';
 
+import 'dart:async';
+
 class VerificationController extends GetxController {
   final TextEditingController otpController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -12,6 +14,7 @@ class VerificationController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxInt remainingTime = 60.obs;
   final RxBool canResend = false.obs;
+  Timer? _timer;
 
   @override
   void onInit() {
@@ -21,28 +24,23 @@ class VerificationController extends GetxController {
 
   @override
   void onClose() {
+    _timer?.cancel();
     // otpController.dispose(); // Commenting out to prevent 'used after disposed' error during navigation
     super.onClose();
   }
 
   void startTimer() {
-    remainingTime.value = 120;
+    remainingTime.value = 5;
     canResend.value = false;
-    _tick();
-  }
-
-  void _tick() {
-    if (remainingTime.value > 0) {
-      Future.delayed(const Duration(seconds: 1), () {
-        // Check if controller is still alive
-        if (!isClosed) {
-          remainingTime.value--;
-          _tick();
-        }
-      });
-    } else {
-      canResend.value = true;
-    }
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (remainingTime.value > 0) {
+        remainingTime.value--;
+      } else {
+        canResend.value = true;
+        timer.cancel();
+      }
+    });
   }
 
   final AuthService _authService = AuthService();
@@ -74,6 +72,7 @@ class VerificationController extends GetxController {
         firstName: firstName?.value,
         lastName: lastName?.value,
         password: password?.value,
+        type: 'register',
       );
 
       if (response['success'] == true) {
@@ -100,16 +99,23 @@ class VerificationController extends GetxController {
   }
 
   void resendCode(String phoneNumber) async {
-    canResend.value = false;
-    // Simulate resend
-    await Future.delayed(const Duration(seconds: 1));
+    if (!canResend.value) return;
 
-    startTimer();
-    Get.snackbar(
-      'نجاح',
-      'تم إعادة إرسال رمز التحقق',
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-    );
+    canResend.value = false;
+
+    try {
+      await _authService.resendOtp(phoneNumber: phoneNumber, type: 'register');
+
+      startTimer();
+      Get.snackbar(
+        'Success',
+        'Verification code resent successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      canResend.value = true; // Allow retry on failure
+      CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
+    }
   }
 }
