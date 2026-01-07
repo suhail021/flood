@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:google/services/flood_service.dart';
+import 'package:google/core/utils/custom_toast.dart';
 
 class ReportFloodController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -28,7 +29,7 @@ class ReportFloodController extends GetxController {
 
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        Get.snackbar('Error', 'Location services are disabled.');
+        CustomToast.showError('خدمة الموقع غير مفعلة');
         return;
       }
 
@@ -36,23 +37,20 @@ class ReportFloodController extends GetxController {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          Get.snackbar('Error', 'Location permissions are denied');
+          CustomToast.showError('تم رفض صلاحية الموقع');
           return;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        Get.snackbar(
-          'Error',
-          'Location permissions are permanently denied, we cannot request permissions.',
-        );
+        CustomToast.showError('تم رفض صلاحية الموقع بشكل دائم');
         return;
       }
 
       final position = await Geolocator.getCurrentPosition();
       selectedLocation.value = LatLng(position.latitude, position.longitude);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to get location: $e');
+      CustomToast.showError('فشل في الحصول على الموقع');
     } finally {
       isLocationLoading.value = false;
     }
@@ -61,22 +59,12 @@ class ReportFloodController extends GetxController {
   void submitReport() async {
     if (formKey.currentState!.validate()) {
       if (selectedImage.value == null) {
-        Get.snackbar(
-          'خطأ',
-          'الرجاء اختيار صورة',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        CustomToast.showError('الرجاء اختيار صورة');
         return;
       }
 
       if (selectedLocation.value == null) {
-        Get.snackbar(
-          'خطأ',
-          'الرجاء تحديد الموقع',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        CustomToast.showError('الرجاء تحديد الموقع');
         return;
       }
 
@@ -91,21 +79,14 @@ class ReportFloodController extends GetxController {
         );
 
         if (success) {
-          Get.snackbar(
-            'نجاح',
-            'تم إرسال البلاغ بنجاح',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-          Get.back();
+          FocusManager.instance.primaryFocus?.unfocus();
+          Get.back(); // Close the screen first
+          // Small delay to ensure route transition allows dialog to show on top of previous screen
+          await Future.delayed(const Duration(milliseconds: 100));
+          CustomToast.showSuccess('تم إرسال البلاغ بنجاح');
         }
       } catch (e) {
-        Get.snackbar(
-          'خطأ',
-          e.toString().replaceAll('Exception: ', ''),
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
       } finally {
         isLoading.value = false;
       }
@@ -121,12 +102,7 @@ class ReportFloodController extends GetxController {
         selectedImage.value = File(image.path);
       }
     } catch (e) {
-      Get.snackbar(
-        'خطأ',
-        'فشل في اختيار الصورة',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      CustomToast.showError('فشل في اختيار الصورة');
     }
   }
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google/controllers/main_controller.dart';
 import 'package:get/get.dart';
+import 'package:google/screens/notifications_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google/screens/phone_login_screen.dart';
 import 'package:google/screens/security_help_screen.dart';
 import 'package:google/screens/profile_screen.dart';
+import 'package:google/core/utils/custom_toast.dart';
 
 // Assuming HelpPage is defined in security_help_screen.dart or similar based on original import
 // Original: import 'security_help_screen.dart'; then Navigator.push(HelpPage())
@@ -89,12 +91,7 @@ class ProfileController extends GetxController {
       isLoading.value = false;
       isEditing.value = false;
 
-      Get.snackbar(
-        'success'.tr,
-        'save_success'.tr,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      CustomToast.showSuccess('save_success'.tr);
     }
   }
 
@@ -135,8 +132,7 @@ class ProfileController extends GetxController {
   }
 
   void goToNotifications() {
-    final MainController mainController = Get.find<MainController>();
-    mainController.changeIndex(2);
+    Get.to(() => const NotificationsScreen());
   }
 
   void goToHelp() {
@@ -148,13 +144,7 @@ class ProfileController extends GetxController {
     await prefs.setString('language_code', langCode);
     Get.updateLocale(Locale(langCode));
     Get.back(); // Close the dialog
-    Get.snackbar(
-      'language_change_success_title'.tr,
-      'language_change_success_body'.tr,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-    );
+    CustomToast.showSuccess('language_change_success_body'.tr);
   }
 
   void loadLanguage() async {

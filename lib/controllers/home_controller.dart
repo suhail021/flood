@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google/controllers/main_controller.dart';
 import 'package:get/get.dart';
+import 'package:google/screens/notifications_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google/screens/report_flood_screen.dart';
@@ -256,8 +257,7 @@ class HomeController extends GetxController {
   }
 
   void goToNotifications() {
-    final MainController mainController = Get.find<MainController>();
-    mainController.changeIndex(2); // Notifications tab
+    Get.to(() => const NotificationsScreen());
   }
 
   void goToReportFlood() {
