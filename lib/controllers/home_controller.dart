@@ -8,6 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google/screens/report_flood_screen.dart';
 import 'package:google/services/flood_service.dart';
 import 'package:google/models/risk_area_model.dart';
+import 'package:google/core/utils/custom_toast.dart';
+import 'package:google/core/errors/failures.dart';
 
 class HomeController extends GetxController {
   final Completer<GoogleMapController> mapControllerCompleter = Completer();
@@ -81,7 +83,11 @@ class HomeController extends GetxController {
         _updateMapObjects();
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update risk areas');
+      if (e is Failure) {
+        CustomToast.showError(e.errMessage);
+      } else {
+        CustomToast.showError('Failed to update risk areas');
+      }
     } finally {
       isLoading.value = false;
     }

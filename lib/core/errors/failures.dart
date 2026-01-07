@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-abstract class Failure {
+abstract class Failure implements Exception {
   final String errMessage;
 
   Failure(this.errMessage);
@@ -17,7 +17,7 @@ class ServerFailure extends Failure {
         return ServerFailure("Send timeout with ApiServer");
       case DioExceptionType.receiveTimeout:
         return ServerFailure("Receive timeout with ApiServer");
-      case DioExceptionType.badCertificate: 
+      case DioExceptionType.badCertificate:
         // TODO: Handle this case.
         throw UnimplementedError();
       case DioExceptionType.badResponse:

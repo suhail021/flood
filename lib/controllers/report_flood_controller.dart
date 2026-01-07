@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:google/services/flood_service.dart';
 import 'package:google/core/utils/custom_toast.dart';
+import 'package:google/core/errors/failures.dart';
 
 class ReportFloodController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -86,7 +87,11 @@ class ReportFloodController extends GetxController {
           CustomToast.showSuccess('تم إرسال البلاغ بنجاح');
         }
       } catch (e) {
-        CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
+        if (e is Failure) {
+          CustomToast.showError(e.errMessage);
+        } else {
+          CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
+        }
       } finally {
         isLoading.value = false;
       }

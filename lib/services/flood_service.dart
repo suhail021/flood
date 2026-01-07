@@ -5,6 +5,7 @@ import 'package:google/models/risk_area_model.dart';
 import 'package:google/models/critical_alert_model.dart';
 import 'package:google/models/updates_model.dart';
 import 'package:google/models/report_model.dart';
+import 'package:google/core/errors/failures.dart';
 import 'dart:io' as java_io;
 
 class FloodService {
@@ -28,10 +29,12 @@ class FloodService {
       if (response.statusCode == 200) {
         return RiskAreaResponse.fromJson(response.data);
       } else {
-        throw Exception('Failed to load risk areas');
+        throw ServerFailure('Failed to load risk areas');
       }
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioException(e);
     } catch (e) {
-      throw Exception('Error fetching risk areas: $e');
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -53,10 +56,12 @@ class FloodService {
       if (response.statusCode == 200) {
         return CriticalAlertResponse.fromJson(response.data);
       } else {
-        throw Exception('Failed to load critical alerts');
+        throw ServerFailure('Failed to load critical alerts');
       }
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioException(e);
     } catch (e) {
-      throw Exception('Error fetching critical alerts: $e');
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -93,17 +98,14 @@ class FloodService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       } else {
-        throw Exception(response.data['message'] ?? 'Failed to submit report');
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw Exception(
-          e.response!.data['message'] ?? 'Failed to submit report',
+        throw ServerFailure(
+          response.data['message'] ?? 'Failed to submit report',
         );
       }
-      throw Exception('Network error occurred: $e');
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioException(e);
     } catch (e) {
-      throw Exception('Error submitting report: $e');
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -125,10 +127,12 @@ class FloodService {
       if (response.statusCode == 200) {
         return UpdatesResponse.fromJson(response.data);
       } else {
-        throw Exception('Failed to check for updates');
+        throw ServerFailure('Failed to check for updates');
       }
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioException(e);
     } catch (e) {
-      throw Exception('Error checking for updates: $e');
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -161,10 +165,12 @@ class FloodService {
 
         return list.map((e) => ReportModel.fromJson(e)).toList();
       } else {
-        throw Exception('Failed to load reports');
+        throw ServerFailure('Failed to load reports');
       }
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioException(e);
     } catch (e) {
-      throw Exception('Error fetching reports: $e');
+      throw ServerFailure(e.toString());
     }
   }
 }

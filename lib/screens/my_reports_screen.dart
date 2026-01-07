@@ -24,57 +24,107 @@ class MyReportsScreen extends StatelessWidget {
         elevation: 0,
       ),
 
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const ReportCardShimmer();
-        }
-
-        if (controller.myReports.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.assignment_outlined,
-                  size: 64,
-                  color: Colors.grey[400],
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'no_reports_yet'.tr,
-                  style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed: controller.goToReportFlood,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+      body: Column(
+        children: [
+          // Filter Chips
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Obx(
+              () => Row(
+                children: [
+                  _buildFilterChip(
+                    context,
+                    controller,
+                    'all',
+                    'all_reports'.tr,
                   ),
-                  icon: const Icon(Icons.add),
-                  label: Text('add_new_report'.tr),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  _buildFilterChip(
+                    context,
+                    controller,
+                    'pending',
+                    'status_pending'.tr,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildFilterChip(
+                    context,
+                    controller,
+                    'processing',
+                    'status_processing'.tr,
+                  ),
+                  const SizedBox(width: 8),
+                  _buildFilterChip(
+                    context,
+                    controller,
+                    'solved',
+                    'status_solved'.tr,
+                  ),
+                ],
+              ),
             ),
-          );
-        }
+          ),
 
-        return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: controller.myReports.length,
-          itemBuilder: (context, index) {
-            final report = controller.myReports[index];
-            return _buildReportCard(context, report);
-          },
-        );
-      }),
+          // Reports List
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const ReportCardShimmer();
+              }
+
+              if (controller.filteredReports.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.assignment_outlined,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        controller.myReports.isEmpty
+                            ? 'no_reports_yet'.tr
+                            : 'no_reports_with_status'.tr,
+                        style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                      ),
+                      if (controller.myReports.isEmpty) ...[
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: controller.goToReportFlood,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: const Icon(Icons.add),
+                          label: Text('add_new_report'.tr),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: controller.filteredReports.length,
+                itemBuilder: (context, index) {
+                  final report = controller.filteredReports[index];
+                  return _buildReportCard(context, report);
+                },
+              );
+            }),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: controller.goToReportFlood,
         backgroundColor: Theme.of(context).primaryColor,
@@ -95,7 +145,23 @@ class MyReportsScreen extends StatelessWidget {
     if (report.statusName != null && report.statusName!.isNotEmpty) {
       statusText = report.statusName!;
     } else {
-      statusText = report.status;
+      // Translate status based on known values
+      switch (report.status.toLowerCase()) {
+        case 'pending':
+          statusText = 'status_pending'.tr;
+          break;
+        case 'processing':
+        case 'under_review':
+          statusText = 'status_processing'.tr;
+          break;
+        case 'solved':
+        case 'processed':
+        case 'completed':
+          statusText = 'status_solved'.tr;
+          break;
+        default:
+          statusText = report.status;
+      }
     }
 
     if (report.statusColor != null && report.statusColor!.isNotEmpty) {
@@ -111,16 +177,14 @@ class MyReportsScreen extends StatelessWidget {
         case 'pending':
           statusColor = Colors.orange;
           break;
-        case 'processed':
         case 'processing':
+        case 'under_review':
           statusColor = Colors.blue;
           break;
         case 'solved':
+        case 'processed':
         case 'completed':
           statusColor = Colors.green;
-          break;
-        case 'rejected':
-          statusColor = Colors.red;
           break;
         default:
           statusColor = Colors.grey;
@@ -210,6 +274,52 @@ class MyReportsScreen extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Icon(Icons.assignment, color: color),
+    );
+  }
+
+  Widget _buildFilterChip(
+    BuildContext context,
+    MyReportsController controller,
+    String status,
+    String label,
+  ) {
+    // Determine color based on status
+    Color chipColor;
+    if (controller.selectedStatus.value == status) {
+      chipColor = Theme.of(context).primaryColor;
+    } else {
+      chipColor = Theme.of(context).cardColor;
+    }
+
+    // Text Color
+    Color textColor =
+        controller.selectedStatus.value == status
+            ? Colors.white
+            : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black;
+
+    return ChoiceChip(
+      label: Text(label),
+      selected: controller.selectedStatus.value == status,
+      onSelected: (bool selected) {
+        if (selected) {
+          controller.setFilter(status);
+        }
+      },
+      selectedColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).cardColor,
+      labelStyle: TextStyle(
+        color: textColor,
+        fontWeight:
+            controller.selectedStatus.value == status
+                ? FontWeight.bold
+                : FontWeight.normal,
+      ),
+      side: BorderSide(
+        color:
+            controller.selectedStatus.value == status
+                ? Colors.transparent
+                : Colors.grey.withOpacity(0.3),
+      ),
     );
   }
 }
