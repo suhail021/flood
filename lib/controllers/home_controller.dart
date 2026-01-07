@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google/screens/setting_screen.dart';
+import 'package:google/screens/profile_screen.dart';
 import 'package:google/screens/notifications_screen.dart';
 import 'package:google/screens/report_flood_screen.dart';
 import 'package:google/services/flood_service.dart';
@@ -252,7 +252,7 @@ class HomeController extends GetxController {
   }
 
   void goToSettings() {
-    Get.to(() => const SettingScreen());
+    Get.to(() => const ProfileScreen());
   }
 
   void goToNotifications() {

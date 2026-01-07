@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google/controllers/setting_controller.dart';
+import 'package:google/controllers/profile_controller.dart';
 
-class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SettingController());
+    final controller = Get.put(ProfileController());
 
     return Scaffold(
       appBar: AppBar(
@@ -194,7 +194,6 @@ class SettingScreen extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Container(
-      
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),

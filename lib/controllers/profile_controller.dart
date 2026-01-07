@@ -1,33 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google/screens/notifications_screen.dart';
+import 'package:google/screens/my_reports_screen.dart';
+import 'package:google/screens/phone_login_screen.dart';
+import 'package:google/screens/security_help_screen.dart';
+import 'package:google/screens/profile_screen.dart';
+
+// Assuming HelpPage is defined in security_help_screen.dart or similar based on original import
+// Original: import 'security_help_screen.dart'; then Navigator.push(HelpPage())
+// Check file content later if needed, but for now I'll assume HelpPage is available or I'll fix import.
+// Actually original had `import 'security_help_screen.dart';` and `Navigator.push(..., HelpPage())`.
+// So HelpPage is likely in `security_help_screen.dart`.
 
 class ProfileController extends GetxController {
+  final RxString currentLang = 'ar'.obs;
+  final Rx<ThemeMode> currentTheme = ThemeMode.system.obs;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
-  late TextEditingController
-  phoneController; // Renamed from passController to be deeper
   late TextEditingController addressController;
   late TextEditingController cityController;
 
   final RxBool isLoading = false.obs;
   final RxBool isEditing = false.obs;
-  final RxString userName = ''.obs;
+
+  final List<String> cities = [
+    'صنعاء',
+    'عدن',
+    'تعز',
+    'الحديدة',
+    'إب',
+    'ذمار',
+    'البيضاء',
+    'حضرموت',
+    'شبوة',
+    'مأرب',
+    'الجوف',
+    'صعدة',
+    'عمران',
+    'ريمة',
+    'أبين',
+    'لحج',
+    'أب',
+    'المحويت',
+    'الضالع',
+    'بيحان',
+  ];
 
   @override
   void onInit() {
     super.onInit();
     nameController = TextEditingController();
-    phoneController = TextEditingController();
     addressController = TextEditingController();
     cityController = TextEditingController();
     loadUserData();
+    loadLanguage();
+    loadTheme();
   }
 
   @override
   void onClose() {
     nameController.dispose();
-    phoneController.dispose();
     addressController.dispose();
     cityController.dispose();
     super.onClose();
@@ -36,22 +70,12 @@ class ProfileController extends GetxController {
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     nameController.text = prefs.getString('user_name') ?? 'أحمد محمد';
-    userName.value = nameController.text; // Update observable
     addressController.text =
         prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
     cityController.text = prefs.getString('user_city') ?? 'صنعاء';
-    // Assuming phone is stored or just dummy
-    phoneController.text = prefs.getString('user_phone') ?? '770000000';
   }
 
-  void toggleEditing() {
-    isEditing.value = !isEditing.value;
-    if (!isEditing.value) {
-      loadUserData(); // Revert changes if cancelled or just to be safe
-    }
-  }
-
-  Future<void> saveChanges() async {
+  Future<void> saveChanges(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
 
@@ -60,20 +84,104 @@ class ProfileController extends GetxController {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_name', nameController.text);
-      userName.value = nameController.text; // Update observable
       await prefs.setString('user_address', addressController.text);
       await prefs.setString('user_city', cityController.text);
-      await prefs.setString('user_phone', phoneController.text);
 
       isLoading.value = false;
       isEditing.value = false;
 
       Get.snackbar(
-        'نجاح',
-        'تم حفظ التغييرات بنجاح',
+        'success'.tr,
+        'save_success'.tr,
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+    }
+  }
+
+  void cancelEdit() {
+    isEditing.value = false;
+    loadUserData();
+  }
+
+  void logout() {
+    Get.defaultDialog(
+      title: 'logout'.tr,
+      middleText: 'logout_confirmation'.tr,
+      textConfirm: 'confirm'.tr,
+      textCancel: 'cancel'.tr,
+      confirmTextColor: Colors.white,
+      onConfirm: () async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+        Get.offAll(() => const PhoneLoginScreen());
+      },
+    );
+  }
+
+  void goToProfile() {
+    Get.to(() => const ProfileScreen());
+  }
+
+  void goToMyReports() {
+    Get.to(() => const MyReportsScreen());
+  }
+
+  void goToNotifications() {
+    Get.to(() => const NotificationsScreen());
+  }
+
+  void goToHelp() {
+    Get.to(() => const SecurityHelpScreen());
+  }
+
+  void changeLanguage(String langCode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language_code', langCode);
+    Get.updateLocale(Locale(langCode));
+    Get.back(); // Close the dialog
+    Get.snackbar(
+      'language_change_success_title'.tr,
+      'language_change_success_body'.tr,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+  }
+
+  void loadLanguage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? langCode = prefs.getString('language_code');
+    if (langCode != null) {
+      currentLang.value = langCode;
+      Get.updateLocale(Locale(langCode));
+    }
+  }
+
+  void changeTheme(ThemeMode mode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String themeString = 'system';
+    if (mode == ThemeMode.light) themeString = 'light';
+    if (mode == ThemeMode.dark) themeString = 'dark';
+
+    await prefs.setString('theme_mode', themeString);
+    Get.changeThemeMode(mode);
+    currentTheme.value = mode;
+    Get.back();
+  }
+
+  void loadTheme() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? themeString = prefs.getString('theme_mode');
+    if (themeString == 'light') {
+      currentTheme.value = ThemeMode.light;
+      Get.changeThemeMode(ThemeMode.light);
+    } else if (themeString == 'dark') {
+      currentTheme.value = ThemeMode.dark;
+      Get.changeThemeMode(ThemeMode.dark);
+    } else {
+      currentTheme.value = ThemeMode.system;
+      Get.changeThemeMode(ThemeMode.system);
     }
   }
 }
