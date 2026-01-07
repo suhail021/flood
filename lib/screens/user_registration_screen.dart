@@ -4,9 +4,7 @@ import 'package:google/controllers/user_registration_controller.dart';
 import 'package:google/core/widgets/custom_text_form_field.dart';
 
 class UserRegistrationScreen extends StatelessWidget {
-  final String phoneNumber;
-
-  const UserRegistrationScreen({super.key, required this.phoneNumber});
+  const UserRegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,14 +81,43 @@ class UserRegistrationScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
 
-                // الاسم
+                // الاسم الأول
                 CustomTextFormField(
-                  controller: controller.nameController,
-                  hintText: 'full_name_hint'.tr,
+                  controller: controller.firstNameController,
+                  hintText: 'first_name'.tr,
                   prefixIcon: Icons.person,
                   validator:
                       (value) => value!.isEmpty ? 'enter_name_error'.tr : null,
                 ),
+                const SizedBox(height: 20),
+
+                // الاسم الأخير
+                CustomTextFormField(
+                  controller: controller.lastNameController,
+                  hintText: 'last_name'.tr,
+                  prefixIcon: Icons.person_outline,
+                  validator:
+                      (value) => value!.isEmpty ? 'enter_name_error'.tr : null,
+                ),
+                const SizedBox(height: 20),
+
+                // رقم الهاتف
+                CustomTextFormField(
+                  controller: controller.phoneController,
+                  hintText: 'phone_number'.tr,
+                  prefixIcon: Icons.phone,
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'enter_phone_error'.tr;
+                    }
+                    if (value.length < 9) {
+                      return 'phone_length_error'.tr;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
                 const SizedBox(height: 20),
 
                 // العنوان (كلمة السر)

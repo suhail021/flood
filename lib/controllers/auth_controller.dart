@@ -5,7 +5,7 @@ import 'package:google/screens/phone_forgetpass_screen.dart';
 import 'package:google/core/utils/user_preferences.dart';
 import 'package:google/models/user_model.dart';
 import 'package:google/screens/phone_login_screen.dart';
-import 'package:google/screens/phone_registration_screen.dart';
+import 'package:google/screens/user_registration_screen.dart';
 import 'package:google/services/auth_service.dart';
 
 class AuthController extends GetxController {
@@ -91,7 +91,7 @@ class AuthController extends GetxController {
   }
 
   void goToRegistration() {
-    Get.to(() => PhoneRegistrationScreen());
+    Get.to(() => const UserRegistrationScreen());
   }
 
   void logout() async {

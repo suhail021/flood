@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google/screens/user_registration_screen.dart';
+import 'package:google/screens/main_screen.dart';
+import 'package:google/services/auth_service.dart';
+import 'package:google/core/utils/custom_toast.dart';
+import 'package:google/core/utils/user_preferences.dart';
 
 class VerificationController extends GetxController {
-  final List<TextEditingController> otpControllers = List.generate(
-    6,
-    (index) => TextEditingController(),
-  );
-  final List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
+  final TextEditingController otpController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   final RxBool isLoading = false.obs;
@@ -22,17 +21,12 @@ class VerificationController extends GetxController {
 
   @override
   void onClose() {
-    for (var controller in otpControllers) {
-      controller.dispose();
-    }
-    for (var node in focusNodes) {
-      node.dispose();
-    }
+    // otpController.dispose(); // Commenting out to prevent 'used after disposed' error during navigation
     super.onClose();
   }
 
   void startTimer() {
-    remainingTime.value = 60;
+    remainingTime.value = 120;
     canResend.value = false;
     _tick();
   }
@@ -51,14 +45,57 @@ class VerificationController extends GetxController {
     }
   }
 
-  void verifyCode(String phoneNumber) async {
-    if (formKey.currentState!.validate()) {
-      isLoading.value = true;
-      // Simulate verification
-      await Future.delayed(const Duration(seconds: 2));
-      isLoading.value = false;
+  final AuthService _authService = AuthService();
+  final UserPreferences _userPreferences = UserPreferences();
+  final RxString? firstName = RxString('');
+  final RxString? lastName = RxString('');
+  final RxString? password = RxString('');
 
-      Get.off(() => UserRegistrationScreen(phoneNumber: phoneNumber));
+  void setUserData({String? fName, String? lName, String? pass}) {
+    firstName?.value = fName ?? '';
+    lastName?.value = lName ?? '';
+    password?.value = pass ?? '';
+  }
+
+  void verifyCode(String phoneNumber) async {
+    final otp = otpController.text;
+
+    if (otp.length != 6) {
+      CustomToast.showError('Enter valid OTP');
+      return;
+    }
+
+    isLoading.value = true;
+
+    try {
+      final response = await _authService.verifyOtp(
+        phoneNumber,
+        otp,
+        firstName: firstName?.value,
+        lastName: lastName?.value,
+        password: password?.value,
+      );
+
+      if (response['success'] == true) {
+        // Unfocus to close keyboard
+        FocusManager.instance.primaryFocus?.unfocus();
+
+        // Wait to ensure UI handles unfocus before navigation
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        if (response['token'] != null) {
+          await _userPreferences.saveToken(response['token']);
+        }
+
+        // Navigate to home - GetX will handle controller disposal
+        Get.offAll(() => const MainScreen());
+
+        CustomToast.showSuccess('Verified Successfully');
+      }
+    } catch (e) {
+      CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -74,11 +111,5 @@ class VerificationController extends GetxController {
       backgroundColor: Colors.green,
       colorText: Colors.white,
     );
-  }
-
-  void onOtpChanged(String value, int index) {
-    if (value.isNotEmpty && index < 5) {
-      focusNodes[index + 1].requestFocus();
-    }
   }
 }

@@ -20,7 +20,7 @@ class ApiConstants {
   static const String myAlarms = '/alarms/my-alarms';
 
   // Auth Endpoints
-  static const String register = '/auth/register';
+  static const String sendOtp = '/auth/send-otp';
   static const String login = '/auth/login';
   static const String verifyOtp = '/auth/verify-otp';
   static const String resendOtp = '/auth/resend-otp';
