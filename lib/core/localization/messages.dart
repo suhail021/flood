@@ -150,6 +150,12 @@ class Messages extends Translations {
       'pick_on_map': 'تحديد على الخريطة',
       'pick_location': 'اختيار الموقع',
       'confirm_location': 'تأكيد الموقع',
+      'enter_valid_otp': 'الرجاء إدخال رمز تحقق صحيح',
+      'registration_success': 'تم التسجيل بنجاح',
+      'verification_failed': 'فشل التحقق من الرمز',
+      'code_resent_success': 'تم إعادة إرسال رمز التحقق بنجاح',
+      'network_error': 'خطأ في الاتصال بالخادم',
+      'invalid_otp': 'رمز التحقق غير صحيح',
     },
     'en': {
       'app_title': 'Smart Flood Prediction System',
@@ -298,6 +304,12 @@ class Messages extends Translations {
       'pick_on_map': 'Pick on Map',
       'pick_location': 'Pick Location',
       'confirm_location': 'Confirm Location',
+      'enter_valid_otp': 'Please enter a valid OTP',
+      'registration_success': 'Registration successful',
+      'verification_failed': 'Verification failed',
+      'code_resent_success': 'Verification code resent successfully',
+      'network_error': 'Network connection error',
+      'invalid_otp': 'Invalid OTP code',
     },
   };
 }

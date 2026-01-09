@@ -4,7 +4,7 @@ import 'package:google/screens/main_screen.dart';
 import 'package:google/services/auth_service.dart';
 import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/core/utils/user_preferences.dart';
-
+import 'package:google/models/user_model.dart';
 import 'dart:async';
 
 class VerificationController extends GetxController {
@@ -12,7 +12,7 @@ class VerificationController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   final RxBool isLoading = false.obs;
-  final RxInt remainingTime = 60.obs;
+  final RxInt remainingTime = 120.obs;
   final RxBool canResend = false.obs;
   Timer? _timer;
 
@@ -25,12 +25,12 @@ class VerificationController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-    // otpController.dispose(); // Commenting out to prevent 'used after disposed' error during navigation
+    // otpController.dispose();
     super.onClose();
   }
 
   void startTimer() {
-    remainingTime.value = 5;
+    remainingTime.value = 120;
     canResend.value = false;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -59,7 +59,7 @@ class VerificationController extends GetxController {
     final otp = otpController.text;
 
     if (otp.length != 6) {
-      CustomToast.showError('Enter valid OTP');
+      CustomToast.showError('enter_valid_otp'.tr);
       return;
     }
 
@@ -75,23 +75,50 @@ class VerificationController extends GetxController {
         type: 'register',
       );
 
+      print('✅ Verification Response: $response');
+
       if (response['success'] == true) {
-        // Unfocus to close keyboard
+        // إخفاء لوحة المفاتيح
         FocusManager.instance.primaryFocus?.unfocus();
 
-        // Wait to ensure UI handles unfocus before navigation
-        await Future.delayed(const Duration(milliseconds: 500));
-
-        if (response['token'] != null) {
+        // حفظ التوكن أولاً
+        if (response['token'] != null && response['token'].toString().isNotEmpty) {
           await _userPreferences.saveToken(response['token']);
+          print('✅ Token saved: ${response['token']}');
+        } else {
+          print('⚠️ No token received');
         }
 
-        // Navigate to home - GetX will handle controller disposal
-        Get.offAll(() => const MainScreen());
+        // حفظ بيانات المستخدم
+        if (response['user'] != null) {
+          try {
+            final user = UserModel.fromJson(response['user']);
+            await _userPreferences.saveUser(user);
+            print('✅ User saved: ${user.name}');
+          } catch (e) {
+            print('❌ Error saving user: $e');
+          }
+        } else {
+          print('⚠️ No user data received');
+        }
 
-        CustomToast.showSuccess('Verified Successfully');
+        // عرض رسالة النجاح
+        CustomToast.showSuccess(
+          response['message'] ?? 'registration_success'.tr,
+        );
+
+        // تأخير قصير لضمان ظهور الرسالة
+        await Future.delayed(const Duration(milliseconds: 800));
+
+        // الانتقال إلى الشاشة الرئيسية وحذف جميع الشاشات السابقة
+        Get.offAll(() => const MainScreen());
+      } else {
+        CustomToast.showError(
+          response['message'] ?? 'verification_failed'.tr,
+        );
       }
     } catch (e) {
+      print('❌ Verification Error: $e');
       CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
@@ -108,13 +135,14 @@ class VerificationController extends GetxController {
 
       startTimer();
       Get.snackbar(
-        'Success',
-        'Verification code resent successfully',
+        'success'.tr,
+        'code_resent_success'.tr,
         backgroundColor: Colors.green,
         colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
     } catch (e) {
-      canResend.value = true; // Allow retry on failure
+      canResend.value = true;
       CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
     }
   }
