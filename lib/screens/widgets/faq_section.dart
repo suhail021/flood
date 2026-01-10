@@ -6,12 +6,16 @@ class FAQSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       elevation: 0,
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: Color(0xFFE2E8F0)),
+        side: BorderSide(
+          color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -20,14 +24,17 @@ class FAQSection extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.question_answer, color: Color(0xFF2C3E50)),
+                Icon(
+                  Icons.question_answer,
+                  color: Theme.of(context).primaryColor,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'faq'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C3E50),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -43,21 +50,29 @@ class FAQSection extends StatelessWidget {
   }
 
   Widget _buildFaqItem(String question, String answer) {
-    return ExpansionTile(
-      title: Text(
-        question,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 15,
-          color: Color(0xFF2C3E50),
-        ),
-      ),
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Text(answer, style: const TextStyle(color: Color(0xFF64748B))),
-        ),
-      ],
+    return Builder(
+      builder:
+          (context) => ExpansionTile(
+            title: Text(
+              question,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Theme.of(context).textTheme.titleMedium?.color,
+              ),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Text(
+                  answer,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google/services/flood_service.dart';
 import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/core/errors/failures.dart';
+import 'package:google/controllers/my_reports_controller.dart';
 
 class ReportFloodController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -85,6 +86,11 @@ class ReportFloodController extends GetxController {
           // Small delay to ensure route transition allows dialog to show on top of previous screen
           await Future.delayed(const Duration(milliseconds: 100));
           CustomToast.showSuccess('تم إرسال البلاغ بنجاح');
+
+          // Refresh reports list if controller is active
+          if (Get.isRegistered<MyReportsController>()) {
+            Get.find<MyReportsController>().fetchMyReports();
+          }
         }
       } catch (e) {
         if (e is Failure) {

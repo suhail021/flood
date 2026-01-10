@@ -7,6 +7,9 @@ import 'package:google/screens/phone_login_screen.dart';
 import 'package:google/screens/security_help_screen.dart';
 import 'package:google/screens/profile_screen.dart';
 import 'package:google/core/utils/custom_toast.dart';
+import 'package:google/screens/safety_guidelines_screen.dart';
+import 'package:google/screens/faq_screen.dart';
+import 'package:google/screens/contact_screen.dart';
 
 // Assuming HelpPage is defined in security_help_screen.dart or similar based on original import
 // Original: import 'security_help_screen.dart'; then Navigator.push(HelpPage())
@@ -137,6 +140,18 @@ class ProfileController extends GetxController {
 
   void goToHelp() {
     Get.to(() => const SecurityHelpScreen());
+  }
+
+  void goToSafetyGuidelines() {
+    Get.to(() => const SafetyGuidelinesScreen());
+  }
+
+  void goToFAQ() {
+    Get.to(() => const FAQScreen());
+  }
+
+  void goToContact() {
+    Get.to(() => const ContactScreen());
   }
 
   void changeLanguage(String langCode) async {

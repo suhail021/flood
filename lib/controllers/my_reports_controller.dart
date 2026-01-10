@@ -4,6 +4,7 @@ import 'package:google/services/flood_service.dart';
 import 'package:google/models/report_model.dart';
 import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/core/errors/failures.dart';
+import 'package:google/screens/notifications_screen.dart';
 
 class MyReportsController extends GetxController {
   final FloodService _floodService = FloodService();
@@ -67,5 +68,9 @@ class MyReportsController extends GetxController {
 
   void goToReportFlood() {
     Get.to(() => const ReportFloodScreen());
+  }
+
+  void goToNotifications() {
+    Get.to(() => const NotificationsScreen());
   }
 }

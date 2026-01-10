@@ -45,7 +45,7 @@ class ReportModel {
       latitude: lat,
       longitude: lng,
       description: json['description'] ?? '',
-      image: json['image_url'] ?? json['image'] ?? '',
+      image: _parseImage(json['image_url'] ?? json['image']),
       status: json['status'] ?? 'pending',
       statusName: json['status_name'],
       statusColor: json['status_color'],
@@ -53,4 +53,19 @@ class ReportModel {
       updatedAt: json['updated_at'] ?? '',
     );
   }
-}
+  }
+
+  String _parseImage(String? imagePath) {
+    if (imagePath == null || imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    
+    // Remove /api from base url to get root domain
+    // Old: https://domain.com/api
+    // New: https://domain.com
+    const String baseUrl = 'https://mintcream-kudu-673423.hostingersite.com';
+    
+    if (imagePath.startsWith('/')) {
+      return '$baseUrl$imagePath';
+    }
+    return '$baseUrl/$imagePath';
+  }

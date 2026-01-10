@@ -14,13 +14,17 @@ class SecurityHelpItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 16),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: Color(0xFFE2E8F0)),
+        side: BorderSide(
+          color: isDark ? Colors.white12 : const Color(0xFFE2E8F0),
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -32,19 +36,19 @@ class SecurityHelpItem extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: const Color(0xFF2C3E50)),
+                  child: Icon(icon, color: Theme.of(context).primaryColor),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2C3E50),
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
                 ),
@@ -53,7 +57,10 @@ class SecurityHelpItem extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               content,
-              style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
             ),
           ],
         ),

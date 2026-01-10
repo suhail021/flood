@@ -13,50 +13,28 @@ class HomeScreen extends StatelessWidget {
     final controller = Get.put(HomeController());
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'app_title'.tr,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: controller.goToNotifications,
+            icon: const Icon(Icons.notifications, color: Colors.white),
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          // AppBar
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).appBarTheme.backgroundColor,
-              boxShadow: [
-                const BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'app_title'.tr,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: controller.goToNotifications,
-                    icon: const Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: 28,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
           // الخريطة
           Expanded(
             flex: 2,
