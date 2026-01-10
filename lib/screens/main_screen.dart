@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google/controllers/alert_controller.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/main_controller.dart';
 import 'package:google/screens/home_screen.dart';
@@ -11,6 +12,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MainController());
+    Get.put(AlertController());
 
     final List<Widget> screens = [
       const HomeScreen(),
