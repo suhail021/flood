@@ -10,6 +10,9 @@ import 'package:google/services/flood_service.dart';
 import 'package:google/models/risk_area_model.dart';
 import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/core/errors/failures.dart';
+import 'package:google/core/utils/marker_generator.dart';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 class HomeController extends GetxController {
   final Completer<GoogleMapController> mapControllerCompleter = Completer();
@@ -22,6 +25,38 @@ class HomeController extends GetxController {
   final FloodService _floodService = FloodService();
   final RxList<ManualAlert> criticalAlerts = <ManualAlert>[].obs;
   final RxList<AiPrediction> aiPredictions = <AiPrediction>[].obs;
+
+  final RxString searchQuery = ''.obs;
+
+  List<ManualAlert> get filteredCriticalAlerts {
+    if (searchQuery.isEmpty) return criticalAlerts;
+    return criticalAlerts
+        .where(
+          (alert) =>
+              alert.locationName.toLowerCase().contains(
+                searchQuery.value.toLowerCase(),
+              ) ||
+              alert.alertTypeName.toLowerCase().contains(
+                searchQuery.value.toLowerCase(),
+              ),
+        )
+        .toList();
+  }
+
+  List<AiPrediction> get filteredAiPredictions {
+    if (searchQuery.isEmpty) return aiPredictions;
+    return aiPredictions
+        .where(
+          (pred) => pred.locationName.toLowerCase().contains(
+            searchQuery.value.toLowerCase(),
+          ),
+        )
+        .toList();
+  }
+
+  void updateSearchQuery(String query) {
+    searchQuery.value = query;
+  }
 
   final RxBool isLoading = false.obs;
   Timer? _pollingTimer;
@@ -122,7 +157,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void _updateMapObjects() {
+  Future<void> _updateMapObjects() async {
     markers.clear();
     circles.clear();
 
@@ -130,6 +165,8 @@ class HomeController extends GetxController {
     for (var alert in criticalAlerts) {
       final latLng = LatLng(alert.latitude, alert.longitude);
       final color = Colors.red;
+
+      final icon = await MarkerGenerator.createCustomMarkerBitmap(color);
 
       markers.add(
         Marker(
@@ -139,7 +176,7 @@ class HomeController extends GetxController {
             title: alert.locationName,
             snippet: '${alert.alertTypeName} - Risk: ${alert.riskLevel}%',
           ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          icon: icon,
         ),
       );
 
@@ -160,6 +197,8 @@ class HomeController extends GetxController {
       final latLng = LatLng(pred.latitude, pred.longitude);
       final color = _parseColor(pred.riskColor);
 
+      final icon = await MarkerGenerator.createCustomMarkerBitmap(color);
+
       markers.add(
         Marker(
           markerId: MarkerId('ai_${pred.id}'),
@@ -168,11 +207,7 @@ class HomeController extends GetxController {
             title: pred.locationName,
             snippet: '${pred.riskLevelName} - Risk: ${pred.riskLevel}%',
           ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-            pred.riskLevel > 50
-                ? BitmapDescriptor.hueOrange
-                : BitmapDescriptor.hueGreen,
-          ),
+          icon: icon,
         ),
       );
 
@@ -204,12 +239,7 @@ class HomeController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      Get.snackbar(
-        'خطأ',
-        'خدمة الموقع غير مفعلة',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      CustomToast.showError('خدمة الموقع غير مفعلة');
       return;
     }
 
@@ -217,23 +247,13 @@ class HomeController extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        Get.snackbar(
-          'خطأ',
-          'تم رفض صلاحية الموقع',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        CustomToast.showError('تم رفض صلاحية الموقع');
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      Get.snackbar(
-        'خطأ',
-        'تم رفض صلاحية الموقع بشكل دائم',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      CustomToast.showError('تم رفض صلاحية الموقع بشكل دائم');
       return;
     }
 

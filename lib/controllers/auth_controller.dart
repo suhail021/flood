@@ -7,6 +7,7 @@ import 'package:google/models/user_model.dart';
 import 'package:google/screens/phone_login_screen.dart';
 import 'package:google/screens/user_registration_screen.dart';
 import 'package:google/services/auth_service.dart';
+import 'package:google/core/utils/custom_toast.dart';
 
 class AuthController extends GetxController {
   late TextEditingController phoneController;
@@ -54,32 +55,12 @@ class AuthController extends GetxController {
           await userPrefs.saveUser(loginUser);
           await userPrefs.saveToken(token);
 
-          Get.snackbar(
-            'success'.tr,
-            response['message'] ?? 'login_success'.tr,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-
           Get.offAll(() => const MainScreen());
         } else {
-          Get.snackbar(
-            'error'.tr,
-            response['message'] ?? 'login_failed'.tr,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
+          CustomToast.showError(response['message'] ?? 'login_failed'.tr);
         }
       } catch (e) {
-        Get.snackbar(
-          'error'.tr,
-          e.toString().replaceAll('Exception: ', ''),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
       } finally {
         isLoading.value = false;
       }

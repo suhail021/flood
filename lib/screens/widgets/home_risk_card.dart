@@ -74,8 +74,8 @@ class HomeRiskCard extends StatelessWidget {
                 return const RiskCardShimmer();
               }
 
-              if (controller.criticalAlerts.isEmpty &&
-                  controller.aiPredictions.isEmpty) {
+              if (controller.filteredCriticalAlerts.isEmpty &&
+                  controller.filteredAiPredictions.isEmpty) {
                 return Center(
                   child: Text(
                     'no_risks_found'.tr,
@@ -87,7 +87,7 @@ class HomeRiskCard extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.only(top: 0),
                 children: [
-                  ...controller.criticalAlerts.map(
+                  ...controller.filteredCriticalAlerts.map(
                     (alert) => RiskAreaItem(
                       controller: controller,
                       name: alert.locationName,
@@ -97,7 +97,7 @@ class HomeRiskCard extends StatelessWidget {
                       targetLocation: LatLng(alert.latitude, alert.longitude),
                     ),
                   ),
-                  ...controller.aiPredictions.map(
+                  ...controller.filteredAiPredictions.map(
                     (pred) => RiskAreaItem(
                       controller: controller,
                       name: pred.locationName,

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:google/controllers/home_controller.dart';
+
 class HomeSearchBar extends StatelessWidget {
   const HomeSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
+
     return Positioned(
       top: 10,
       left: 16,
@@ -24,6 +28,7 @@ class HomeSearchBar extends StatelessWidget {
           ],
         ),
         child: TextField(
+          onChanged: controller.updateSearchQuery,
           decoration: InputDecoration(
             hintText: 'search'.tr,
             hintStyle: TextStyle(color: Colors.grey.shade600),

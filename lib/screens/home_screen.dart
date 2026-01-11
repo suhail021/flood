@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google/core/widgets/custom_app_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google/controllers/home_controller.dart';
 import 'package:google/screens/widgets/home_risk_card.dart';
@@ -13,25 +14,11 @@ class HomeScreen extends StatelessWidget {
     final controller = Get.put(HomeController());
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'app_title'.tr,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: controller.goToNotifications,
-            icon: const Icon(Icons.notifications, color: Colors.white),
-          ),
-        ],
+      resizeToAvoidBottomInset: false,
+      appBar: buildAppBar(
+        context,
+        title: 'app_title'.tr,
+        onPressed: controller.goToNotifications,
       ),
       body: Column(
         children: [

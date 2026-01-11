@@ -21,6 +21,8 @@ class MainScreen extends StatelessWidget {
     ];
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       body: Obx(
         () => IndexedStack(
           index: controller.currentIndex.value,

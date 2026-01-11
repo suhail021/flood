@@ -82,7 +82,8 @@ class VerificationController extends GetxController {
         FocusManager.instance.primaryFocus?.unfocus();
 
         // حفظ التوكن أولاً
-        if (response['token'] != null && response['token'].toString().isNotEmpty) {
+        if (response['token'] != null &&
+            response['token'].toString().isNotEmpty) {
           await _userPreferences.saveToken(response['token']);
           print('✅ Token saved: ${response['token']}');
         } else {
@@ -113,9 +114,7 @@ class VerificationController extends GetxController {
         // الانتقال إلى الشاشة الرئيسية وحذف جميع الشاشات السابقة
         Get.offAll(() => const MainScreen());
       } else {
-        CustomToast.showError(
-          response['message'] ?? 'verification_failed'.tr,
-        );
+        CustomToast.showError(response['message'] ?? 'verification_failed'.tr);
       }
     } catch (e) {
       print('❌ Verification Error: $e');
@@ -134,13 +133,7 @@ class VerificationController extends GetxController {
       await _authService.resendOtp(phoneNumber: phoneNumber, type: 'register');
 
       startTimer();
-      Get.snackbar(
-        'success'.tr,
-        'code_resent_success'.tr,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      CustomToast.showSuccess('code_resent_success'.tr);
     } catch (e) {
       canResend.value = true;
       CustomToast.showError(e.toString().replaceAll('Exception: ', ''));

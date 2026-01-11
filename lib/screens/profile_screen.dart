@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/profile_controller.dart';
+import 'package:google/core/widgets/custom_app_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -10,35 +11,16 @@ class ProfileScreen extends StatelessWidget {
     final controller = Get.put(ProfileController());
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'profile'.tr,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: controller.goToNotifications,
-            icon: const Icon(Icons.notifications, color: Colors.white),
-          ),
-        ],
-      ),
+      appBar: buildAppBar(context, title: 'prfile'.tr,onPressed: ()=> controller.goToNotifications),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
           child: Obx(
             () => Column(
               children: [
                 // 1. User Info Header
                 _buildUserInfoHeader(context, controller),
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
 
                 // 2. Account Section
                 _buildSectionHeader(context, 'account'.tr),

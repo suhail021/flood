@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/my_reports_controller.dart';
+import 'package:google/core/widgets/custom_app_bar.dart';
 import 'package:google/models/report_model.dart';
 import 'package:google/screens/widgets/shimmer_helper.dart';
 import 'package:google/screens/report_details_screen.dart';
@@ -14,27 +15,8 @@ class MyReportsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'reports'.tr,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: controller.goToNotifications,
-            icon: const Icon(Icons.notifications, color: Colors.white),
-          ),
-        ],
-      ),
-
+      appBar: buildAppBar(context, title:  'report_flood_title'.tr,onPressed: () => controller.goToNotifications(),)
+,
       body: Column(
         children: [
           // Filter Chips
