@@ -13,7 +13,7 @@ class NotificationsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('الإشعارات والتحذيرات'),
+        title: Text('notifications_history_title'.tr),
         centerTitle: true,
         elevation: 0,
       ),
@@ -34,7 +34,7 @@ class NotificationsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'لا توجد إشعارات حالياً',
+                  'no_notifications'.tr,
                   style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                 ),
               ],

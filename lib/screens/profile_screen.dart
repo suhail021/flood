@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/profile_controller.dart';
 import 'package:google/core/widgets/custom_app_bar.dart';
+import 'package:google/core/utils/app_colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -11,7 +12,11 @@ class ProfileScreen extends StatelessWidget {
     final controller = Get.put(ProfileController());
 
     return Scaffold(
-      appBar: buildAppBar(context, title: 'prfile'.tr,onPressed: ()=> controller.goToNotifications),
+      appBar: buildAppBar(
+        context,
+        title: 'profile'.tr,
+        onPressed: () => controller.goToNotifications,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
@@ -193,7 +198,10 @@ class ProfileScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).primaryColor,
+            color:
+                Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.textSecondary
+                    : Theme.of(context).primaryColor,
           ),
         ),
       ),
@@ -317,7 +325,10 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: Icon(
                     icon,
-                    color: Theme.of(context).primaryColor,
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.textSecondary
+                            : Theme.of(context).primaryColor,
                     size: 22, // Smaller icon
                   ),
                 ),

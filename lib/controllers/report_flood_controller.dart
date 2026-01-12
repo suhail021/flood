@@ -31,7 +31,7 @@ class ReportFloodController extends GetxController {
 
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        CustomToast.showError('خدمة الموقع غير مفعلة');
+        CustomToast.showError('location_service_disabled'.tr);
         return;
       }
 
@@ -39,20 +39,20 @@ class ReportFloodController extends GetxController {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          CustomToast.showError('تم رفض صلاحية الموقع');
+          CustomToast.showError('location_permission_denied'.tr);
           return;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        CustomToast.showError('تم رفض صلاحية الموقع بشكل دائم');
+        CustomToast.showError('location_permission_permanently_denied'.tr);
         return;
       }
 
       final position = await Geolocator.getCurrentPosition();
       selectedLocation.value = LatLng(position.latitude, position.longitude);
     } catch (e) {
-      CustomToast.showError('فشل في الحصول على الموقع');
+      CustomToast.showError('location_fetch_error'.tr);
     } finally {
       isLocationLoading.value = false;
     }
@@ -61,12 +61,12 @@ class ReportFloodController extends GetxController {
   void submitReport() async {
     if (formKey.currentState!.validate()) {
       if (selectedImage.value == null) {
-        CustomToast.showError('الرجاء اختيار صورة');
+        CustomToast.showError('please_select_image'.tr);
         return;
       }
 
       if (selectedLocation.value == null) {
-        CustomToast.showError('الرجاء تحديد الموقع');
+        CustomToast.showError('please_select_location'.tr);
         return;
       }
 
@@ -85,7 +85,7 @@ class ReportFloodController extends GetxController {
           Get.back(); // Close the screen first
           // Small delay to ensure route transition allows dialog to show on top of previous screen
           await Future.delayed(const Duration(milliseconds: 100));
-          CustomToast.showSuccess('تم إرسال البلاغ بنجاح');
+          CustomToast.showSuccess('report_sent_success'.tr);
 
           // Refresh reports list if controller is active
           if (Get.isRegistered<MyReportsController>()) {
@@ -113,7 +113,7 @@ class ReportFloodController extends GetxController {
         selectedImage.value = File(image.path);
       }
     } catch (e) {
-      CustomToast.showError('فشل في اختيار الصورة');
+      CustomToast.showError('image_pick_error'.tr);
     }
   }
 
