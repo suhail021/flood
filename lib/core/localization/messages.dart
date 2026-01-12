@@ -6,6 +6,7 @@ class Messages extends Translations {
     'ar': {
       'app_title': 'نظام التنبؤ الذكي للسيول',
       'settings': 'الإعدادات',
+      'contact_support_desc':'اتصل بنا للحصول على مساعدة أو طلب مساعدة',
       'profile': 'الملف الشخصي',
       'manage_profile': 'إدارة الملف الشخصي',
       'reports': 'البلاغات',
@@ -155,6 +156,7 @@ class Messages extends Translations {
       'phone_number': 'رقم الهاتف',
       'edit': 'تعديل',
       'save': 'حفظ',
+      'no_risks_found': 'لا توجد مخاطر حالياً',
       'home': 'الرئيسية',
       'gallery': 'المعرض',
       'pick_on_map': 'تحديد على الخريطة',
@@ -246,6 +248,7 @@ class Messages extends Translations {
       'mark_all_read': 'Mark all as read',
       'total_notifications': 'Total Notifications',
       'help_support_title': 'Help & Support',
+      'no_risks_found': 'No Risks Found',
       'how_to_use': 'How to use the app',
       'alerts_notifications': 'Alerts & Notifications',
       'alerts_desc':

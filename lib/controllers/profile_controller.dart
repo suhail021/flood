@@ -10,6 +10,8 @@ import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/screens/safety_guidelines_screen.dart';
 import 'package:google/screens/faq_screen.dart';
 import 'package:google/screens/contact_screen.dart';
+import 'package:google/core/utils/user_preferences.dart';
+import 'package:google/models/user_model.dart';
 
 // Assuming HelpPage is defined in security_help_screen.dart or similar based on original import
 // Original: import 'security_help_screen.dart'; then Navigator.push(HelpPage())
@@ -71,12 +73,30 @@ class ProfileController extends GetxController {
     super.onClose();
   }
 
+  final RxString phoneNumber = ''.obs;
+  final UserPreferences _userPreferences = UserPreferences();
+
   Future<void> loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    nameController.text = prefs.getString('user_name') ?? 'أحمد محمد';
-    addressController.text =
-        prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
-    cityController.text = prefs.getString('user_city') ?? 'صنعاء';
+    // Try loading from UserPreferences (Subject of Truth)
+    final UserModel? user = await _userPreferences.getUser();
+
+    if (user != null) {
+      nameController.text = user.name;
+      // If address/city are null in user model, we might want to keep defaults or leave empty.
+      // For now, let's look at how they were handled.
+      // The Model has string? for address and city.
+      addressController.text = user.address ?? 'شارع الجمهورية، صنعاء';
+      cityController.text = user.city ?? 'صنعاء';
+      phoneNumber.value = user.phoneNumber;
+    } else {
+      // Fallback to legacy SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      nameController.text = prefs.getString('user_name') ?? 'أحمد محمد';
+      addressController.text =
+          prefs.getString('user_address') ?? 'شارع الجمهورية، صنعاء';
+      cityController.text = prefs.getString('user_city') ?? 'صنعاء';
+      phoneNumber.value = '';
+    }
   }
 
   Future<void> saveChanges(BuildContext context) async {
@@ -159,7 +179,7 @@ class ProfileController extends GetxController {
     await prefs.setString('language_code', langCode);
     Get.updateLocale(Locale(langCode));
     Get.back(); // Close the dialog
-    CustomToast.showSuccess('language_change_success_body'.tr);
+    // CustomToast.showSuccess('language_change_success_body'.tr);
   }
 
   void loadLanguage() async {

@@ -54,6 +54,18 @@ class HomeController extends GetxController {
         .toList();
   }
 
+  List<dynamic> get allRisks {
+    final List<dynamic> all = [];
+    all.addAll(filteredCriticalAlerts);
+    all.addAll(filteredAiPredictions);
+    all.sort((a, b) {
+      final DateTime dateA = (a as dynamic).createdAt;
+      final DateTime dateB = (b as dynamic).createdAt;
+      return dateB.compareTo(dateA);
+    });
+    return all;
+  }
+
   void updateSearchQuery(String query) {
     searchQuery.value = query;
   }
@@ -292,7 +304,7 @@ class HomeController extends GetxController {
 
   void animateToLocation(LatLng location) async {
     final GoogleMapController controller = await mapControllerCompleter.future;
-    controller.animateCamera(CameraUpdate.newLatLngZoom(location, 13.2));
+    controller.animateCamera(CameraUpdate.newLatLngZoom(location, 14.2));
   }
 
   // Logic from original file to create flood zones

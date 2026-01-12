@@ -15,8 +15,11 @@ class MyReportsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: buildAppBar(context, title:  'report_flood_title'.tr,onPressed: () => controller.goToNotifications(),)
-,
+      appBar: buildAppBar(
+        context,
+        title: 'reports'.tr,
+        onPressed: () => controller.goToNotifications(),
+      ),
       body: Column(
         children: [
           // Filter Chips
@@ -84,22 +87,22 @@ class MyReportsScreen extends StatelessWidget {
                       ),
                       if (controller.myReports.isEmpty) ...[
                         const SizedBox(height: 24),
-                        ElevatedButton.icon(
-                          onPressed: controller.goToReportFlood,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          icon: const Icon(Icons.add),
-                          label: Text('add_new_report'.tr),
-                        ),
+                        // ElevatedButton.icon(
+                        //   onPressed: controller.goToReportFlood,
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: Theme.of(context).primaryColor,
+                        //     foregroundColor: Colors.white,
+                        //     padding: const EdgeInsets.symmetric(
+                        //       horizontal: 24,
+                        //       vertical: 12,
+                        //     ),
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(12),
+                        //     ),
+                        //   ),
+                        //   icon: const Icon(Icons.add),
+                        //   label: Text('add_new_report'.tr),
+                        // ),
                       ],
                     ],
                   ),

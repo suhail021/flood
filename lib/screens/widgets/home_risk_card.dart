@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google/controllers/home_controller.dart';
+import 'package:google/models/risk_area_model.dart';
 import 'risk_area_item.dart';
 import 'shimmer_helper.dart';
 
@@ -13,7 +14,7 @@ class HomeRiskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      height: 300,
       padding: const EdgeInsets.only(bottom: 0, left: 16, right: 16, top: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -74,8 +75,7 @@ class HomeRiskCard extends StatelessWidget {
                 return const RiskCardShimmer();
               }
 
-              if (controller.filteredCriticalAlerts.isEmpty &&
-                  controller.filteredAiPredictions.isEmpty) {
+              if (controller.allRisks.isEmpty) {
                 return Center(
                   child: Text(
                     'no_risks_found'.tr,
@@ -84,30 +84,32 @@ class HomeRiskCard extends StatelessWidget {
                 );
               }
 
-              return ListView(
+              return ListView.builder(
                 padding: const EdgeInsets.only(top: 0),
-                children: [
-                  ...controller.filteredCriticalAlerts.map(
-                    (alert) => RiskAreaItem(
+                itemCount: controller.allRisks.length,
+                itemBuilder: (context, index) {
+                  final item = controller.allRisks[index];
+                  if (item is ManualAlert) {
+                    return RiskAreaItem(
                       controller: controller,
-                      name: alert.locationName,
-                      risk: _mapRiskLevel(alert.riskLevel),
+                      name: item.locationName,
+                      risk: _mapRiskLevel(item.riskLevel),
                       color: Colors.red,
-                      probability: alert.riskLevel / 100.0,
-                      targetLocation: LatLng(alert.latitude, alert.longitude),
-                    ),
-                  ),
-                  ...controller.filteredAiPredictions.map(
-                    (pred) => RiskAreaItem(
+                      probability: item.riskLevel / 100.0,
+                      targetLocation: LatLng(item.latitude, item.longitude),
+                    );
+                  } else if (item is AiPrediction) {
+                    return RiskAreaItem(
                       controller: controller,
-                      name: pred.locationName,
-                      risk: _mapRiskLevel(pred.riskLevel),
-                      color: _parseColor(pred.riskColor),
-                      probability: pred.riskLevel / 100.0,
-                      targetLocation: LatLng(pred.latitude, pred.longitude),
-                    ),
-                  ),
-                ],
+                      name: item.locationName,
+                      risk: _mapRiskLevel(item.riskLevel),
+                      color: _parseColor(item.riskColor),
+                      probability: item.riskLevel / 100.0,
+                      targetLocation: LatLng(item.latitude, item.longitude),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
               );
             }),
           ),

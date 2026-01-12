@@ -79,7 +79,7 @@ class UserRegistrationScreen extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
 
                 // الاسم الأول
                 CustomTextFormField(
@@ -118,8 +118,6 @@ class UserRegistrationScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 20),
-                const SizedBox(height: 20),
-
                 // العنوان (كلمة السر)
                 CustomTextFormField(
                   controller: controller.passwordController,

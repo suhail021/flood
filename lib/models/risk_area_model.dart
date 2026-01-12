@@ -1,3 +1,5 @@
+import 'package:google/core/utils/date_utils_helper.dart';
+
 class RiskAreaResponse {
   final bool success;
   final RiskData data;
@@ -92,6 +94,14 @@ class ManualAlert {
     );
   }
 
+  DateTime get createdAt {
+    final now = DateTime.now();
+    final remaining = DateUtilsHelper.parseTimeRemaining(timeRemaining);
+    final duration = Duration(hours: durationHours);
+    if (remaining > duration) return now;
+    return now.subtract(duration - remaining);
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -161,6 +171,8 @@ class AiPrediction {
       timeAgo: json['time_ago'] ?? '',
     );
   }
+
+  DateTime get createdAt => DateUtilsHelper.parseTimeAgo(timeAgo);
 
   @override
   bool operator ==(Object other) {

@@ -265,16 +265,12 @@ class ProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.location_on,
-                    color: Colors.white70,
-                    size: 16,
-                  ),
+                  const Icon(Icons.phone, color: Colors.white70, size: 16),
                   const SizedBox(width: 4),
                   Text(
-                    controller.cityController.text.isNotEmpty
-                        ? controller.cityController.text
-                        : 'صنعاء',
+                    controller.phoneNumber.value.isNotEmpty
+                        ? controller.phoneNumber.value
+                        : '',
                     style: const TextStyle(fontSize: 14, color: Colors.white70),
                   ),
                 ],
