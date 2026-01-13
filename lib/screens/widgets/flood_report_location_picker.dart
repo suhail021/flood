@@ -4,10 +4,38 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google/controllers/report_flood_controller.dart';
 import 'package:google/screens/widgets/map_picker_screen.dart';
 
-class FloodReportLocationPicker extends StatelessWidget {
+class FloodReportLocationPicker extends StatefulWidget {
   final ReportFloodController controller;
 
   const FloodReportLocationPicker({super.key, required this.controller});
+
+  @override
+  State<FloodReportLocationPicker> createState() =>
+      _FloodReportLocationPickerState();
+}
+
+class _FloodReportLocationPickerState extends State<FloodReportLocationPicker> {
+  GoogleMapController? _mapController;
+  Worker? _locationWorker;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to location changes and update map camera
+    _locationWorker = ever(widget.controller.selectedLocation, (
+      LatLng? location,
+    ) {
+      if (location != null && _mapController != null) {
+        _mapController!.animateCamera(CameraUpdate.newLatLng(location));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _locationWorker?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +61,11 @@ class FloodReportLocationPicker extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed:
-                          controller.isLocationLoading.value
+                          widget.controller.isLocationLoading.value
                               ? null
-                              : controller.getCurrentLocation,
+                              : widget.controller.getCurrentLocation,
                       icon:
-                          controller.isLocationLoading.value
+                          widget.controller.isLocationLoading.value
                               ? const SizedBox(
                                 width: 20,
                                 height: 20,
@@ -50,7 +78,7 @@ class FloodReportLocationPicker extends StatelessWidget {
                               )
                               : const Icon(Icons.my_location),
                       label: Text(
-                        controller.isLocationLoading.value
+                        widget.controller.isLocationLoading.value
                             ? 'locating'.tr
                             : 'locate_me'.tr,
                       ),
@@ -69,11 +97,12 @@ class FloodReportLocationPicker extends StatelessWidget {
                       onPressed: () async {
                         final result = await Get.to(
                           () => MapPickerScreen(
-                            initialLocation: controller.selectedLocation.value,
+                            initialLocation:
+                                widget.controller.selectedLocation.value,
                           ),
                         );
                         if (result != null && result is LatLng) {
-                          controller.selectedLocation.value = result;
+                          widget.controller.selectedLocation.value = result;
                         }
                       },
                       icon: const Icon(Icons.map),
@@ -92,7 +121,7 @@ class FloodReportLocationPicker extends StatelessWidget {
               ),
             ),
 
-            if (controller.selectedLocation.value != null) ...[
+            if (widget.controller.selectedLocation.value != null) ...[
               Container(
                 width: double.infinity,
                 height: 200,
@@ -103,29 +132,38 @@ class FloodReportLocationPicker extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: controller.selectedLocation.value!,
-                      zoom: 15.0,
-                    ),
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId('selected_location'),
-                        position: controller.selectedLocation.value!,
-                        infoWindow: InfoWindow(
-                          title: 'selected_location'.tr,
-                          snippet: 'report_location'.tr,
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: widget.controller.selectedLocation.value!,
+                          zoom: 15.0,
+                        ),
+                        onMapCreated: (GoogleMapController controller) {
+                          _mapController = controller;
+                        },
+                        zoomControlsEnabled: false,
+                        myLocationButtonEnabled: false,
+                        scrollGesturesEnabled: false,
+                        zoomGesturesEnabled: false,
+                        tiltGesturesEnabled: false,
+                        rotateGesturesEnabled: false,
+                      ),
+                      Center(
+                        child: Icon(
+                          Icons.location_on,
+                          size: 48,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
-                    },
-                    onMapCreated: (GoogleMapController controller) {},
+                    ],
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  '${'coordinates'.tr}: ${controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
+                  '${'coordinates'.tr}: ${widget.controller.selectedLocation.value!.latitude.toStringAsFixed(6)}, ${widget.controller.selectedLocation.value!.longitude.toStringAsFixed(6)}',
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.secondary,

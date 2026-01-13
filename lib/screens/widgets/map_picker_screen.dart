@@ -17,6 +17,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   late LatLng _currentCameraPosition;
   bool _isLoading = true;
+  bool _isMoving = false;
 
   @override
   void initState() {
@@ -68,17 +69,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('pick_location'.tr),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            onPressed: () {
-              Get.back(result: _currentCameraPosition);
-            },
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('pick_location'.tr)),
       body: Stack(
         children: [
           GoogleMap(
@@ -92,6 +83,16 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
             },
             onCameraMove: (CameraPosition position) {
               _currentCameraPosition = position.target;
+            },
+            onCameraMoveStarted: () {
+              setState(() {
+                _isMoving = true;
+              });
+            },
+            onCameraIdle: () {
+              setState(() {
+                _isMoving = false;
+              });
             },
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
@@ -110,24 +111,39 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
             left: 24,
             right: 24,
             child: ElevatedButton(
-              onPressed: () {
-                Get.back(result: _currentCameraPosition);
-              },
+              onPressed:
+                  (_isLoading || _isMoving)
+                      ? null
+                      : () {
+                        Get.back(result: _currentCameraPosition);
+                      },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
                 foregroundColor: Colors.white,
+                disabledBackgroundColor: Theme.of(context).primaryColor,
+                disabledForegroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: Text(
-                'confirm_location'.tr,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child:
+                  (_isLoading || _isMoving)
+                      ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                      : Text(
+                        'confirm_location'.tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
             ),
           ),
         ],

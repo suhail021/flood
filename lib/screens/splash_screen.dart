@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+  with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<Offset> logoSlideAnimation;
   late Animation<Offset> titleSlideAnimation;

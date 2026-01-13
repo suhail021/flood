@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:google/screens/report_flood_screen.dart';
 import 'package:google/services/flood_service.dart';
@@ -11,6 +12,7 @@ class MyReportsController extends GetxController {
   final RxList<ReportModel> myReports = <ReportModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString selectedStatus = 'all'.obs;
+  Timer? _timer;
 
   List<ReportModel> get filteredReports {
     if (selectedStatus.value == 'all') {
@@ -48,21 +50,37 @@ class MyReportsController extends GetxController {
   void onInit() {
     super.onInit();
     fetchMyReports();
+    // Start periodic update every 30 seconds
+    _timer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      fetchMyReports(isBackground: true);
+    });
   }
 
-  Future<void> fetchMyReports() async {
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
+  }
+
+  Future<void> fetchMyReports({bool isBackground = false}) async {
     try {
-      isLoading.value = true;
+      if (!isBackground) {
+        isLoading.value = true;
+      }
       final reports = await _floodService.getMyReports();
       myReports.assignAll(reports);
     } catch (e) {
-      if (e is Failure) {
-        CustomToast.showError(e.errMessage);
-      } else {
-        CustomToast.showError('Failed to fetch reports');
+      if (!isBackground) {
+        if (e is Failure) {
+          CustomToast.showError(e.errMessage);
+        } else {
+          CustomToast.showError('Failed to fetch reports');
+        }
       }
     } finally {
-      isLoading.value = false;
+      if (!isBackground) {
+        isLoading.value = false;
+      }
     }
   }
 
