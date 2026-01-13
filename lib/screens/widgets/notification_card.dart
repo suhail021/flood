@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google/models/critical_alert_model.dart';
+import 'package:intl/intl.dart';
 
 class NotificationCard extends StatelessWidget {
   final CriticalAlert alert;
@@ -128,7 +129,7 @@ class NotificationCard extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    alert.lastUpdatedAt,
+                    _formatDate(alert.lastUpdatedAt),
                     style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                   ),
                 ],
@@ -138,5 +139,15 @@ class NotificationCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatDate(String dateStr) {
+    if (dateStr.isEmpty) return '';
+    try {
+      final date = DateTime.parse(dateStr);
+      return DateFormat('yyyy-MM-dd hh:mm a').format(date);
+    } catch (_) {
+      return dateStr;
+    }
   }
 }

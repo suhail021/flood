@@ -19,7 +19,7 @@ class DateUtilsHelper {
 
   /// Parses "X minutes/hours/days ago" to DateTime
   static DateTime parseTimeAgo(String timeAgo) {
-    if (timeAgo.isEmpty) return DateTime.now();
+    if (timeAgo.isEmpty) return DateTime(2000);
 
     final now = DateTime.now();
     final lower = timeAgo.toLowerCase();
@@ -72,6 +72,6 @@ class DateUtilsHelper {
       }
     } catch (_) {}
 
-    return now;
+    return DateTime(2000);
   }
 }

@@ -43,7 +43,7 @@ class RiskAreaItem extends StatelessWidget {
                 color: color.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: Icon(_getRiskIcon(risk), color: color, size: 24),
+              child: Icon(_getRiskIcon(), color: color, size: 24),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -112,18 +112,14 @@ class RiskAreaItem extends StatelessWidget {
     );
   }
 
-  IconData _getRiskIcon(String risk) {
-    switch (risk) {
-      case 'risk_low':
-        return Icons.check_circle;
-      case 'risk_medium':
-        return Icons.info;
-      case 'risk_high':
-        return Icons.warning;
-      case 'risk_critical':
-        return Icons.dangerous;
-      default:
-        return Icons.help;
+  IconData _getRiskIcon() {
+    final percentage = probability * 100;
+    if (percentage <= 40) {
+      return Icons.check_circle;
+    } else if (percentage <= 70) {
+      return Icons.warning_amber;
+    } else {
+      return Icons.dangerous;
     }
   }
 }

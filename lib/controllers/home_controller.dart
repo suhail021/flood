@@ -61,7 +61,9 @@ class HomeController extends GetxController {
     all.sort((a, b) {
       final DateTime dateA = (a as dynamic).createdAt;
       final DateTime dateB = (b as dynamic).createdAt;
-      return dateB.compareTo(dateA);
+      int cmp = dateB.compareTo(dateA);
+      if (cmp != 0) return cmp;
+      return (b as dynamic).id.compareTo((a as dynamic).id); // Tie-breaker
     });
     return all;
   }
@@ -184,7 +186,7 @@ class HomeController extends GetxController {
     // Add markers and circles for critical alerts
     for (var alert in criticalAlerts) {
       final latLng = LatLng(alert.latitude, alert.longitude);
-      final color = Colors.red;
+      final color = _getRiskColor(alert.riskLevel);
 
       final icon = await MarkerGenerator.createCustomMarkerBitmap(color);
 
@@ -215,7 +217,7 @@ class HomeController extends GetxController {
     // Add markers and circles for AI predictions
     for (var pred in aiPredictions) {
       final latLng = LatLng(pred.latitude, pred.longitude);
-      final color = _parseColor(pred.riskColor);
+      final color = _getRiskColor(pred.riskLevel);
 
       final icon = await MarkerGenerator.createCustomMarkerBitmap(color);
 
@@ -244,12 +246,13 @@ class HomeController extends GetxController {
     }
   }
 
-  Color _parseColor(String? hexColor) {
-    if (hexColor == null || hexColor.isEmpty) return Colors.green;
-    try {
-      return Color(int.parse(hexColor.replaceAll('#', '0xFF')));
-    } catch (_) {
-      return Colors.green;
+  Color _getRiskColor(int level) {
+    if (level <= 40) {
+      return Colors.green; // Normal
+    } else if (level <= 70) {
+      return const Color(0xffEAB308); // Cautious (Yellow/Amber) matches logic
+    } else {
+      return Colors.red; // Dangerous
     }
   }
 

@@ -94,7 +94,7 @@ class HomeRiskCard extends StatelessWidget {
                       controller: controller,
                       name: item.locationName,
                       risk: _mapRiskLevel(item.riskLevel),
-                      color: Colors.red,
+                      color: _getRiskColor(item.riskLevel),
                       probability: item.riskLevel / 100.0,
                       targetLocation: LatLng(item.latitude, item.longitude),
                     );
@@ -103,7 +103,7 @@ class HomeRiskCard extends StatelessWidget {
                       controller: controller,
                       name: item.locationName,
                       risk: _mapRiskLevel(item.riskLevel),
-                      color: _parseColor(item.riskColor),
+                      color: _getRiskColor(item.riskLevel),
                       probability: item.riskLevel / 100.0,
                       targetLocation: LatLng(item.latitude, item.longitude),
                     );
@@ -125,12 +125,13 @@ class HomeRiskCard extends StatelessWidget {
     return 'risk_low'.tr;
   }
 
-  Color _parseColor(String? hexColor) {
-    if (hexColor == null || hexColor.isEmpty) return Colors.green;
-    try {
-      return Color(int.parse(hexColor.replaceAll('#', '0xFF')));
-    } catch (_) {
-      return Colors.green;
+  Color _getRiskColor(int level) {
+    if (level <= 40) {
+      return Colors.green; // Normal
+    } else if (level <= 70) {
+      return Color(0xffEAB308); // Cautious
+    } else {
+      return Colors.red; // Dangerous
     }
   }
 }
