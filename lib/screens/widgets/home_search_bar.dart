@@ -28,6 +28,7 @@ class HomeSearchBar extends StatelessWidget {
           ],
         ),
         child: TextField(
+          focusNode: controller.searchFocusNode,
           onChanged: controller.updateSearchQuery,
           decoration: InputDecoration(
             hintText: 'search'.tr,

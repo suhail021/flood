@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google/core/utils/app_colors.dart';
 
 class SecurityHelpItem extends StatelessWidget {
   final String title;
@@ -39,7 +40,13 @@ class SecurityHelpItem extends StatelessWidget {
                     color: Theme.of(context).primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: Theme.of(context).primaryColor),
+                  child: Icon(
+                    icon,
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.textSecondary
+                            : Theme.of(context).primaryColor,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

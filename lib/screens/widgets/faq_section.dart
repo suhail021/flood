@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google/core/utils/app_colors.dart';
 
 class FAQSection extends StatelessWidget {
   const FAQSection({super.key});
@@ -26,7 +27,10 @@ class FAQSection extends StatelessWidget {
               children: [
                 Icon(
                   Icons.question_answer,
-                  color: Theme.of(context).primaryColor,
+                  color:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.textSecondary
+                          : Theme.of(context).primaryColor,
                 ),
                 const SizedBox(width: 8),
                 Text(

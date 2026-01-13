@@ -41,7 +41,7 @@ class EmergencyContactsCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             _buildEmergencyContact('civil_defense'.tr, '191'),
-            Divider(color: isDark ? Colors.red.shade800 : Colors.red[100]),
+            Divider(color: Colors.red[100]),
             _buildEmergencyContact('police'.tr, '199'),
             Divider(color: Colors.red[100]),
             _buildEmergencyContact('ambulance'.tr, '195'),
@@ -81,13 +81,17 @@ class EmergencyContactsCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.phone, size: 16, color: Colors.red),
+                    Icon(
+                      Icons.phone,
+                      size: 16,
+                      color: isDark ? Colors.white : Colors.red,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       number,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.red[800],
+                        color: isDark ? Colors.white : Colors.red,
                       ),
                     ),
                   ],

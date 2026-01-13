@@ -72,6 +72,7 @@ class HomeController extends GetxController {
 
   final RxBool isLoading = false.obs;
   Timer? _pollingTimer;
+  final FocusNode searchFocusNode = FocusNode();
 
   @override
   void onInit() {
@@ -85,7 +86,14 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     _pollingTimer?.cancel();
+    searchFocusNode.dispose();
     super.onClose();
+  }
+
+  void unfocusSearch() {
+    if (searchFocusNode.hasFocus) {
+      searchFocusNode.unfocus();
+    }
   }
 
   Future<void> fetchRiskAreas() async {
