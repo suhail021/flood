@@ -13,6 +13,7 @@ import 'package:google/core/errors/failures.dart';
 import 'package:google/core/utils/marker_generator.dart';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:audioplayers/audioplayers.dart';
 
 class HomeController extends GetxController {
   final Completer<GoogleMapController> mapControllerCompleter = Completer();
@@ -21,6 +22,9 @@ class HomeController extends GetxController {
   final RxSet<Polyline> floodZones = <Polyline>{}.obs;
   final RxSet<Marker> markers = <Marker>{}.obs;
   final RxSet<Circle> circles = <Circle>{}.obs;
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  final Set<int> _playedAlertIds = {};
 
   final FloodService _floodService = FloodService();
   final RxList<ManualAlert> criticalAlerts = <ManualAlert>[].obs;
@@ -138,6 +142,7 @@ class HomeController extends GetxController {
 
       if (criticalChanged || aiChanged) {
         _updateMapObjects();
+        _checkAndPlayAlertSound();
       }
     } catch (e) {
       if (e is Failure) {
@@ -253,6 +258,37 @@ class HomeController extends GetxController {
       return const Color(0xffEAB308); // Cautious (Yellow/Amber) matches logic
     } else {
       return Colors.red; // Dangerous
+    }
+  }
+
+  void _checkAndPlayAlertSound() {
+    bool shouldPlay = false;
+    for (var alert in criticalAlerts) {
+      if (alert.riskLevel >= 70 && !_playedAlertIds.contains(alert.id)) {
+        shouldPlay = true;
+        _playedAlertIds.add(alert.id);
+      }
+    }
+
+    // Also check AI predictions if they are considered "critical" enough
+    for (var pred in aiPredictions) {
+      if (pred.riskLevel >= 70 && !_playedAlertIds.contains(pred.id)) {
+        shouldPlay = true;
+        _playedAlertIds.add(pred.id);
+      }
+    }
+
+    if (shouldPlay) {
+      _playSound();
+    }
+  }
+
+  Future<void> _playSound() async {
+    try {
+      await _audioPlayer.stop(); // Stop potential previous sound
+      await _audioPlayer.play(AssetSource('sounds/alert.mp3'));
+    } catch (e) {
+      debugPrint('Error playing alert sound: $e');
     }
   }
 
