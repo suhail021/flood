@@ -36,7 +36,6 @@ class PhoneVerificationScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,

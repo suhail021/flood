@@ -149,6 +149,23 @@ class PhoneLoginScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 20),
+                  // زر الدخول كزائر
+                  TextButton.icon(
+                    onPressed: controller.loginAsGuest,
+                    icon: Icon(
+                      Icons.person_outline,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    label: Text(
+                      'continue_as_guest'.tr,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

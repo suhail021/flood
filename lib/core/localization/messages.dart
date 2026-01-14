@@ -6,7 +6,7 @@ class Messages extends Translations {
     'ar': {
       'app_title': 'نظام التنبؤ الذكي للسيول',
       'settings': 'الإعدادات',
-      'contact_support_desc':'اتصل بنا للحصول على مساعدة أو طلب مساعدة',
+      'contact_support_desc': 'اتصل بنا للحصول على مساعدة أو طلب مساعدة',
       'profile': 'الملف الشخصي',
       'manage_profile': 'إدارة الملف الشخصي',
       'reports': 'البلاغات',
@@ -42,7 +42,7 @@ class Messages extends Translations {
       'status_processing': 'قيد المعالجة',
       'status_solved': 'تمت المعالجة',
       'status_pending': 'قيد الانتظار',
-      'all_reports': 'جميع البلاغات',
+      'all_reports': 'الكل',
       'add_new_report': 'إضافة بلاغ جديد',
       'report_flood_title': 'إبلاغ عن سيول',
       'new_report': 'بلاغ جديد',
@@ -186,6 +186,7 @@ class Messages extends Translations {
       'please_select_location': 'الرجاء تحديد الموقع',
       'report_sent_success': 'تم إرسال البلاغ بنجاح',
       'image_pick_error': 'فشل في اختيار الصورة',
+      'continue_as_guest': 'المتابعة كزائر',
     },
     'en': {
       'app_title': 'Smart Flood Prediction System',
@@ -372,6 +373,7 @@ class Messages extends Translations {
       'please_select_location': 'Please select location',
       'report_sent_success': 'Report sent successfully',
       'image_pick_error': 'Failed to pick image',
+      'continue_as_guest': 'Continue as Guest',
     },
   };
 }

@@ -67,6 +67,33 @@ class AuthController extends GetxController {
     }
   }
 
+  void loginAsGuest() async {
+    isLoading.value = true;
+    try {
+      // Create a guest user model
+      final guestUser = UserModel(
+        id: 0,
+        name: 'Guest',
+        phoneNumber: '',
+        role: 'guest',
+      );
+
+      // Save guest session
+      final UserPreferences userPrefs = UserPreferences();
+      await userPrefs.saveUser(guestUser);
+      // We might not need a token for guest, or we can save a dummy one if needed for checks
+      await userPrefs.saveToken('guest_token');
+
+      Get.offAll(() => const MainScreen());
+
+      CustomToast.showSuccess('login_success'.tr); // Or specific guest welcome
+    } catch (e) {
+      CustomToast.showError(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void goToForgotPassword() {
     Get.to(() => const PhoneForgetpassScreen());
   }
