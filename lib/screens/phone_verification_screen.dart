@@ -20,6 +20,9 @@ class PhoneVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Delete old controller if exists to ensure fresh start
+    Get.delete<VerificationController>();
+
     // Using tag to ensure unique controller if needed, or just standard put.
     // Since we might have multiple verification screens in stack (unlikely), standard put is fine.
     // However, if we resend and come back, we want fresh timer.
@@ -33,6 +36,8 @@ class PhoneVerificationScreen extends StatelessWidget {
     // Pass user data to controller
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.setUserData(fName: firstName, lName: lastName, pass: password);
+      // Force restart timer to ensure it runs even if controller was kept alive
+      controller.startTimer();
     });
 
     return Scaffold(
@@ -44,13 +49,13 @@ class PhoneVerificationScreen extends StatelessWidget {
         elevation: 0,
 
         leading: IconButton(
-          padding: EdgeInsets.only(right: 24),
+          padding: EdgeInsets.only(right: 24, left: 24),
 
           onPressed: () => Get.back(),
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,
-            size: 28,
+            size: 22,
           ),
         ),
       ),
@@ -78,7 +83,11 @@ class PhoneVerificationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.verified_user, size: 50),
+                  child: Icon(
+                    Icons.verified_user,
+                    size: 50,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 const SizedBox(height: 32),
 
@@ -105,41 +114,46 @@ class PhoneVerificationScreen extends StatelessWidget {
                 const SizedBox(height: 40),
 
                 // حقل إدخال رمز التحقق
-                Pinput(
-                  length: 6,
-                  controller: controller.otpController,
-                  defaultPinTheme: PinTheme(
-                    width: 50,
-                    height: 60,
-                    textStyle: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Theme.of(context).dividerColor),
-                    ),
-                  ),
-                  focusedPinTheme: PinTheme(
-                    width: 50,
-                    height: 60,
-                    textStyle: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Pinput(
+                    length: 6,
+                    controller: controller.otpController,
+                    defaultPinTheme: PinTheme(
+                      width: 50,
+                      height: 60,
+                      textStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).dividerColor,
+                        ),
                       ),
                     ),
+                    focusedPinTheme: PinTheme(
+                      width: 50,
+                      height: 60,
+                      textStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    onCompleted: (pin) => controller.verifyCode(phoneNumber),
                   ),
-                  onCompleted: (pin) => controller.verifyCode(phoneNumber),
                 ),
                 const SizedBox(height: 40),
 

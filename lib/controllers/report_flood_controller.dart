@@ -93,10 +93,46 @@ class ReportFloodController extends GetxController {
           }
         }
       } catch (e) {
+        String errorMessage;
+        bool isNetworkError = false;
+
         if (e is Failure) {
-          CustomToast.showError(e.errMessage);
+          errorMessage = e.errMessage;
+          // Check if it's a network/connection error
+          if (errorMessage.toLowerCase().contains('internet') ||
+              errorMessage.toLowerCase().contains('connection')) {
+            isNetworkError = true;
+          }
         } else {
-          CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
+          errorMessage = e.toString().replaceAll('Exception: ', '');
+        }
+
+        if (isNetworkError) {
+          // Show network error dialog with reconnect option
+          CustomToast.showActionDialog(
+            message: 'check_internet_and_retry'.tr,
+            primaryButtonText: 'retry'.tr,
+            onPrimaryPressed: () {
+              submitReport(); // Retry submission
+            },
+            secondaryButtonText: 'cancel'.tr,
+            onSecondaryPressed: () {
+              // User cancelled, do nothing
+            },
+          );
+        } else {
+          // Show regular error dialog with retry option
+          CustomToast.showActionDialog(
+            message: errorMessage,
+            primaryButtonText: 'retry_send'.tr,
+            onPrimaryPressed: () {
+              submitReport(); // Retry submission
+            },
+            secondaryButtonText: 'cancel'.tr,
+            onSecondaryPressed: () {
+              // User cancelled, do nothing
+            },
+          );
         }
       } finally {
         isLoading.value = false;

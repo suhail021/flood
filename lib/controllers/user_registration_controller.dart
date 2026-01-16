@@ -59,9 +59,9 @@ class UserRegistrationController extends GetxController {
               password: passwordController.text,
             ),
           );
-          CustomToast.showSuccess(
-            response['message'] ?? 'OTP sent successfully',
-          );
+          // CustomToast.showSuccess(
+          //   response['message'] ?? 'OTP sent successfully',
+          // );
         }
       } catch (e) {
         CustomToast.showError(e.toString().replaceAll('Exception: ', ''));

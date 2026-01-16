@@ -187,6 +187,21 @@ class Messages extends Translations {
       'report_sent_success': 'تم إرسال البلاغ بنجاح',
       'image_pick_error': 'فشل في اختيار الصورة',
       'continue_as_guest': 'المتابعة كزائر',
+      'guest_login_required_title': 'تسجيل الدخول مطلوب',
+      'guest_login_required_message':
+          'يجب عليك تسجيل الدخول لاستخدام هذه الميزة.',
+      'login_now': 'تسجيل الدخول',
+      'location_disabled_title': 'خدمة الموقع مغلقة',
+      'location_disabled_message':
+          'يرجى تفعيل خدمة تحديد الموقع لاستخدام هذه الميزة.',
+      'open_settings': 'فتح الإعدادات',
+      'retry': 'إعادة المحاولة',
+      'exit_app': 'الخروج من التطبيق',
+      'reconnect': 'إعادة الاتصال',
+      'retry_send': 'إعادة الإرسال',
+      'no_internet_connection': 'لا يوجد اتصال بالإنترنت',
+      'check_internet_and_retry':
+          'الرجاء التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.',
     },
     'en': {
       'app_title': 'Smart Flood Prediction System',
@@ -374,6 +389,20 @@ class Messages extends Translations {
       'report_sent_success': 'Report sent successfully',
       'image_pick_error': 'Failed to pick image',
       'continue_as_guest': 'Continue as Guest',
+      'guest_login_required_title': 'Login Required',
+      'guest_login_required_message': 'You need to login to use this feature.',
+      'login_now': 'Login',
+      'location_disabled_title': 'Location Service Disabled',
+      'location_disabled_message':
+          'Please enable location service to use this feature.',
+      'open_settings': 'Open Settings',
+      'retry': 'Retry',
+      'exit_app': 'Exit App',
+      'reconnect': 'Reconnect',
+      'retry_send': 'Retry Send',
+      'no_internet_connection': 'No Internet Connection',
+      'check_internet_and_retry':
+          'Please check your internet connection and try again.',
     },
   };
 }

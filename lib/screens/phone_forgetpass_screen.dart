@@ -24,7 +24,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,
-            size: 28,
+            size: 22,
           ),
         ),
       ),
@@ -38,19 +38,13 @@ class PhoneForgetpassScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // شعار التطبيق
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Container(
-                      width: 210,
-                      height: 210,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(60),
-                      ),
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
+                  const SizedBox(height: 20),
+                  Icon(
+                    Icons.lock_reset,
+                    size: 100,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
 
                   // عنوان التطبيق
                   Text(

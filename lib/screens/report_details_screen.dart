@@ -49,7 +49,16 @@ class ReportDetailsScreen extends StatelessWidget {
     final Completer<GoogleMapController> _controller = Completer();
 
     return Scaffold(
-      appBar: AppBar(title: Text('report_details'.tr), centerTitle: true),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+
+        leading: IconButton(
+          highlightColor: Colors.transparent,
+          padding: EdgeInsets.only(right: 24, left: 24),
+          onPressed: Get.back,
+          icon: Icon(Icons.arrow_back_ios, size: 22),
+        ),
+        title: Text('report_details'.tr), centerTitle: true),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

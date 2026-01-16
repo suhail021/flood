@@ -16,6 +16,7 @@ class ReportFloodScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           'report_flood_title'.tr,
@@ -24,6 +25,13 @@ class ReportFloodScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         foregroundColor: Colors.white,
         elevation: 0,
+
+        leading: IconButton(
+          highlightColor: Colors.transparent,
+          padding: EdgeInsets.only(right: 24, left: 24),
+          onPressed: Get.back,
+          icon: Icon(Icons.arrow_back_ios, size: 22),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -34,7 +42,6 @@ class ReportFloodScreen extends StatelessWidget {
             children: [
               const FloodReportHeader(),
               const SizedBox(height: 20),
-
               // حقل الوصف
               CustomTextFormField(
                 controller: controller.descriptionController,

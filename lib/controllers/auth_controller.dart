@@ -86,7 +86,7 @@ class AuthController extends GetxController {
 
       Get.offAll(() => const MainScreen());
 
-      CustomToast.showSuccess('login_success'.tr); // Or specific guest welcome
+      // CustomToast.showSuccess('login_success'.tr); // Or specific guest welcome
     } catch (e) {
       CustomToast.showError(e.toString());
     } finally {

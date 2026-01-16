@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google/controllers/profile_controller.dart';
 import 'package:google/core/widgets/custom_app_bar.dart';
 import 'package:google/core/utils/app_colors.dart';
+import 'package:google/screens/notifications_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -15,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: buildAppBar(
         context,
         title: 'profile'.tr,
-        onPressed: () => controller.goToNotifications,
+        onPressed: () => Get.to(() => const NotificationsScreen()),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

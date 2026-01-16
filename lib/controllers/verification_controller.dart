@@ -12,14 +12,14 @@ class VerificationController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   final RxBool isLoading = false.obs;
-  final RxInt remainingTime = 120.obs;
+  final RxInt remainingTime = 5.obs;
   final RxBool canResend = false.obs;
   Timer? _timer;
 
   @override
   void onInit() {
     super.onInit();
-    startTimer();
+    // Timer will be started via addPostFrameCallback in the screen
   }
 
   @override
@@ -30,15 +30,18 @@ class VerificationController extends GetxController {
   }
 
   void startTimer() {
-    remainingTime.value = 120;
+    remainingTime.value = 30;
     canResend.value = false;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (remainingTime.value > 0) {
-        remainingTime.value--;
-      } else {
+      remainingTime.value--;
+      print('⏳ Timer tick: ${remainingTime.value}');
+
+      if (remainingTime.value <= 0) {
+        remainingTime.value = 0;
         canResend.value = true;
         timer.cancel();
+        print('✅ Timer finished');
       }
     });
   }

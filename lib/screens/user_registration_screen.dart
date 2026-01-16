@@ -27,13 +27,13 @@ class UserRegistrationScreen extends StatelessWidget {
         elevation: 0,
 
         leading: IconButton(
-          padding: EdgeInsets.only(right: 24),
+          padding: EdgeInsets.only(right: 24, left: 24),
 
           onPressed: () => Get.back(),
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,
-            size: 28,
+            size: 22,
           ),
         ),
       ),
@@ -159,7 +159,6 @@ class UserRegistrationScreen extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              // المدينة
               SizedBox(
                 width: double.infinity,
                 height: 56,

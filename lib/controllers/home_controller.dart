@@ -11,9 +11,11 @@ import 'package:google/models/risk_area_model.dart';
 import 'package:google/core/utils/custom_toast.dart';
 import 'package:google/core/errors/failures.dart';
 import 'package:google/core/utils/marker_generator.dart';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:google/core/utils/user_preferences.dart';
+import 'package:google/controllers/auth_controller.dart';
+import 'package:google/screens/phone_login_screen.dart';
 
 class HomeController extends GetxController {
   final Completer<GoogleMapController> mapControllerCompleter = Completer();
@@ -145,10 +147,36 @@ class HomeController extends GetxController {
         _checkAndPlayAlertSound();
       }
     } catch (e) {
+      String errorMessage;
+      bool isNetworkError = false;
+
       if (e is Failure) {
-        CustomToast.showError(e.errMessage);
+        errorMessage = e.errMessage;
+        // Check if it's a network/connection error
+        if (errorMessage.toLowerCase().contains('internet') ||
+            errorMessage.toLowerCase().contains('connection')) {
+          isNetworkError = true;
+        }
       } else {
-        CustomToast.showError('Failed to update risk areas');
+        errorMessage = 'Failed to update risk areas';
+      }
+
+      if (isNetworkError) {
+        // Show network error dialog with retry option
+        CustomToast.showActionDialog(
+          message: 'check_internet_and_retry'.tr,
+          primaryButtonText: 'retry'.tr,
+          onPrimaryPressed: () {
+            fetchRiskAreas(); // Retry fetching data
+          },
+          secondaryButtonText: 'cancel'.tr,
+          onSecondaryPressed: () {
+            // User cancelled, do nothing
+          },
+        );
+      } else {
+        // Show regular error toast for non-network errors
+        CustomToast.showError(errorMessage);
       }
     } finally {
       isLoading.value = false;
@@ -298,7 +326,17 @@ class HomeController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      CustomToast.showError('خدمة الموقع غير مفعلة');
+      Get.defaultDialog(
+        title: 'location_disabled_title'.tr,
+        middleText: 'location_disabled_message'.tr,
+        textConfirm: 'open_settings'.tr,
+        textCancel: 'cancel'.tr,
+        confirmTextColor: Colors.white,
+        onConfirm: () async {
+          Get.back();
+          await Geolocator.openLocationSettings();
+        },
+      );
       return;
     }
 
@@ -345,8 +383,32 @@ class HomeController extends GetxController {
     Get.to(() => const NotificationsScreen());
   }
 
-  void goToReportFlood() {
-    Get.to(() => const ReportFloodScreen());
+  Future<void> goToReportFlood() async {
+    final UserPreferences userPrefs = UserPreferences();
+    final user = await userPrefs.getUser();
+
+    if (user != null && user.role == 'guest') {
+      Get.defaultDialog(
+        title: 'guest_login_required_title'.tr,
+        middleText: 'guest_login_required_message'.tr,
+        textConfirm: 'login_now'.tr,
+        textCancel: 'cancel'.tr,
+        confirmTextColor: Colors.white,
+        onConfirm: () {
+          Get.back(); // Close dialog
+          if (Get.isRegistered<AuthController>()) {
+            Get.find<AuthController>().logout();
+          } else {
+            // Fallback if controller is disposed
+            final UserPreferences userPrefs = UserPreferences();
+            userPrefs.clearSession();
+            Get.offAll(() => const PhoneLoginScreen());
+          }
+        },
+      );
+    } else {
+      Get.to(() => const ReportFloodScreen());
+    }
   }
 
   void animateToLocation(LatLng location) async {

@@ -16,6 +16,14 @@ class NotificationsScreen extends StatelessWidget {
         title: Text('notifications_history_title'.tr),
         centerTitle: true,
         elevation: 0,
+        automaticallyImplyLeading: false,
+
+        leading: IconButton(
+          highlightColor: Colors.transparent,
+          padding: EdgeInsets.only(right: 24, left: 24),
+          onPressed: Get.back,
+          icon: Icon(Icons.arrow_back_ios, size: 22),
+        ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

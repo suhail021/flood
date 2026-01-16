@@ -17,6 +17,14 @@ class SecurityHelpScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+
+        leading: IconButton(
+          highlightColor: Colors.transparent,
+          padding: EdgeInsets.only(right: 24, left: 24),
+          onPressed: Get.back,
+          icon: Icon(Icons.arrow_back_ios, size: 22),
+        ),
         title: Text(
           'help_support_title'.tr,
           style: const TextStyle(color: Colors.white),

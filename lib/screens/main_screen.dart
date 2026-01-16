@@ -63,7 +63,7 @@ class MainScreen extends StatelessWidget {
                   icon: const Icon(Icons.home_outlined),
                   selectedIcon: Icon(
                     Icons.home,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   label: 'home'.tr,
                 ),
@@ -71,15 +71,16 @@ class MainScreen extends StatelessWidget {
                   icon: const Icon(Icons.assignment_outlined),
                   selectedIcon: Icon(
                     Icons.assignment,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   label: 'reports'.tr,
                 ),
                 NavigationDestination(
                   icon: const Icon(Icons.person_outline),
+
                   selectedIcon: Icon(
                     Icons.person,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   label: 'profile'.tr,
                 ),
