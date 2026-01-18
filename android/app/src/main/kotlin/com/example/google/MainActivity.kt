@@ -1,4 +1,4 @@
-package com.example.floodd
+package com.example.floods
 
 import io.flutter.embedding.android.FlutterActivity
 

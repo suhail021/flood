@@ -27,6 +27,7 @@ class HomeController extends GetxController {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
   final Set<int> _playedAlertIds = {};
+  bool _isFirstFetch = true;
 
   final FloodService _floodService = FloodService();
   final RxList<ManualAlert> criticalAlerts = <ManualAlert>[].obs;
@@ -146,6 +147,7 @@ class HomeController extends GetxController {
         _updateMapObjects();
         _checkAndPlayAlertSound();
       }
+      _isFirstFetch = false;
     } catch (e) {
       String errorMessage;
       bool isNetworkError = false;
@@ -293,7 +295,9 @@ class HomeController extends GetxController {
     bool shouldPlay = false;
     for (var alert in criticalAlerts) {
       if (alert.riskLevel >= 70 && !_playedAlertIds.contains(alert.id)) {
-        shouldPlay = true;
+        if (!_isFirstFetch) {
+          shouldPlay = true;
+        }
         _playedAlertIds.add(alert.id);
       }
     }
@@ -301,7 +305,9 @@ class HomeController extends GetxController {
     // Also check AI predictions if they are considered "critical" enough
     for (var pred in aiPredictions) {
       if (pred.riskLevel >= 70 && !_playedAlertIds.contains(pred.id)) {
-        shouldPlay = true;
+        if (!_isFirstFetch) {
+          shouldPlay = true;
+        }
         _playedAlertIds.add(pred.id);
       }
     }

@@ -224,6 +224,11 @@ class Messages extends Translations {
       'login_failed': 'فشل تسجيل الدخول',
       'send_otp_failed': 'فشل إرسال رمز التحقق',
       'verify_otp_failed': 'فشل التحقق من الرمز',
+      'resend_otp_failed': 'فشل إعادة إرسال رمز التحقق',
+      'user_not_found': 'المستخدم غير موجود',
+      'unexpected_error': 'حدث خطأ غير متوقع',
+      'request_cancelled': 'تم إلغاء الطلب',
+      'bad_request': 'طلب غير صالح',
     },
     'en': {
       'app_title': 'Smart Flood Prediction System',
@@ -447,6 +452,11 @@ class Messages extends Translations {
       'login_failed': 'Login Failed',
       'send_otp_failed': 'Failed to send verification code',
       'verify_otp_failed': 'Failed to verify OTP',
+      'resend_otp_failed': 'Failed to resend verification code',
+      'user_not_found': 'User not found',
+      'unexpected_error': 'Unexpected error occurred',
+      'request_cancelled': 'Request was cancelled',
+      'bad_request': 'Bad request',
     },
   };
 }

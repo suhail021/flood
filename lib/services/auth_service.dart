@@ -44,19 +44,21 @@ class AuthService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return data;
       } else {
-        throw Exception(data['message'] ?? 'فشل إرسال رمز التحقق');
+        throw Exception(data['message'] ?? 'send_otp_failed'.tr);
       }
     } catch (e) {
       print('❌ Send OTP Error: $e');
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout) {
-          throw Exception('انتهت مهلة الاتصال بالخادم');
+          throw Exception('connection_timeout'.tr);
         } else if (e.type == DioExceptionType.connectionError) {
-          throw Exception('لا يوجد اتصال بالانترنت');
+          throw Exception('no_internet_connection'.tr);
+        } else if (e.type == DioExceptionType.cancel) {
+          throw Exception('request_cancelled'.tr);
         }
       }
-      throw Exception('خطأ في الاتصال بالخادم: $e');
+      throw Exception('server_error'.tr);
     }
   }
 
@@ -110,10 +112,10 @@ class AuthService {
           print('✅ Verification successful - Token: ${data['token']}');
           return data;
         } else {
-          throw Exception(data['message'] ?? 'فشل التحقق من الرمز');
+          throw Exception(data['message'] ?? 'verify_otp_failed'.tr);
         }
       } else {
-        throw Exception(data['message'] ?? 'فشل التحقق من الرمز');
+        throw Exception(data['message'] ?? 'verify_otp_failed'.tr);
       }
     } catch (e) {
       print('❌ Verify OTP Error: $e');
@@ -123,12 +125,14 @@ class AuthService {
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout) {
-          throw Exception('انتهت مهلة الاتصال بالخادم');
+          throw Exception('connection_timeout'.tr);
         } else if (e.type == DioExceptionType.connectionError) {
-          throw Exception('لا يوجد اتصال بالانترنت');
+          throw Exception('no_internet_connection'.tr);
+        } else if (e.type == DioExceptionType.cancel) {
+          throw Exception('request_cancelled'.tr);
         }
       }
-      throw Exception('خطأ في الاتصال بالخادم: $e');
+      throw Exception('server_error'.tr);
     }
   }
 
@@ -156,11 +160,19 @@ class AuthService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return data;
       } else {
-        throw Exception(data['message'] ?? 'فشل إعادة إرسال رمز التحقق');
+        throw Exception(data['message'] ?? 'resend_otp_failed'.tr);
       }
     } catch (e) {
       print('❌ Resend OTP Error: $e');
-      throw Exception('خطأ في الاتصال بالخادم');
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw Exception('connection_timeout'.tr);
+        } else if (e.type == DioExceptionType.connectionError) {
+          throw Exception('no_internet_connection'.tr);
+        }
+      }
+      throw Exception('server_error'.tr);
     }
   }
 
@@ -186,14 +198,22 @@ class AuthService {
       if (response.statusCode == 200) {
         return data;
       } else {
-        throw Exception(data['message'] ?? 'فشل تسجيل الدخول');
+        throw Exception(data['message'] ?? 'login_failed'.tr);
       }
     } catch (e) {
       print('❌ Login Error: $e');
       if (e.toString().contains('Exception:')) {
         rethrow;
       }
-      throw Exception('خطأ في الاتصال بالخادم');
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw Exception('connection_timeout'.tr);
+        } else if (e.type == DioExceptionType.connectionError) {
+          throw Exception('no_internet_connection'.tr);
+        }
+      }
+      throw Exception('server_error'.tr);
     }
   }
 
@@ -268,6 +288,14 @@ class AuthService {
       if (e.toString().contains('Exception:')) {
         rethrow;
       }
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw Exception('connection_timeout'.tr);
+        } else if (e.type == DioExceptionType.connectionError) {
+          throw Exception('no_internet_connection'.tr);
+        }
+      }
       throw Exception('server_error'.tr);
     }
   }
@@ -305,6 +333,14 @@ class AuthService {
       print('❌ Reset Password Error: $e');
       if (e.toString().contains('Exception:')) {
         rethrow;
+      }
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw Exception('connection_timeout'.tr);
+        } else if (e.type == DioExceptionType.connectionError) {
+          throw Exception('no_internet_connection'.tr);
+        }
       }
       throw Exception('server_error'.tr);
     }

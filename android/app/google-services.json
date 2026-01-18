@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:496402561262:android:01fbbe9bf9e0a3174fdbff",
         "android_client_info": {
-          "package_name": "com.example.floodd_prediction"
+          "package_name": "com.example.floods_prediction"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.floodd"
+                "bundle_id": "com.example.floods"
               }
             }
           ]
@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:496402561262:android:d137a850e19361cd4fdbff",
         "android_client_info": {
-          "package_name": "com.example.floodd"
+          "package_name": "com.example.floods"
         }
       },
       "oauth_client": [
@@ -70,7 +70,7 @@
               "client_id": "496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.floodd"
+                "bundle_id": "com.example.floods"
               }
             }
           ]
