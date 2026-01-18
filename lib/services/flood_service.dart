@@ -7,6 +7,7 @@ import 'package:google/models/updates_model.dart';
 import 'package:google/models/report_model.dart';
 import 'package:google/core/errors/failures.dart';
 import 'dart:io' as java_io;
+import 'package:http_parser/http_parser.dart';
 
 class FloodService {
   final Dio _dio = Dio();
@@ -77,11 +78,28 @@ class FloodService {
 
       String fileName = image.path.split('/').last;
 
+      String extension = fileName.split('.').last.toLowerCase();
+      MediaType? contentType;
+
+      if (extension == 'png') {
+        contentType = MediaType('image', 'png');
+      } else if (extension == 'jpg' || extension == 'jpeg') {
+        contentType = MediaType('image', 'jpeg');
+      } else {
+        // Default fallbacks if needed, or let Dio handle it,
+        // but explicit is better for "png/jpg" requirement.
+        contentType = MediaType('image', 'jpeg');
+      }
+
       FormData formData = FormData.fromMap({
         'latitude': lat,
         'longitude': lng,
         'description': desc ?? '',
-        'image': await MultipartFile.fromFile(image.path, filename: fileName),
+        'image': await MultipartFile.fromFile(
+          image.path,
+          filename: fileName,
+          contentType: contentType,
+        ),
       });
 
       final response = await _dio.post(

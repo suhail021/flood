@@ -146,6 +146,11 @@ class ReportFloodController extends GetxController {
       final XFile? image = await picker.pickImage(source: source);
 
       if (image != null) {
+        final String extension = image.path.split('.').last.toLowerCase();
+        if (extension != 'png' && extension != 'jpg' && extension != 'jpeg') {
+          CustomToast.showError('invalid_image_format'.tr);
+          return;
+        }
         selectedImage.value = File(image.path);
       }
     } catch (e) {

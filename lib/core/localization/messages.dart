@@ -229,6 +229,8 @@ class Messages extends Translations {
       'unexpected_error': 'حدث خطأ غير متوقع',
       'request_cancelled': 'تم إلغاء الطلب',
       'bad_request': 'طلب غير صالح',
+      'invalid_image_format':
+          'صيغة الصورة غير مدعومة. يرجى اختيار صورة بصيغة PNG أو JPG',
     },
     'en': {
       'app_title': 'Smart Flood Prediction System',
@@ -457,6 +459,8 @@ class Messages extends Translations {
       'unexpected_error': 'Unexpected error occurred',
       'request_cancelled': 'Request was cancelled',
       'bad_request': 'Bad request',
+      'invalid_image_format':
+          'Invalid image format. Please select a PNG or JPG image',
     },
   };
 }

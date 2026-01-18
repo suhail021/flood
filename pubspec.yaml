@@ -50,6 +50,7 @@ dependencies:
   url_launcher: ^6.3.2
   audioplayers: ^6.5.1
   firebase_core: ^4.3.0
+  http_parser: ^4.1.2
 
 
 dev_dependencies:
