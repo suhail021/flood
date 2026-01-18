@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:google/core/utils/backend_endpoint.dart';
 
 class AuthService {
@@ -217,22 +218,22 @@ class AuthService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return data;
       } else {
-        throw Exception(data['message'] ?? 'فشل إرسال رمز التحقق');
+        throw Exception(data['message'] ?? 'send_otp_failed'.tr);
       }
     } catch (e) {
       print('❌ Forgot Pass Send OTP Error: $e');
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.receiveTimeout) {
-          throw Exception('انتهت مهلة الاتصال بالخادم');
+          throw Exception('connection_timeout'.tr);
         } else if (e.type == DioExceptionType.connectionError) {
-          throw Exception('لا يوجد اتصال بالانترنت');
+          throw Exception('no_internet_connection'.tr);
         }
       }
       if (e.toString().contains('Exception:')) {
         rethrow;
       }
-      throw Exception('خطأ في الاتصال بالخادم');
+      throw Exception('server_error'.tr);
     }
   }
 
@@ -260,14 +261,14 @@ class AuthService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return data;
       } else {
-        throw Exception(data['message'] ?? 'فشل التحقق من الرمز');
+        throw Exception(data['message'] ?? 'verify_otp_failed'.tr);
       }
     } catch (e) {
       print('❌ Forgot Pass Verify OTP Error: $e');
       if (e.toString().contains('Exception:')) {
         rethrow;
       }
-      throw Exception('خطأ في الاتصال بالخادم');
+      throw Exception('server_error'.tr);
     }
   }
 
@@ -298,14 +299,14 @@ class AuthService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return data;
       } else {
-        throw Exception(data['message'] ?? 'فشل تعيين كلمة المرور');
+        throw Exception(data['message'] ?? 'server_error'.tr);
       }
     } catch (e) {
       print('❌ Reset Password Error: $e');
       if (e.toString().contains('Exception:')) {
         rethrow;
       }
-      throw Exception('خطأ في الاتصال بالخادم');
+      throw Exception('server_error'.tr);
     }
   }
 }
