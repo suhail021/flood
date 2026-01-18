@@ -9,132 +9,161 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine color based on risk level
+    // Determine color based on risk level to match Home Screen
     Color riskColor;
     Color backgroundColor;
-    IconData iconData;
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    if (alert.riskLevel >= 70) {
-      riskColor =
-          isDarkMode ? const Color(0xFFEF5350) : const Color(0xFFD32F2F);
-      backgroundColor =
-          isDarkMode ? const Color(0xFF3E2723) : const Color(0xFFFFEBEE);
-      iconData = Icons.warning_rounded;
-    } else if (alert.riskLevel >= 40) {
-      riskColor =
-          isDarkMode ? const Color(0xFFFFB74D) : const Color(0xFFF57C00);
-      backgroundColor =
-          isDarkMode ? const Color(0xFF3E2723) : const Color(0xFFFFF3E0);
-      iconData = Icons.info_outline_rounded;
+    if (alert.riskLevel > 70) {
+      // Critical - Red
+      riskColor = Colors.red;
+    } else if (alert.riskLevel > 40) {
+      // Medium - Yellow/Amber
+      riskColor = const Color(0xffEAB308);
     } else {
-      riskColor =
-          isDarkMode ? const Color(0xFF66BB6A) : const Color(0xFF388E3C);
-      backgroundColor =
-          isDarkMode ? const Color(0xFF1B5E20) : const Color(0xFFE8F5E9);
-      iconData = Icons.check_circle_outline_rounded;
+      // Low - Green
+      riskColor = Colors.green;
     }
 
-    return Card(
+    backgroundColor = riskColor.withOpacity(isDarkMode ? 0.15 : 0.1);
+
+    return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color:
-              Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white10
-                  : Colors.grey.shade200,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(
+          color: isDarkMode ? Colors.white10 : Colors.grey.shade100,
         ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(iconData, color: riskColor, size: 24),
+          onTap: () {
+            // Optional: navigating to map logic could go here
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Icon Container to look like Map Marker
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    shape: BoxShape.circle,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          alert.locationName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          alert.alertTypeName,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: Icon(
+                    Icons.location_on_rounded, // Map marker style
+                    color: riskColor,
+                    size: 28,
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: riskColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      '${alert.riskLevel}%',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+                ),
+                const SizedBox(width: 12), // Reduced slightly for small screens
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.access_time,
-                        size: 16,
-                        color: Colors.grey[600],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              alert.locationName,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: riskColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: riskColor.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Text(
+                              '${alert.riskLevel}%',
+                              style: TextStyle(
+                                color: riskColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        alert.timeRemaining,
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        alert.alertTypeName,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_rounded,
+                                  size: 14,
+                                  color: Colors.grey[500],
+                                ),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    alert.timeRemaining,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _formatDate(alert.lastUpdatedAt),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Text(
-                    _formatDate(alert.lastUpdatedAt),
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
