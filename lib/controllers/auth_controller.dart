@@ -26,8 +26,8 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    phoneController.dispose();
-    passwordController.dispose();
+    // phoneController.dispose();
+    // passwordController.dispose();
     super.onClose();
   }
 

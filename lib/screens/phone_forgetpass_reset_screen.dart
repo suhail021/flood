@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/forget_pass_controller.dart';
 import 'package:google/core/widgets/custom_text_form_field.dart';
 
-class PhoneForgetpassScreen extends StatelessWidget {
-  const PhoneForgetpassScreen({super.key});
+class PhoneForgetpassResetScreen extends GetView<ForgetPassController> {
+  const PhoneForgetpassResetScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ForgetPassController());
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,22 +30,19 @@ class PhoneForgetpassScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 2.0, right: 24, left: 24),
           child: SingleChildScrollView(
             child: Form(
-              key: controller.phoneFormKey,
+              key: controller.resetFormKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // شعار التطبيق
                   const SizedBox(height: 20),
                   Icon(
-                    Icons.lock_reset,
+                    Icons.lock_person,
                     size: 100,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(height: 20),
-
-                  // عنوان التطبيق
                   Text(
-                    'forgot_password'.tr,
+                    'reset_password_title'.tr,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -57,9 +51,8 @@ class PhoneForgetpassScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-
                   Text(
-                    'enter_phone_to_reset'.tr,
+                    'enter_new_password_desc'.tr,
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).colorScheme.secondary,
@@ -67,24 +60,38 @@ class PhoneForgetpassScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 25),
-
-                  // حقل إدخال رقم الهاتف
                   CustomTextFormField(
-                    controller: controller.phoneController,
-                    hintText: 'phone_number'.tr,
-                    prefixIcon: Icons.phone,
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    controller: controller.newPasswordController,
+                    obscureText: true,
+                    hintText: 'new_password'.tr,
+                    prefixIcon: Icons.lock_outline,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'enter_phone_error'.tr;
+                        return 'enter_password_error'.tr;
+                      }
+                      if (value.length < 6) {
+                        return 'password_min_length_error'.tr;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextFormField(
+                    controller: controller.confirmPasswordController,
+                    obscureText: true,
+                    hintText: 'confirm_password'.tr,
+                    prefixIcon: Icons.lock,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'confirm_password_error'.tr;
+                      }
+                      if (value != controller.newPasswordController.text) {
+                        return 'passwords_not_match'.tr;
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 25),
-
-                  // زر إرسال رمز التحقق
                   SizedBox(
                     width: double.infinity,
                     height: 56,
@@ -93,7 +100,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
                         onPressed:
                             controller.isLoading.value
                                 ? null
-                                : controller.sendOtp,
+                                : controller.resetPassword,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Colors.white,
@@ -110,7 +117,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
                                   ),
                                 )
                                 : Text(
-                                  'send_verification_code'.tr,
+                                  'reset_password_btn'.tr,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

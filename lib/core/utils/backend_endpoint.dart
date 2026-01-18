@@ -25,6 +25,12 @@ class ApiConstants {
   static const String verifyOtp = '/auth/verify-otp';
   static const String resendOtp = '/auth/resend-otp';
 
+  // Forgot Password Endpoints
+  static const String forgotPasswordSendOtp = '/auth/forgot-password/send-otp';
+  static const String forgotPasswordVerifyOtp =
+      '/auth/forgot-password/verify-otp';
+  static const String forgotPasswordReset = '/auth/forgot-password/reset';
+
   // Headers
   static Map<String, String> get headers => {
     'Content-Type': 'application/json',

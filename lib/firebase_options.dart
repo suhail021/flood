@@ -63,8 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '496402561262',
     projectId: 'chat-app-a412c',
     storageBucket: 'chat-app-a412c.firebasestorage.app',
-    iosClientId: '496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com',
-    iosBundleId: 'com.example.google',
+    iosClientId:
+        '496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flood',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,8 +74,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '496402561262',
     projectId: 'chat-app-a412c',
     storageBucket: 'chat-app-a412c.firebasestorage.app',
-    iosClientId: '496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com',
-    iosBundleId: 'com.example.google',
+    iosClientId:
+        '496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flood',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

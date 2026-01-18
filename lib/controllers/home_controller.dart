@@ -176,7 +176,7 @@ class HomeController extends GetxController {
         );
       } else {
         // Show regular error toast for non-network errors
-        CustomToast.showError(errorMessage);
+        // CustomToast.showError(errorMessage);
       }
     } finally {
       isLoading.value = false;

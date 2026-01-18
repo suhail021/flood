@@ -195,4 +195,117 @@ class AuthService {
       throw Exception('خطأ في الاتصال بالخادم');
     }
   }
+
+  Future<Map<String, dynamic>> forgotPasswordSendOtp(String phoneNumber) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.forgotPasswordSendOtp,
+        options: Options(headers: ApiConstants.headers),
+        data: {'phone_number': phoneNumber},
+      );
+
+      print('📤 Forgot Pass Send OTP Request: $phoneNumber');
+      print(
+        '📥 Forgot Pass Send OTP Response: ${response.statusCode} - ${response.data}',
+      );
+
+      final data =
+          response.data is Map<String, dynamic>
+              ? response.data
+              : {'message': response.data.toString()};
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return data;
+      } else {
+        throw Exception(data['message'] ?? 'فشل إرسال رمز التحقق');
+      }
+    } catch (e) {
+      print('❌ Forgot Pass Send OTP Error: $e');
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          throw Exception('انتهت مهلة الاتصال بالخادم');
+        } else if (e.type == DioExceptionType.connectionError) {
+          throw Exception('لا يوجد اتصال بالانترنت');
+        }
+      }
+      if (e.toString().contains('Exception:')) {
+        rethrow;
+      }
+      throw Exception('خطأ في الاتصال بالخادم');
+    }
+  }
+
+  Future<Map<String, dynamic>> forgotPasswordVerifyOtp(
+    String phoneNumber,
+    String otp,
+  ) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.forgotPasswordVerifyOtp,
+        options: Options(headers: ApiConstants.headers),
+        data: {'phone_number': phoneNumber, 'otp': otp},
+      );
+
+      print('📤 Forgot Pass Verify OTP Request: $phoneNumber, $otp');
+      print(
+        '📥 Forgot Pass Verify OTP Response: ${response.statusCode} - ${response.data}',
+      );
+
+      final data =
+          response.data is Map<String, dynamic>
+              ? response.data
+              : {'message': response.data.toString()};
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return data;
+      } else {
+        throw Exception(data['message'] ?? 'فشل التحقق من الرمز');
+      }
+    } catch (e) {
+      print('❌ Forgot Pass Verify OTP Error: $e');
+      if (e.toString().contains('Exception:')) {
+        rethrow;
+      }
+      throw Exception('خطأ في الاتصال بالخادم');
+    }
+  }
+
+  Future<Map<String, dynamic>> resetPassword(
+    String token,
+    String newPassword,
+  ) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.forgotPasswordReset,
+        options: Options(headers: ApiConstants.headersWithToken(token)),
+        data: {
+          'new_password': newPassword,
+          'new_password_confirmation': newPassword,
+        },
+      );
+
+      print('📤 Reset Password Request');
+      print(
+        '📥 Reset Password Response: ${response.statusCode} - ${response.data}',
+      );
+
+      final data =
+          response.data is Map<String, dynamic>
+              ? response.data
+              : {'message': response.data.toString()};
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return data;
+      } else {
+        throw Exception(data['message'] ?? 'فشل تعيين كلمة المرور');
+      }
+    } catch (e) {
+      print('❌ Reset Password Error: $e');
+      if (e.toString().contains('Exception:')) {
+        rethrow;
+      }
+      throw Exception('خطأ في الاتصال بالخادم');
+    }
+  }
 }

@@ -34,7 +34,7 @@
               "client_id": "496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.google"
+                "bundle_id": "com.example.flood"
               }
             }
           ]
@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:496402561262:android:d137a850e19361cd4fdbff",
         "android_client_info": {
-          "package_name": "com.example.google"
+          "package_name": "com.example.flood"
         }
       },
       "oauth_client": [
@@ -70,7 +70,7 @@
               "client_id": "496402561262-o20semoq60qfsrlc4er47hq8q9qptrrv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.google"
+                "bundle_id": "com.example.flood"
               }
             }
           ]
