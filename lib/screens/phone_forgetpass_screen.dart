@@ -68,7 +68,7 @@ class PhoneForgetpassScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 25),
 
-                  // حقل إدخال رقم الهاتف
+                // حقل إدخال رقم الهاتف
                   CustomTextFormField(
                     controller: controller.phoneController,
                     hintText: 'phone_number'.tr,

@@ -103,8 +103,9 @@ class ForgetPassController extends GetxController {
           resetToken!,
           newPasswordController.text,
         );
-        // CustomToast.showSuccess('password_reset_success'.tr);
+        CustomToast.showSuccess('password_reset_success'.tr);
         Get.offAll(() => const PhoneLoginScreen());
+        CustomToast.showSuccess('password_reset_success'.tr);
       } catch (e) {
         CustomToast.showError(e.toString().replaceAll('Exception: ', ''));
       } finally {

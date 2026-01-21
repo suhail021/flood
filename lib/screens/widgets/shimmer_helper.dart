@@ -34,7 +34,7 @@ class RiskCardShimmer extends StatelessWidget {
 
     return ListView.builder(
       padding: const EdgeInsets.only(top: 0),
-      itemCount: 3,
+      itemCount: 5,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {

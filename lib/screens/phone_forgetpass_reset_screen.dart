@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google/controllers/forget_pass_controller.dart';
 import 'package:google/core/widgets/custom_text_form_field.dart';
@@ -65,6 +66,8 @@ class PhoneForgetpassResetScreen extends GetView<ForgetPassController> {
                     obscureText: true,
                     hintText: 'new_password'.tr,
                     prefixIcon: Icons.lock_outline,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'enter_password_error'.tr;
@@ -81,9 +84,11 @@ class PhoneForgetpassResetScreen extends GetView<ForgetPassController> {
                     obscureText: true,
                     hintText: 'confirm_password'.tr,
                     prefixIcon: Icons.lock,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'confirm_password_error'.tr;
+                        return 'enter_confirm_password_error'.tr;
                       }
                       if (value != controller.newPasswordController.text) {
                         return 'passwords_not_match'.tr;
